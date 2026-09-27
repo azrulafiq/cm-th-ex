@@ -93,3 +93,17 @@ module "ingress" {
 
   name_prefix = var.name_prefix
 }
+
+# from task 3 - dashboard, alerts, uptime check, log based metric
+module "monitoring" {
+  source = "./modules/monitoring"
+
+  project_id          = var.project_id
+  name_prefix         = var.name_prefix
+  alert_email         = var.alert_email
+  app_domain          = var.app_domain
+  app_namespace       = var.app_namespace
+  cluster_name        = module.gke.cluster_name
+  sql_instance_name   = module.cloudsql.instance_name
+  sql_max_connections = var.sql_max_connections
+}

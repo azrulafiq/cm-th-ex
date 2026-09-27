@@ -94,3 +94,21 @@ output "app_ip_address" {
 output "app_domain" {
   value = var.app_domain
 }
+
+# from task 3 - monitoring outputs
+
+output "monitoring_log_metric" {
+  value = module.monitoring.log_metric
+}
+
+output "monitoring_uptime_check_id" {
+  value = module.monitoring.uptime_check_id
+}
+
+output "monitoring_alert_policies" {
+  value = module.monitoring.alert_policies
+}
+
+output "monitoring_dashboard_id" {
+  value = module.monitoring.dashboard_id
+}

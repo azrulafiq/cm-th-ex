@@ -1,0 +1,17 @@
+$ gcloud logging read resource.type="k8s_container" AND resource.labels.namespace_name="app" AND resource.labels.container_name="app" AND severity>=ERROR AND timestamp>="2026-09-27T09:57:00Z" AND timestamp<="2026-09-27T09:59:00Z" --limit=6 --format=table(timestamp,severity,jsonPayload.message,jsonPayload.path,resource.labels.pod_name)
+TIMESTAMP                       SEVERITY  MESSAGE                      PATH    POD_NAME
+2026-09-27T09:58:00.302891984Z  ERROR     GET /error 500               /error  app-68cf846886-5mntv
+2026-09-27T09:58:00.302836634Z  ERROR     simulated application error          app-68cf846886-5mntv
+2026-09-27T09:58:00.164013616Z  ERROR     GET /error 500               /error  app-68cf846886-2q27j
+2026-09-27T09:58:00.163701860Z  ERROR     simulated application error          app-68cf846886-2q27j
+2026-09-27T09:58:00.030847862Z  ERROR     GET /error 500               /error  app-68cf846886-5mntv
+2026-09-27T09:58:00.030660929Z  ERROR     simulated application error          app-68cf846886-5mntv
+
+$ (count of matching log entries 09:57-09:59 UTC)
+20
+
+$ (monitoring api) logging.googleapis.com/user/cm-app-errors 09:55-10:02 UTC, per series
+path=/error pod=app-68cf846886-2q27j total=5
+path=(none) pod=app-68cf846886-2q27j total=5
+path=/error pod=app-68cf846886-5mntv total=5
+path=(none) pod=app-68cf846886-5mntv total=5

@@ -1,0 +1,41 @@
+$ gcloud beta monitoring channels list --format=table(name.basename(),displayName,type,enabled,verificationStatus)
+NAME                 DISPLAY_NAME     TYPE   ENABLED  VERIFICATION_STATUS
+5633695206479919101  cm alerts email  email  True
+
+$ gcloud alpha monitoring policies list --format=table(name.basename(),displayName,enabled,severity,conditions[0].displayName)
+NAME                  DISPLAY_NAME                              ENABLED  SEVERITY  CONDITIONS_DISPLAY_NAME
+18359576122370631028  cm gke node cpu above 80% for 5 min       True     WARNING   node cpu allocatable utilization > 0.8 for 5 min
+2196561270371538581   cm cloud sql connections above 80%        True     WARNING   num_backends > 20 (80% of max_connections 25)
+2196561270371539819   cm app pod restarting (CrashLoopBackOff)  True     ERROR     more than 2 container restarts in 5 min
+4303096840742046477   cm app uptime check failing               True     CRITICAL  https://cm-app.sokay.my/healthz failing from more than 1 region
+
+$ gcloud monitoring uptime list-configs --format=table(name.basename(),displayName,httpCheck.path,httpCheck.port,period,monitoredResource.labels.host)
+NAME                              DISPLAY_NAME          PATH      PORT  PERIOD  HOST
+cm-app-https-healthz-Hj1EXMaMD9s  cm app https healthz  /healthz  443   60s     cm-app.sokay.my
+
+$ gcloud logging metrics describe cm-app-errors
+createTime: '2026-09-27T09:54:42.066527120Z'
+description: Application log entries with severity >= ERROR in the app namespace.
+filter: resource.type="k8s_container" AND resource.labels.cluster_name="cm-gke" AND
+  resource.labels.namespace_name="app" AND resource.labels.container_name="app" AND
+  severity>=ERROR
+labelExtractors:
+  path: EXTRACT(jsonPayload.path)
+metricDescriptor:
+  description: Application log entries with severity >= ERROR in the app namespace.
+  labels:
+  - description: Request path from the app json log
+    key: path
+  metricKind: DELTA
+  name: projects/cloud-mile-assessment/metricDescriptors/logging.googleapis.com/user/cm-app-errors
+  type: logging.googleapis.com/user/cm-app-errors
+  unit: '1'
+  valueType: INT64
+name: cm-app-errors
+resourceName: projects/cloud-mile-assessment/metrics/cm-app-errors
+updateTime: '2026-09-27T09:54:42.066527120Z'
+
+$ gcloud monitoring dashboards list --format=table(name.basename(),displayName)
+NAME                                  DISPLAY_NAME
+eae33331-2d4d-49f2-b4c6-79028e916524  cm ops dashboard
+

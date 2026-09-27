@@ -1,0 +1,39 @@
+## 2026-09-27T09:57:56Z baseline
+num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}
+
+## 2026-09-27T09:57:57Z send 10 x GET /error through the https lb (log based metric + 5xx rate)
+500 500 500 500 500 500 500 500 500 500 
+
+## 2026-09-27T09:57:59Z hold 20 db connections for 360s from pod app-68cf846886-2q27j
+{"holding":20,"seconds":360}
+
+
+2026-09-27T09:58:31Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T09:59:03Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T09:59:35Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:00:06Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:00:38Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:01:10Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:01:41Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:02:13Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:02:46Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:03:18Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:03:49Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:04:20Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:04:52Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:05:24Z num_backends: total=22 {'appdb': 20, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:05:57Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:06:29Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:07:01Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:07:32Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:08:05Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:08:37Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:09:09Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:09:41Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:10:12Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:10:44Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:11:16Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:11:49Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+2026-09-27T10:12:21Z num_backends: total=2 {'appdb': 0, 'cloudsqladmin': 2, 'postgres': 0, 'template1': 0}  readyz: 200
+
+## 2026-09-27T10:12:22Z done (connections released at hold start + 360s)

@@ -8,12 +8,13 @@ Cloudmile Take-home Exercise: GCP Cloud Operations hands-on homework.
 | [00-prerequisites.md](docs/00-prerequisites.md) | Workstation, credentials, region, budget, quotas, API bootstrap, remote state bucket |
 | [01-task-1-infrastructure.md](docs/01-task-1-infrastructure.md) | Task 1: Terraform platform (VPC, NAT, firewall, private GKE, Cloud SQL, Secret Manager, IAM), architecture diagram |
 | [02-task-2-gke-deployment.md](docs/02-task-2-gke-deployment.md) | Task 2: sample app on GKE, Cloud SQL via Auth Proxy, HTTPS Ingress, rolling update, rollback, scaling, HPA |
+| [03-task-3-observability.md](docs/03-task-3-observability.md) | Task 3: dashboard, 4 alert policies, email channel, uptime check, log based metric, alert fire and resolve timeline |
 
 ## Repository layout
 
 ```
 terraform/bootstrap/   APIs and Terraform state bucket
-terraform/platform/    Task 1 platform (modules: network, gke, cloudsql, secrets, iam, registry, ingress)
+terraform/platform/    Task 1 platform (modules: network, gke, cloudsql, secrets, iam, registry, ingress, monitoring)
 app/                   Task 2 sample app (Python, Dockerfile)
 k8s/                   Task 2 Kubernetes manifests
 scripts/               Helper and demo scripts

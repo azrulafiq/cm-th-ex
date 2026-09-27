@@ -1,0 +1,41 @@
+module.monitoring.google_logging_metric.app_errors: Creating...
+module.monitoring.google_logging_metric.app_errors: Creation complete after 3s [id=cm-app-errors]
+module.monitoring.google_monitoring_dashboard.ops: Creating...
+module.monitoring.google_monitoring_dashboard.ops: Creation complete after 2s [id=projects/969886371063/dashboards/eae33331-2d4d-49f2-b4c6-79028e916524]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+app_domain = "cm-app.sokay.my"
+app_ip_address = "8.232.93.111"
+app_ip_name = "cm-app-ip"
+app_ksa = "app/app-ksa"
+app_service_account = "cm-app@cloud-mile-assessment.iam.gserviceaccount.com"
+artifact_registry_url = "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app"
+db_name = "appdb"
+db_password_secret = "cm-db-password"
+db_user = "app"
+destroy_command = "terraform apply -var=deletion_protection=false && terraform destroy -var=deletion_protection=false"
+gke_cluster_location = "asia-southeast1-a"
+gke_cluster_name = "cm-gke"
+gke_get_credentials = "gcloud container clusters get-credentials cm-gke --zone asia-southeast1-a --project cloud-mile-assessment"
+gke_node_pool = "cm-pool"
+gke_node_service_account = "cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+monitoring_alert_policies = {
+  "node_cpu" = "projects/cloud-mile-assessment/alertPolicies/18359576122370631028"
+  "pod_restarts" = "projects/cloud-mile-assessment/alertPolicies/2196561270371539819"
+  "sql_connections" = "projects/cloud-mile-assessment/alertPolicies/2196561270371538581"
+  "uptime" = "projects/cloud-mile-assessment/alertPolicies/4303096840742046477"
+}
+monitoring_dashboard_id = "projects/969886371063/dashboards/eae33331-2d4d-49f2-b4c6-79028e916524"
+monitoring_log_metric = "cm-app-errors"
+monitoring_uptime_check_id = "cm-app-https-healthz-Hj1EXMaMD9s"
+nat_name = "cm-nat"
+network_name = "cm-vpc"
+router_name = "cm-router"
+sql_connection_name = "cloud-mile-assessment:asia-southeast1:cm-pg"
+sql_instance_name = "cm-pg"
+sql_private_ip = "10.172.80.3"
+subnet_name = "cm-gke-subnet"
+apply exit: 0

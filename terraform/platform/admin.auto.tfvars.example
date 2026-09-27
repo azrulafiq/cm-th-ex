@@ -6,3 +6,6 @@ authorized_networks = [
     display_name = "admin-workstation"
   },
 ]
+
+# email for alert notifications
+alert_email = "you@example.com"

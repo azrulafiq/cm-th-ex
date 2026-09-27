@@ -1,5 +1,7 @@
 # 02. Task 2: GKE Deployment and Operations
 
+All times in this document are MYT (UTC+8). Raw evidence files are captured in UTC.
+
 This document records how the sample application was built, deployed to the Task 1 GKE cluster, connected to Cloud SQL, exposed over HTTPS, and operated (rolling update, rollback, scale up and down, HPA). Each step lists the commands run, the result, and where the raw output is stored.
 
 ## Summary
@@ -250,11 +252,11 @@ kubectl -n app rollout status deploy/app
 kubectl -n app rollout history deploy/app
 ```
 
-| Time (UTC) | State |
+| Time (MYT) | State |
 |------------|-------|
-| 08:42:40 | All pods return `"version":"v1"` (ReplicaSet `app-cf4575ccb`) |
-| 08:42:44 | `set image` to v2 |
-| Before 08:43:40 | `successfully rolled out`, all pods return `"version":"v2"` (ReplicaSet `app-76d5cc9c79`) |
+| 16:42:40 | All pods return `"version":"v1"` (ReplicaSet `app-cf4575ccb`) |
+| 16:42:44 | `set image` to v2 |
+| Before 16:43:40 | `successfully rolled out`, all pods return `"version":"v2"` (ReplicaSet `app-76d5cc9c79`) |
 
 History after update: revision 1 `initial deploy v1`, revision 2 `update to v2`.
 
@@ -268,9 +270,9 @@ kubectl -n app rollout status deploy/app
 kubectl -n app rollout history deploy/app
 ```
 
-| Time (UTC) | State |
+| Time (MYT) | State |
 |------------|-------|
-| 08:43:40 | `rollout undo` |
+| 16:43:40 | `rollout undo` |
 | After rollout | All pods return `"version":"v1"`, back on ReplicaSet `app-cf4575ccb` |
 
 History after rollback: revision 2 `update to v2`, revision 3 `initial deploy v1`. The old v1 ReplicaSet was reused (same pod template hash), which is how rollback works in Kubernetes: it re-applies a previous template as a new revision.
@@ -286,12 +288,12 @@ kubectl -n app patch hpa app -p '{"spec":{"minReplicas":4}}'   # scale up
 kubectl -n app patch hpa app -p '{"spec":{"minReplicas":2}}'   # scale down
 ```
 
-| Time (UTC) | Action | Replicas |
+| Time (MYT) | Action | Replicas |
 |------------|--------|----------|
-| 08:45:06 | Start | 3 |
-| 08:45:07 | `minReplicas` 2 to 4 | 4 |
-| 08:45:38 | `minReplicas` 4 to 2 | 4, held by the 120s scale down stabilization window |
-| 08:48:38 | After the window | 2 |
+| 16:45:06 | Start | 3 |
+| 16:45:07 | `minReplicas` 2 to 4 | 4 |
+| 16:45:38 | `minReplicas` 4 to 2 | 4, held by the 120s scale down stabilization window |
+| 16:48:38 | After the window | 2 |
 
 Raw output: [11-scale-manual.txt](../evidence/task-2/11-scale-manual.txt), script: [demo-scaling.sh](../scripts/demo-scaling.sh)
 
@@ -301,7 +303,7 @@ CPU load was generated on each pod with the token protected `/cpu?seconds=240` e
 
 | Time | HPA CPU (target 60%) | Replicas | Note |
 |------|----------------------|----------|------|
-| 08:48:39 | 3% | 2 | Load started on both pods |
+| 16:48:39 | 3% | 2 | Load started on both pods |
 | t+20s | 33% | 2 | Metrics catching up |
 | t+40s | 498% | 6 | Scaled straight to max |
 | t+80s | 244% | 6 | Load spread across 6 pods (4 idle) |
@@ -342,7 +344,7 @@ echo | openssl s_client -connect cm-app.sokay.my:443 -servername cm-app.sokay.my
 | `GET /error` without token | `403`, chaos endpoints are not usable from the internet without the token |
 | Certificate | Subject `CN = cm-app.sokay.my`, issuer Google Trust Services (WR3), valid Sep 27 2026 to Dec 26 2026, renewed automatically by Google |
 
-Note: the ManagedCertificate top level `certificateStatus` still showed `Provisioning` for a few minutes after the domain was `Active` and HTTPS was already being served. It turned `Active` at 09:36:08 UTC, about 34 minutes after the DNS record was created. The follow up check is at the end of the evidence file.
+Note: the ManagedCertificate top level `certificateStatus` still showed `Provisioning` for a few minutes after the domain was `Active` and HTTPS was already being served. It turned `Active` at 17:36:08 MYT, about 34 minutes after the DNS record was created. The follow up check is at the end of the evidence file.
 
 Raw output: [13-https-ingress.txt](../evidence/task-2/13-https-ingress.txt)
 

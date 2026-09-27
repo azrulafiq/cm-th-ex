@@ -138,3 +138,17 @@ variable "app_domain" {
   type        = string
   default     = "cm-app.sokay.my"
 }
+
+# from task 3 - alerting inputs
+
+variable "alert_email" {
+  description = "Email for alert notifications. Set in the gitignored admin.auto.tfvars."
+  type        = string
+  sensitive   = true
+}
+
+variable "sql_max_connections" {
+  description = "max_connections on the Cloud SQL tier, used for the 80% alert (db-f1-micro = 25)."
+  type        = number
+  default     = 25
+}

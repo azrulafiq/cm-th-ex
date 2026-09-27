@@ -1,0 +1,357 @@
+module.gke.google_service_account.nodes: Refreshing state... [id=projects/cloud-mile-assessment/serviceAccounts/cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret.db_password: Refreshing state... [id=projects/cloud-mile-assessment/secrets/cm-db-password]
+module.ingress.google_compute_global_address.app: Refreshing state... [id=projects/cloud-mile-assessment/global/addresses/cm-app-ip]
+module.registry.google_artifact_registry_repository.app: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1/repositories/cm-app]
+module.iam.google_service_account.app: Refreshing state... [id=projects/cloud-mile-assessment/serviceAccounts/cm-app@cloud-mile-assessment.iam.gserviceaccount.com]
+module.network.google_compute_network.vpc: Refreshing state... [id=projects/cloud-mile-assessment/global/networks/cm-vpc]
+module.network.google_compute_router.router: Refreshing state... [id=projects/cloud-mile-assessment/regions/asia-southeast1/routers/cm-router]
+module.network.google_compute_firewall.allow_internal: Refreshing state... [id=projects/cloud-mile-assessment/global/firewalls/cm-allow-internal]
+module.network.google_compute_global_address.psa_range: Refreshing state... [id=projects/cloud-mile-assessment/global/addresses/cm-psa-range]
+module.network.google_compute_firewall.allow_health_checks: Refreshing state... [id=projects/cloud-mile-assessment/global/firewalls/cm-allow-health-checks]
+module.network.google_compute_subnetwork.gke: Refreshing state... [id=projects/cloud-mile-assessment/regions/asia-southeast1/subnetworks/cm-gke-subnet]
+module.network.google_compute_router_nat.nat: Refreshing state... [id=cloud-mile-assessment/asia-southeast1/cm-router/cm-nat]
+module.network.google_service_networking_connection.psa: Refreshing state... [id=projects%2Fcloud-mile-assessment%2Fglobal%2Fnetworks%2Fcm-vpc:servicenetworking.googleapis.com]
+module.gke.google_project_iam_member.nodes_default: Refreshing state... [id=cloud-mile-assessment/roles/container.defaultNodeServiceAccount/serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.registry.google_artifact_registry_repository_iam_member.readers["gke-nodes"]: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1/repositories/cm-app/roles/artifactregistry.reader/serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.iam.google_secret_manager_secret_iam_member.app_db_password: Refreshing state... [id=projects/cloud-mile-assessment/secrets/cm-db-password/roles/secretmanager.secretAccessor/serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com]
+module.gke.google_container_cluster.this: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1-a/clusters/cm-gke]
+module.iam.google_service_account_iam_member.app_wi: Refreshing state... [id=projects/cloud-mile-assessment/serviceAccounts/cm-app@cloud-mile-assessment.iam.gserviceaccount.com/roles/iam.workloadIdentityUser/serviceAccount:cloud-mile-assessment.svc.id.goog[app/app-ksa]]
+module.gke.google_container_node_pool.primary: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1-a/clusters/cm-gke/nodePools/cm-pool]
+module.cloudsql.random_password.db: Refreshing state... [id=none]
+module.cloudsql.google_sql_database_instance.this: Refreshing state... [id=cm-pg]
+module.secrets.google_secret_manager_secret_version.db_password: Refreshing state... [id=projects/969886371063/secrets/cm-db-password/versions/1]
+module.cloudsql.google_sql_database.app: Refreshing state... [id=projects/cloud-mile-assessment/instances/cm-pg/databases/appdb]
+module.cloudsql.google_sql_user.app: Refreshing state... [id=app//cm-pg]
+module.iam.google_project_iam_member.app_sql_client: Refreshing state... [id=cloud-mile-assessment/roles/cloudsql.client/serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com/only-cm-pg//resource.name == "projects/cloud-mile-assessment/instances/cm-pg" && resource.type == "sqladmin.googleapis.com/Instance"]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.monitoring.google_logging_metric.app_errors will be created
+  + resource "google_logging_metric" "app_errors" {
+      + deletion_policy  = "DELETE"
+      + description      = "Application log entries with severity >= ERROR in the app namespace."
+      + filter           = "resource.type=\"k8s_container\" AND resource.label.cluster_name=\"cm-gke\" AND resource.label.namespace_name=\"app\" AND resource.label.container_name=\"app\" AND severity>=ERROR"
+      + id               = (known after apply)
+      + label_extractors = {
+          + "path" = "EXTRACT(jsonPayload.path)"
+        }
+      + name             = "cm-app-errors"
+      + project          = "cloud-mile-assessment"
+
+      + metric_descriptor {
+          + metric_kind = "DELTA"
+          + unit        = "1"
+          + value_type  = "INT64"
+
+          + labels {
+              + description = "Request path from the app json log"
+              + key         = "path"
+              + value_type  = "STRING"
+            }
+        }
+    }
+
+  # module.monitoring.google_monitoring_alert_policy.node_cpu will be created
+  + resource "google_monitoring_alert_policy" "node_cpu" {
+      + combiner              = "OR"
+      + creation_record       = (known after apply)
+      + deletion_policy       = "DELETE"
+      + display_name          = "cm gke node cpu above 80% for 5 min"
+      + enabled               = true
+      + id                    = (known after apply)
+      + name                  = (known after apply)
+      + notification_channels = (known after apply)
+      + project               = "cloud-mile-assessment"
+      + severity              = "WARNING"
+
+      + alert_strategy {
+          + auto_close = "1800s"
+        }
+
+      + conditions {
+          + display_name = "node cpu allocatable utilization > 0.8 for 5 min"
+          + name         = (known after apply)
+
+          + condition_threshold {
+              + comparison      = "COMPARISON_GT"
+              + duration        = "300s"
+              + filter          = "metric.type=\"kubernetes.io/node/cpu/allocatable_utilization\" AND resource.type=\"k8s_node\" AND resource.label.cluster_name=\"cm-gke\""
+              + threshold_value = 0.8
+
+              + aggregations {
+                  + alignment_period   = "60s"
+                  + per_series_aligner = "ALIGN_MEAN"
+                }
+
+              + trigger {
+                  + count = 1
+                }
+            }
+        }
+
+      + documentation {
+          + content   = <<-EOT
+                A GKE node in `cm-gke` has used more than 80% of its allocatable CPU for 5 minutes.
+                
+                Check:
+                - `kubectl top nodes` and `kubectl top pods -A --sort-by=cpu`
+                - `kubectl -n app get hpa app` (is the HPA at max?)
+                - node pool autoscaler max (3 nodes, limited by the E2 CPU quota)
+            EOT
+          + mime_type = "text/markdown"
+        }
+    }
+
+  # module.monitoring.google_monitoring_alert_policy.pod_restarts will be created
+  + resource "google_monitoring_alert_policy" "pod_restarts" {
+      + combiner              = "OR"
+      + creation_record       = (known after apply)
+      + deletion_policy       = "DELETE"
+      + display_name          = "cm app pod restarting (CrashLoopBackOff)"
+      + enabled               = true
+      + id                    = (known after apply)
+      + name                  = (known after apply)
+      + notification_channels = (known after apply)
+      + project               = "cloud-mile-assessment"
+      + severity              = "ERROR"
+
+      + alert_strategy {
+          + auto_close = "1800s"
+        }
+
+      + conditions {
+          + display_name = "more than 2 container restarts in 5 min"
+          + name         = (known after apply)
+
+          + condition_threshold {
+              + comparison      = "COMPARISON_GT"
+              + duration        = "0s"
+              + filter          = "metric.type=\"kubernetes.io/container/restart_count\" AND resource.type=\"k8s_container\" AND resource.label.cluster_name=\"cm-gke\" AND resource.label.namespace_name=\"app\""
+              + threshold_value = 2
+
+              + aggregations {
+                  + alignment_period     = "300s"
+                  + cross_series_reducer = "REDUCE_SUM"
+                  + group_by_fields      = [
+                      + "resource.label.pod_name",
+                      + "resource.label.container_name",
+                    ]
+                  + per_series_aligner   = "ALIGN_DELTA"
+                }
+
+              + trigger {
+                  + count = 1
+                }
+            }
+        }
+
+      + documentation {
+          + content   = <<-EOT
+                Container in namespace `app` restarted more than 2 times in 5 minutes. Usually CrashLoopBackOff.
+                
+                Check:
+                - `kubectl -n app get pods`
+                - `kubectl -n app describe pod <pod>` (Last State, Reason, Exit Code, OOMKilled)
+                - `kubectl -n app logs <pod> -c <container> --previous`
+                - recent changes: `kubectl -n app rollout history deploy/app`, configmap `app-config` (CRASH_ON_START)
+            EOT
+          + mime_type = "text/markdown"
+        }
+    }
+
+  # module.monitoring.google_monitoring_alert_policy.sql_connections will be created
+  + resource "google_monitoring_alert_policy" "sql_connections" {
+      + combiner              = "OR"
+      + creation_record       = (known after apply)
+      + deletion_policy       = "DELETE"
+      + display_name          = "cm cloud sql connections above 80%"
+      + enabled               = true
+      + id                    = (known after apply)
+      + name                  = (known after apply)
+      + notification_channels = (known after apply)
+      + project               = "cloud-mile-assessment"
+      + severity              = "WARNING"
+
+      + alert_strategy {
+          + auto_close = "1800s"
+        }
+
+      + conditions {
+          + display_name = "num_backends > 20 (80% of max_connections 25)"
+          + name         = (known after apply)
+
+          + condition_threshold {
+              + comparison      = "COMPARISON_GT"
+              + duration        = "60s"
+              + filter          = "metric.type=\"cloudsql.googleapis.com/database/postgresql/num_backends\" AND resource.type=\"cloudsql_database\" AND resource.label.database_id=\"cloud-mile-assessment:cm-pg\""
+              + threshold_value = 20
+
+              + aggregations {
+                  + alignment_period     = "60s"
+                  + cross_series_reducer = "REDUCE_SUM"
+                  + group_by_fields      = [
+                      + "resource.label.database_id",
+                    ]
+                  + per_series_aligner   = "ALIGN_MEAN"
+                }
+
+              + trigger {
+                  + count = 1
+                }
+            }
+        }
+
+      + documentation {
+          + content   = <<-EOT
+                Cloud SQL `cm-pg` has more than 20 connections (80% of max_connections 25). New connections will soon be refused.
+                
+                Check:
+                - `SELECT datname, usename, state, count(*) FROM pg_stat_activity GROUP BY 1,2,3;`
+                - app pods holding connections (`kubectl -n app logs deploy/app -c app | grep "holding db connections"`)
+                - number of app replicas (`kubectl -n app get hpa app`)
+            EOT
+          + mime_type = "text/markdown"
+        }
+    }
+
+  # module.monitoring.google_monitoring_alert_policy.uptime will be created
+  + resource "google_monitoring_alert_policy" "uptime" {
+      + combiner              = "OR"
+      + creation_record       = (known after apply)
+      + deletion_policy       = "DELETE"
+      + display_name          = "cm app uptime check failing"
+      + enabled               = true
+      + id                    = (known after apply)
+      + name                  = (known after apply)
+      + notification_channels = (known after apply)
+      + project               = "cloud-mile-assessment"
+      + severity              = "CRITICAL"
+
+      + alert_strategy {
+          + auto_close = "1800s"
+        }
+
+      + conditions {
+          + display_name = "https://cm-app.sokay.my/healthz failing from more than 1 region"
+          + name         = (known after apply)
+
+          + condition_threshold {
+              + comparison      = "COMPARISON_GT"
+              + duration        = "60s"
+              + filter          = (known after apply)
+              + threshold_value = 1
+
+              + aggregations {
+                  + alignment_period     = "60s"
+                  + cross_series_reducer = "REDUCE_COUNT_FALSE"
+                  + group_by_fields      = [
+                      + "resource.label.host",
+                    ]
+                  + per_series_aligner   = "ALIGN_NEXT_OLDER"
+                }
+
+              + trigger {
+                  + count = 1
+                }
+            }
+        }
+
+      + documentation {
+          + content   = <<-EOT
+                `https://cm-app.sokay.my/healthz` is failing from more than one checker region.
+                
+                Check:
+                - `curl -v https://cm-app.sokay.my/healthz`
+                - `kubectl -n app get pods,ingress` and the LB backend health in the console
+                - `kubectl -n app describe ingress app`, managed certificate status, dns a record
+            EOT
+          + mime_type = "text/markdown"
+        }
+    }
+
+  # module.monitoring.google_monitoring_dashboard.ops will be created
+  + resource "google_monitoring_dashboard" "ops" {
+      + dashboard_json  = (known after apply)
+      + deletion_policy = "DELETE"
+      + id              = (known after apply)
+      + project         = "cloud-mile-assessment"
+    }
+
+  # module.monitoring.google_monitoring_notification_channel.email will be created
+  + resource "google_monitoring_notification_channel" "email" {
+      + deletion_policy     = "DELETE"
+      + display_name        = "cm alerts email"
+      + enabled             = true
+      + force_delete        = false
+      + id                  = (known after apply)
+      + labels              = {
+          + "email_address" = (sensitive value)
+        }
+      + name                = (known after apply)
+      + project             = "cloud-mile-assessment"
+      + type                = "email"
+      + verification_status = (known after apply)
+    }
+
+  # module.monitoring.google_monitoring_uptime_check_config.app will be created
+  + resource "google_monitoring_uptime_check_config" "app" {
+      + checker_type    = (known after apply)
+      + deletion_policy = "DELETE"
+      + display_name    = "cm app https healthz"
+      + id              = (known after apply)
+      + name            = (known after apply)
+      + period          = "60s"
+      + project         = "cloud-mile-assessment"
+      + timeout         = "10s"
+      + uptime_check_id = (known after apply)
+
+      + content_matchers {
+          + content = "\"status\":\"ok\""
+          + matcher = "CONTAINS_STRING"
+        }
+
+      + http_check {
+          + headers        = (known after apply)
+          + path           = "/healthz"
+          + port           = 443
+          + request_method = "GET"
+          + use_ssl        = true
+          + validate_ssl   = true
+
+          + accepted_response_status_codes {
+              + status_class = "STATUS_CLASS_2XX"
+            }
+        }
+
+      + monitored_resource {
+          + labels = {
+              + "host"       = "cm-app.sokay.my"
+              + "project_id" = "cloud-mile-assessment"
+            }
+          + type   = "uptime_url"
+        }
+    }
+
+Plan: 8 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + monitoring_alert_policies  = {
+      + node_cpu        = (known after apply)
+      + pod_restarts    = (known after apply)
+      + sql_connections = (known after apply)
+      + uptime          = (known after apply)
+    }
+  + monitoring_dashboard_id    = (known after apply)
+  + monitoring_log_metric      = "cm-app-errors"
+  + monitoring_uptime_check_id = (known after apply)
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: platform.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "platform.tfplan"
