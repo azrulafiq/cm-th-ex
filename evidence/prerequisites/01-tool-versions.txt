@@ -1,0 +1,29 @@
+$ gcloud --version
+Google Cloud SDK 575.0.1
+alpha 2026.07.07
+beta 2026.07.07
+bq 2.1.33
+bundled-python3-unix 3.14.5
+core 2026.07.07
+gcloud-crc32c 1.0.0
+gke-gcloud-auth-plugin 0.5.15
+gsutil 5.37
+kubectl 1.35.6
+preview 2026.07.07
+
+$ terraform version
+Terraform v1.15.8
+on linux_amd64
+
+Your version of Terraform is out of date! The latest version
+is 1.16.4. You can update by downloading from https://developer.hashicorp.com/terraform/install
+
+$ kubectl version --client
+Client Version: v1.35.6-dispatcher
+Kustomize Version: v5.7.1
+
+$ gke-gcloud-auth-plugin --version
+Kubernetes v0.1.0-gke.3-6-g26cf93a24
+
+$ docker version --format {{.Server.Version}}
+29.5.2

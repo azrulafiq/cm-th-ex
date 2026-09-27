@@ -1,0 +1,188 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # google_project_service.this["artifactregistry.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "artifactregistry.googleapis.com"
+    }
+
+  # google_project_service.this["cloudresourcemanager.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "cloudresourcemanager.googleapis.com"
+    }
+
+  # google_project_service.this["compute.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "compute.googleapis.com"
+    }
+
+  # google_project_service.this["container.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "container.googleapis.com"
+    }
+
+  # google_project_service.this["iam.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "iam.googleapis.com"
+    }
+
+  # google_project_service.this["iamcredentials.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "iamcredentials.googleapis.com"
+    }
+
+  # google_project_service.this["logging.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "logging.googleapis.com"
+    }
+
+  # google_project_service.this["monitoring.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "monitoring.googleapis.com"
+    }
+
+  # google_project_service.this["secretmanager.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "secretmanager.googleapis.com"
+    }
+
+  # google_project_service.this["servicenetworking.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "servicenetworking.googleapis.com"
+    }
+
+  # google_project_service.this["serviceusage.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "serviceusage.googleapis.com"
+    }
+
+  # google_project_service.this["sqladmin.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "sqladmin.googleapis.com"
+    }
+
+  # google_storage_bucket.tfstate will be created
+  + resource "google_storage_bucket" "tfstate" {
+      + deletion_policy             = "DELETE"
+      + effective_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy               = false
+      + id                          = (known after apply)
+      + location                    = "ASIA-SOUTHEAST1"
+      + name                        = "cloud-mile-assessment-tfstate"
+      + project                     = (known after apply)
+      + project_number              = (known after apply)
+      + public_access_prevention    = "enforced"
+      + rpo                         = (known after apply)
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + terraform_labels            = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + time_created                = (known after apply)
+      + uniform_bucket_level_access = true
+      + updated                     = (known after apply)
+      + url                         = (known after apply)
+
+      + lifecycle_rule {
+          + action {
+              + type          = "Delete"
+                # (1 unchanged attribute hidden)
+            }
+          + condition {
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + num_newer_versions     = 10
+              + with_state             = (known after apply)
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      + soft_delete_policy (known after apply)
+
+      + versioning {
+          + enabled = true
+        }
+
+      + website (known after apply)
+    }
+
+Plan: 13 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + enabled_services = [
+      + "artifactregistry.googleapis.com",
+      + "cloudresourcemanager.googleapis.com",
+      + "compute.googleapis.com",
+      + "container.googleapis.com",
+      + "iam.googleapis.com",
+      + "iamcredentials.googleapis.com",
+      + "logging.googleapis.com",
+      + "monitoring.googleapis.com",
+      + "secretmanager.googleapis.com",
+      + "servicenetworking.googleapis.com",
+      + "serviceusage.googleapis.com",
+      + "sqladmin.googleapis.com",
+    ]
+  + tfstate_bucket   = "cloud-mile-assessment-tfstate"
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: bootstrap.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "bootstrap.tfplan"

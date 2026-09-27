@@ -1,0 +1,20 @@
+$ terraform plan -detailed-exitcode
+google_project_service.this["container.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/container.googleapis.com]
+google_project_service.this["artifactregistry.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/artifactregistry.googleapis.com]
+google_project_service.this["servicenetworking.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/servicenetworking.googleapis.com]
+google_project_service.this["serviceusage.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/serviceusage.googleapis.com]
+google_project_service.this["logging.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/logging.googleapis.com]
+google_project_service.this["iam.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/iam.googleapis.com]
+google_project_service.this["sqladmin.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/sqladmin.googleapis.com]
+google_project_service.this["compute.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/compute.googleapis.com]
+google_project_service.this["iamcredentials.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/iamcredentials.googleapis.com]
+google_project_service.this["monitoring.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/monitoring.googleapis.com]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/cloudresourcemanager.googleapis.com]
+google_project_service.this["secretmanager.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/secretmanager.googleapis.com]
+google_storage_bucket.tfstate: Refreshing state... [id=cloud-mile-assessment-tfstate]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+exit code: 0

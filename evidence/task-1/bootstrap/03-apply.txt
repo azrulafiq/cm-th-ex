@@ -1,0 +1,112 @@
+google_project_service.this["artifactregistry.googleapis.com"]: Creating...
+google_project_service.this["iam.googleapis.com"]: Creating...
+google_project_service.this["serviceusage.googleapis.com"]: Creating...
+google_project_service.this["secretmanager.googleapis.com"]: Creating...
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Creating...
+google_project_service.this["compute.googleapis.com"]: Creating...
+google_project_service.this["monitoring.googleapis.com"]: Creating...
+google_project_service.this["iamcredentials.googleapis.com"]: Creating...
+google_project_service.this["container.googleapis.com"]: Creating...
+google_project_service.this["servicenetworking.googleapis.com"]: Creating...
+google_project_service.this["monitoring.googleapis.com"]: Creation complete after 4s [id=cloud-mile-assessment/monitoring.googleapis.com]
+google_project_service.this["serviceusage.googleapis.com"]: Creation complete after 4s [id=cloud-mile-assessment/serviceusage.googleapis.com]
+google_project_service.this["sqladmin.googleapis.com"]: Creating...
+google_project_service.this["logging.googleapis.com"]: Creating...
+google_project_service.this["logging.googleapis.com"]: Creation complete after 5s [id=cloud-mile-assessment/logging.googleapis.com]
+google_project_service.this["artifactregistry.googleapis.com"]: Still creating... [00m10s elapsed]
+google_project_service.this["secretmanager.googleapis.com"]: Still creating... [00m10s elapsed]
+google_project_service.this["iam.googleapis.com"]: Still creating... [00m10s elapsed]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Still creating... [00m10s elapsed]
+google_project_service.this["compute.googleapis.com"]: Still creating... [00m10s elapsed]
+google_project_service.this["iamcredentials.googleapis.com"]: Still creating... [00m10s elapsed]
+google_project_service.this["servicenetworking.googleapis.com"]: Still creating... [00m10s elapsed]
+google_project_service.this["container.googleapis.com"]: Still creating... [00m10s elapsed]
+google_project_service.this["sqladmin.googleapis.com"]: Still creating... [00m10s elapsed]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Still creating... [00m20s elapsed]
+google_project_service.this["artifactregistry.googleapis.com"]: Still creating... [00m20s elapsed]
+google_project_service.this["iam.googleapis.com"]: Still creating... [00m20s elapsed]
+google_project_service.this["compute.googleapis.com"]: Still creating... [00m20s elapsed]
+google_project_service.this["secretmanager.googleapis.com"]: Still creating... [00m20s elapsed]
+google_project_service.this["servicenetworking.googleapis.com"]: Still creating... [00m20s elapsed]
+google_project_service.this["iamcredentials.googleapis.com"]: Still creating... [00m20s elapsed]
+google_project_service.this["container.googleapis.com"]: Still creating... [00m20s elapsed]
+google_project_service.this["sqladmin.googleapis.com"]: Still creating... [00m20s elapsed]
+google_project_service.this["sqladmin.googleapis.com"]: Creation complete after 24s [id=cloud-mile-assessment/sqladmin.googleapis.com]
+google_project_service.this["compute.googleapis.com"]: Still creating... [00m30s elapsed]
+google_project_service.this["secretmanager.googleapis.com"]: Still creating... [00m30s elapsed]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Still creating... [00m30s elapsed]
+google_project_service.this["artifactregistry.googleapis.com"]: Still creating... [00m30s elapsed]
+google_project_service.this["iam.googleapis.com"]: Still creating... [00m30s elapsed]
+google_project_service.this["iamcredentials.googleapis.com"]: Still creating... [00m30s elapsed]
+google_project_service.this["servicenetworking.googleapis.com"]: Still creating... [00m30s elapsed]
+google_project_service.this["container.googleapis.com"]: Still creating... [00m30s elapsed]
+google_project_service.this["iam.googleapis.com"]: Still creating... [00m40s elapsed]
+google_project_service.this["secretmanager.googleapis.com"]: Still creating... [00m40s elapsed]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Still creating... [00m40s elapsed]
+google_project_service.this["artifactregistry.googleapis.com"]: Still creating... [00m40s elapsed]
+google_project_service.this["compute.googleapis.com"]: Still creating... [00m40s elapsed]
+google_project_service.this["container.googleapis.com"]: Still creating... [00m40s elapsed]
+google_project_service.this["servicenetworking.googleapis.com"]: Still creating... [00m40s elapsed]
+google_project_service.this["iamcredentials.googleapis.com"]: Still creating... [00m40s elapsed]
+google_project_service.this["artifactregistry.googleapis.com"]: Still creating... [00m50s elapsed]
+google_project_service.this["secretmanager.googleapis.com"]: Still creating... [00m50s elapsed]
+google_project_service.this["compute.googleapis.com"]: Still creating... [00m50s elapsed]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Still creating... [00m50s elapsed]
+google_project_service.this["iam.googleapis.com"]: Still creating... [00m50s elapsed]
+google_project_service.this["servicenetworking.googleapis.com"]: Still creating... [00m50s elapsed]
+google_project_service.this["container.googleapis.com"]: Still creating... [00m50s elapsed]
+google_project_service.this["iamcredentials.googleapis.com"]: Still creating... [00m50s elapsed]
+google_project_service.this["iam.googleapis.com"]: Still creating... [01m00s elapsed]
+google_project_service.this["secretmanager.googleapis.com"]: Still creating... [01m00s elapsed]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Still creating... [01m00s elapsed]
+google_project_service.this["artifactregistry.googleapis.com"]: Still creating... [01m00s elapsed]
+google_project_service.this["compute.googleapis.com"]: Still creating... [01m00s elapsed]
+google_project_service.this["iamcredentials.googleapis.com"]: Still creating... [01m00s elapsed]
+google_project_service.this["servicenetworking.googleapis.com"]: Still creating... [01m00s elapsed]
+google_project_service.this["container.googleapis.com"]: Still creating... [01m00s elapsed]
+google_project_service.this["secretmanager.googleapis.com"]: Still creating... [01m10s elapsed]
+google_project_service.this["compute.googleapis.com"]: Still creating... [01m10s elapsed]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Still creating... [01m10s elapsed]
+google_project_service.this["artifactregistry.googleapis.com"]: Still creating... [01m10s elapsed]
+google_project_service.this["iam.googleapis.com"]: Still creating... [01m10s elapsed]
+google_project_service.this["servicenetworking.googleapis.com"]: Still creating... [01m10s elapsed]
+google_project_service.this["container.googleapis.com"]: Still creating... [01m10s elapsed]
+google_project_service.this["iamcredentials.googleapis.com"]: Still creating... [01m10s elapsed]
+google_project_service.this["iam.googleapis.com"]: Still creating... [01m20s elapsed]
+google_project_service.this["compute.googleapis.com"]: Still creating... [01m20s elapsed]
+google_project_service.this["artifactregistry.googleapis.com"]: Still creating... [01m20s elapsed]
+google_project_service.this["secretmanager.googleapis.com"]: Still creating... [01m20s elapsed]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Still creating... [01m20s elapsed]
+google_project_service.this["iamcredentials.googleapis.com"]: Still creating... [01m20s elapsed]
+google_project_service.this["servicenetworking.googleapis.com"]: Still creating... [01m20s elapsed]
+google_project_service.this["container.googleapis.com"]: Still creating... [01m20s elapsed]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Creation complete after 1m27s [id=cloud-mile-assessment/cloudresourcemanager.googleapis.com]
+google_project_service.this["container.googleapis.com"]: Creation complete after 1m27s [id=cloud-mile-assessment/container.googleapis.com]
+google_project_service.this["servicenetworking.googleapis.com"]: Creation complete after 1m27s [id=cloud-mile-assessment/servicenetworking.googleapis.com]
+google_project_service.this["artifactregistry.googleapis.com"]: Creation complete after 1m27s [id=cloud-mile-assessment/artifactregistry.googleapis.com]
+google_project_service.this["iamcredentials.googleapis.com"]: Creation complete after 1m27s [id=cloud-mile-assessment/iamcredentials.googleapis.com]
+google_project_service.this["iam.googleapis.com"]: Creation complete after 1m27s [id=cloud-mile-assessment/iam.googleapis.com]
+google_project_service.this["secretmanager.googleapis.com"]: Creation complete after 1m27s [id=cloud-mile-assessment/secretmanager.googleapis.com]
+google_project_service.this["compute.googleapis.com"]: Creation complete after 1m27s [id=cloud-mile-assessment/compute.googleapis.com]
+google_storage_bucket.tfstate: Creating...
+google_storage_bucket.tfstate: Creation complete after 3s [id=cloud-mile-assessment-tfstate]
+
+Apply complete! Resources: 13 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+enabled_services = tolist([
+  "artifactregistry.googleapis.com",
+  "cloudresourcemanager.googleapis.com",
+  "compute.googleapis.com",
+  "container.googleapis.com",
+  "iam.googleapis.com",
+  "iamcredentials.googleapis.com",
+  "logging.googleapis.com",
+  "monitoring.googleapis.com",
+  "secretmanager.googleapis.com",
+  "servicenetworking.googleapis.com",
+  "serviceusage.googleapis.com",
+  "sqladmin.googleapis.com",
+])
+tfstate_bucket = "cloud-mile-assessment-tfstate"

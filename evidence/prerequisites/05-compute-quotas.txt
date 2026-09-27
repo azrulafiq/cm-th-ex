@@ -1,0 +1,13 @@
+$ gcloud compute regions describe asia-southeast1 --flatten=quotas --format="table(quotas.metric,quotas.usage,quotas.limit)" | grep -E "METRIC|^(CPUS|E2_CPUS|IN_USE_ADDRESSES|SSD_TOTAL_GB|DISKS_TOTAL_GB|INSTANCES) "
+METRIC                                               USAGE  LIMIT
+CPUS                                                 0.0    32.0
+DISKS_TOTAL_GB                                       0.0    2048.0
+IN_USE_ADDRESSES                                     0.0    4.0
+SSD_TOTAL_GB                                         0.0    250.0
+INSTANCES                                            0.0    8.0
+E2_CPUS                                              0.0    8.0
+
+$ gcloud compute project-info describe --flatten=quotas --format="table(quotas.metric,quotas.usage,quotas.limit)" | grep -E "METRIC|^(CPUS_ALL_REGIONS|GPUS_ALL_REGIONS) "
+METRIC                                             USAGE  LIMIT
+CPUS_ALL_REGIONS                                   0.0    12.0
+GPUS_ALL_REGIONS                                   0.0    0.0

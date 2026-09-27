@@ -1,0 +1,24 @@
+$ gcloud auth list
+      Credentialed Accounts
+ACTIVE  ACCOUNT
+        azrulafiq.w@gmail.com
+*       zantarockstudio@gmail.com
+
+To set the active account, run:
+    $ gcloud config set account `ACCOUNT`
+
+
+$ gcloud config list
+[compute]
+region = asia-southeast1
+zone = asia-southeast1-a
+[core]
+account = zantarockstudio@gmail.com
+disable_usage_reporting = True
+project = cloud-mile-assessment
+
+Your active configuration is: [default]
+
+$ gcloud config configurations list
+NAME     IS_ACTIVE  ACCOUNT                    PROJECT                COMPUTE_DEFAULT_ZONE  COMPUTE_DEFAULT_REGION
+default  True       zantarockstudio@gmail.com  cloud-mile-assessment  asia-southeast1-a     asia-southeast1

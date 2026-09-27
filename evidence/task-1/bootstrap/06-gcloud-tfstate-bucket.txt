@@ -1,0 +1,5 @@
+location: ASIA-SOUTHEAST1
+name: cloud-mile-assessment-tfstate
+public_access_prevention: enforced
+uniform_bucket_level_access: true
+versioning_enabled: true

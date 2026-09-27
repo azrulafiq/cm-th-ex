@@ -1,0 +1,12 @@
+$ gcloud projects describe cloud-mile-assessment
+createTime: '2026-09-27T06:00:00.235Z'
+lifecycleState: ACTIVE
+name: cloud-mile-assessment
+projectId: cloud-mile-assessment
+projectNumber: '969886371063'
+
+$ gcloud billing projects describe cloud-mile-assessment
+billingAccountName: billingAccounts/XXXXXX-XXXXXX-XXXXXX  # redacted
+billingEnabled: true
+name: projects/cloud-mile-assessment/billingInfo
+projectId: cloud-mile-assessment
