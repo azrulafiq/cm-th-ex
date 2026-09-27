@@ -1,0 +1,544 @@
+## 2026-09-27T19:11:23 MYT - DIAGNOSIS
+
+### 1. what users see
+$ curl -sS -w "\nhttp=%{http_code} time=%{time_total}s\n" https://cm-app.sokay.my/healthz
+<h2></h2>
+</body></html>
+
+http=502 time=0.117887s
+
+### 2. is kubernetes healthy? pods, restarts, events
+$ kubectl -n app get pods -o wide
+NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE                               NOMINATED NODE   READINESS GATES
+app-6c6b9d976d-5b7z2   2/2     Running   0          27m   10.20.0.11   gke-cm-gke-cm-pool-404d116a-89c9   <none>           1/1
+app-6c6b9d976d-jdllv   2/2     Running   0          27m   10.20.3.32   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+
+$ kubectl -n app get events --sort-by=.lastTimestamp
+LAST SEEN   TYPE      REASON                              OBJECT                        MESSAGE
+45m         Normal    SuccessfulCreate                    replicaset/app-589cbfbdf6     Created pod: app-589cbfbdf6-fx6bm
+45m         Normal    Scheduled                           pod/app-589cbfbdf6-fx6bm      Successfully assigned app/app-589cbfbdf6-fx6bm to gke-cm-gke-cm-pool-404d116a-fzib
+45m         Normal    LoadBalancerNegNotReady             pod/app-589cbfbdf6-fx6bm      Waiting for pod to become healthy in at least one of the NEG(s): [k8s1-75b98460-app-app-80-a291f78d]
+45m         Normal    ScalingReplicaSet                   deployment/app                Scaled up replica set app-589cbfbdf6 from 0 to 1
+45m         Normal    Pulled                              pod/app-589cbfbdf6-fx6bm      Container image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" already present on machine and can be accessed by the pod
+45m         Normal    Created                             pod/app-589cbfbdf6-fx6bm      Container created
+45m         Normal    Started                             pod/app-589cbfbdf6-fx6bm      Container started
+45m         Warning   Unhealthy                           pod/app-589cbfbdf6-fx6bm      Startup probe failed: Get "http://10.20.3.27:9090/startup": dial tcp 10.20.3.27:9090: connect: connection refused
+45m         Normal    Pulling                             pod/app-589cbfbdf6-fx6bm      Pulling image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5"
+45m         Normal    Created                             pod/app-589cbfbdf6-fx6bm      Container created
+45m         Normal    Pulled                              pod/app-589cbfbdf6-fx6bm      Successfully pulled image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5" in 3.775s (3.775s including waiting). Image size: 50601428 bytes.
+45m         Normal    Started                             pod/app-589cbfbdf6-fx6bm      Container started
+45m         Warning   Unhealthy                           pod/app-589cbfbdf6-fx6bm      Readiness probe failed: Get "http://10.20.3.27:8080/readyz": dial tcp 10.20.3.27:8080: connect: connection refused
+45m         Warning   Unhealthy                           pod/app-589cbfbdf6-fx6bm      Readiness probe failed: Get "http://10.20.3.27:8080/readyz": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+45m         Normal    LoadBalancerNegReady                pod/app-589cbfbdf6-fx6bm      Pod has become Healthy in NEG "Key{\"k8s1-75b98460-app-app-80-a291f78d\", zone: \"asia-southeast1-a\"}" attached to BackendService "Key{\"k8s1-75b98460-app-app-80-a291f78d\"}". Marking condition "cloud.google.com/load-balancer-neg-ready" to True.
+45m         Normal    SuccessfulCreate                    replicaset/app-589cbfbdf6     Created pod: app-589cbfbdf6-fq8lk
+45m         Normal    ScalingReplicaSet                   deployment/app                Scaled down replica set app-68cf846886 from 2 to 1
+45m         Normal    LoadBalancerNegNotReady             pod/app-589cbfbdf6-fq8lk      Waiting for pod to become healthy in at least one of the NEG(s): [k8s1-75b98460-app-app-80-a291f78d]
+45m         Normal    SuccessfulDelete                    replicaset/app-68cf846886     Deleted pod: app-68cf846886-2q27j
+45m         Normal    ScalingReplicaSet                   deployment/app                Scaled up replica set app-589cbfbdf6 from 1 to 2
+45m         Normal    Killing                             pod/app-68cf846886-2q27j      Stopping container cloud-sql-proxy
+45m         Normal    Scheduled                           pod/app-589cbfbdf6-fq8lk      Successfully assigned app/app-589cbfbdf6-fq8lk to gke-cm-gke-cm-pool-404d116a-fzib
+45m         Normal    Killing                             pod/app-68cf846886-2q27j      Stopping container app
+45m         Normal    Created                             pod/app-589cbfbdf6-fq8lk      Container created
+45m         Normal    Pulled                              pod/app-589cbfbdf6-fq8lk      Container image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" already present on machine and can be accessed by the pod
+45m         Normal    Started                             pod/app-589cbfbdf6-fq8lk      Container started
+45m         Normal    Pulled                              pod/app-589cbfbdf6-fq8lk      Container image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5" already present on machine and can be accessed by the pod
+45m         Normal    Created                             pod/app-589cbfbdf6-fq8lk      Container created
+45m         Normal    Started                             pod/app-589cbfbdf6-fq8lk      Container started
+45m         Warning   Unhealthy                           pod/app-589cbfbdf6-fq8lk      Readiness probe failed: Get "http://10.20.3.28:8080/readyz": dial tcp 10.20.3.28:8080: connect: connection refused
+45m         Normal    LoadBalancerNegReady                pod/app-589cbfbdf6-fq8lk      Pod has become Healthy in NEG "Key{\"k8s1-75b98460-app-app-80-a291f78d\", zone: \"asia-southeast1-a\"}" attached to BackendService "Key{\"k8s1-75b98460-app-app-80-a291f78d\"}". Marking condition "cloud.google.com/load-balancer-neg-ready" to True.
+44m         Normal    SuccessfulDelete                    replicaset/app-68cf846886     Deleted pod: app-68cf846886-5mntv
+44m         Normal    ScalingReplicaSet                   deployment/app                Scaled down replica set app-68cf846886 from 1 to 0
+44m         Normal    Killing                             pod/app-68cf846886-5mntv      Stopping container app
+44m         Normal    Killing                             pod/app-68cf846886-5mntv      Stopping container cloud-sql-proxy
+33m         Normal    ScalingReplicaSet                   deployment/app                Scaled up replica set app-6b648b7b86 from 0 to 1
+33m         Normal    LoadBalancerNegNotReady             pod/app-6b648b7b86-8lcq7      Waiting for pod to become healthy in at least one of the NEG(s): [k8s1-75b98460-app-app-80-a291f78d]
+33m         Normal    SuccessfulCreate                    replicaset/app-6b648b7b86     Created pod: app-6b648b7b86-8lcq7
+33m         Normal    Scheduled                           pod/app-6b648b7b86-8lcq7      Successfully assigned app/app-6b648b7b86-8lcq7 to gke-cm-gke-cm-pool-404d116a-89c9
+33m         Warning   FailedMount                         pod/app-6b648b7b86-8lcq7      MountVolume.SetUp failed for volume "db-secret" : kubernetes.io/csi: mounter.SetUpAt failed to get CSI client: driver name secrets-store-gke.csi.k8s.io not found in the list of registered CSI drivers
+32m         Normal    Pulling                             pod/app-6b648b7b86-8lcq7      Pulling image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4"
+32m         Normal    Pulled                              pod/app-6b648b7b86-8lcq7      Successfully pulled image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" in 7.816s (7.817s including waiting). Image size: 18667947 bytes.
+32m         Normal    Created                             pod/app-6b648b7b86-8lcq7      Container created
+32m         Normal    Started                             pod/app-6b648b7b86-8lcq7      Container started
+32m         Warning   Unhealthy                           pod/app-6b648b7b86-8lcq7      Startup probe failed: Get "http://10.20.0.7:9090/startup": dial tcp 10.20.0.7:9090: connect: connection refused
+32m         Normal    Pulling                             pod/app-6b648b7b86-8lcq7      Pulling image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5"
+32m         Normal    Pulled                              pod/app-6b648b7b86-8lcq7      Successfully pulled image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5" in 5.458s (5.458s including waiting). Image size: 50601428 bytes.
+32m         Normal    Created                             pod/app-6b648b7b86-8lcq7      Container created
+32m         Normal    Started                             pod/app-6b648b7b86-8lcq7      Container started
+32m         Warning   Unhealthy                           pod/app-6b648b7b86-8lcq7      Readiness probe failed: Get "http://10.20.0.7:8080/readyz": dial tcp 10.20.0.7:8080: connect: connection refused
+32m         Normal    LoadBalancerNegReady                pod/app-6b648b7b86-8lcq7      Pod has become Healthy in NEG "Key{\"k8s1-75b98460-app-app-80-a291f78d\", zone: \"asia-southeast1-a\"}" attached to BackendService "Key{\"k8s1-75b98460-app-app-80-a291f78d\"}". Marking condition "cloud.google.com/load-balancer-neg-ready" to True.
+32m         Normal    LoadBalancerNegNotReady             pod/app-6b648b7b86-v4g7h      Waiting for pod to become healthy in at least one of the NEG(s): [k8s1-75b98460-app-app-80-a291f78d]
+32m         Normal    Scheduled                           pod/app-6b648b7b86-v4g7h      Successfully assigned app/app-6b648b7b86-v4g7h to gke-cm-gke-cm-pool-404d116a-89c9
+32m         Normal    SuccessfulCreate                    replicaset/app-6b648b7b86     Created pod: app-6b648b7b86-v4g7h
+32m         Normal    ScalingReplicaSet                   deployment/app                Scaled up replica set app-6b648b7b86 from 1 to 2
+32m         Normal    ScalingReplicaSet                   deployment/app                Scaled down replica set app-589cbfbdf6 from 2 to 1
+32m         Normal    SuccessfulDelete                    replicaset/app-589cbfbdf6     Deleted pod: app-589cbfbdf6-fx6bm
+32m         Normal    Killing                             pod/app-589cbfbdf6-fx6bm      Stopping container app
+32m         Normal    Killing                             pod/app-589cbfbdf6-fx6bm      Stopping container cloud-sql-proxy
+32m         Normal    Created                             pod/app-6b648b7b86-v4g7h      Container created
+32m         Normal    Pulled                              pod/app-6b648b7b86-v4g7h      Container image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" already present on machine and can be accessed by the pod
+32m         Normal    Started                             pod/app-6b648b7b86-v4g7h      Container started
+32m         Normal    Pulled                              pod/app-6b648b7b86-v4g7h      Container image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5" already present on machine and can be accessed by the pod
+32m         Normal    Created                             pod/app-6b648b7b86-v4g7h      Container created
+32m         Normal    Started                             pod/app-6b648b7b86-v4g7h      Container started
+32m         Warning   Unhealthy                           pod/app-6b648b7b86-v4g7h      Readiness probe failed: Get "http://10.20.0.8:8080/readyz": dial tcp 10.20.0.8:8080: connect: connection refused
+31m         Warning   Unhealthy                           pod/app-6b648b7b86-v4g7h      Readiness probe failed: Get "http://10.20.0.8:8080/readyz": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+31m         Normal    ScalingReplicaSet                   deployment/app                Scaled down replica set app-589cbfbdf6 from 1 to 0
+31m         Normal    SuccessfulDelete                    replicaset/app-589cbfbdf6     Deleted pod: app-589cbfbdf6-fq8lk
+31m         Normal    LoadBalancerNegReady                pod/app-6b648b7b86-v4g7h      Pod has become Healthy in NEG "Key{\"k8s1-75b98460-app-app-80-a291f78d\", zone: \"asia-southeast1-a\"}" attached to BackendService "Key{\"k8s1-75b98460-app-app-80-a291f78d\"}". Marking condition "cloud.google.com/load-balancer-neg-ready" to True.
+31m         Normal    Killing                             pod/app-589cbfbdf6-fq8lk      Stopping container app
+31m         Normal    Killing                             pod/app-589cbfbdf6-fq8lk      Stopping container cloud-sql-proxy
+30m         Normal    ScalingReplicaSet                   deployment/app                Scaled up replica set app-596c56db68 from 0 to 1
+30m         Normal    Scheduled                           pod/app-596c56db68-g7h9p      Successfully assigned app/app-596c56db68-g7h9p to gke-cm-gke-cm-pool-404d116a-89c9
+30m         Normal    LoadBalancerNegNotReady             pod/app-596c56db68-g7h9p      Waiting for pod to become healthy in at least one of the NEG(s): [k8s1-75b98460-app-app-80-a291f78d]
+30m         Normal    SuccessfulCreate                    replicaset/app-596c56db68     Created pod: app-596c56db68-g7h9p
+30m         Normal    Created                             pod/app-596c56db68-g7h9p      Container created
+30m         Normal    Pulled                              pod/app-596c56db68-g7h9p      Container image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" already present on machine and can be accessed by the pod
+30m         Normal    Started                             pod/app-596c56db68-g7h9p      Container started
+30m         Warning   Unhealthy                           pod/app-596c56db68-g7h9p      Startup probe failed: Get "http://10.20.0.9:9090/startup": dial tcp 10.20.0.9:9090: connect: connection refused
+30m         Normal    Created                             pod/app-596c56db68-g7h9p      Container created
+30m         Normal    Started                             pod/app-596c56db68-g7h9p      Container started
+30m         Normal    Pulled                              pod/app-596c56db68-g7h9p      Container image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5" already present on machine and can be accessed by the pod
+30m         Warning   Unhealthy                           pod/app-596c56db68-g7h9p      Readiness probe failed: Get "http://10.20.0.9:8080/readyz": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+30m         Normal    SuccessfulCreate                    replicaset/app-596c56db68     Created pod: app-596c56db68-pznfj
+30m         Normal    ScalingReplicaSet                   deployment/app                Scaled up replica set app-596c56db68 from 1 to 2
+30m         Normal    LoadBalancerNegNotReady             pod/app-596c56db68-pznfj      Waiting for pod to become healthy in at least one of the NEG(s): [k8s1-75b98460-app-app-80-a291f78d]
+30m         Normal    ScalingReplicaSet                   deployment/app                Scaled down replica set app-6b648b7b86 from 2 to 1
+30m         Normal    Scheduled                           pod/app-596c56db68-pznfj      Successfully assigned app/app-596c56db68-pznfj to gke-cm-gke-cm-pool-404d116a-fzib
+30m         Normal    LoadBalancerNegReady                pod/app-596c56db68-g7h9p      Pod has become Healthy in NEG "Key{\"k8s1-75b98460-app-app-80-a291f78d\", zone: \"asia-southeast1-a\"}" attached to BackendService "Key{\"k8s1-75b98460-app-app-80-a291f78d\"}". Marking condition "cloud.google.com/load-balancer-neg-ready" to True.
+30m         Normal    Killing                             pod/app-6b648b7b86-8lcq7      Stopping container cloud-sql-proxy
+30m         Normal    SuccessfulDelete                    replicaset/app-6b648b7b86     Deleted pod: app-6b648b7b86-8lcq7
+30m         Normal    Killing                             pod/app-6b648b7b86-8lcq7      Stopping container app
+30m         Normal    Started                             pod/app-596c56db68-pznfj      Container started
+30m         Normal    Created                             pod/app-596c56db68-pznfj      Container created
+30m         Normal    Pulled                              pod/app-596c56db68-pznfj      Container image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" already present on machine and can be accessed by the pod
+30m         Normal    Started                             pod/app-596c56db68-pznfj      Container started
+30m         Normal    Created                             pod/app-596c56db68-pznfj      Container created
+30m         Normal    Pulled                              pod/app-596c56db68-pznfj      Container image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5" already present on machine and can be accessed by the pod
+30m         Warning   Unhealthy                           pod/app-596c56db68-pznfj      Readiness probe failed: Get "http://10.20.3.30:8080/readyz": dial tcp 10.20.3.30:8080: connect: connection refused
+30m         Warning   Unhealthy                           pod/app-596c56db68-pznfj      Readiness probe failed: Get "http://10.20.3.30:8080/readyz": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+30m         Normal    LoadBalancerNegReady                pod/app-596c56db68-pznfj      Pod has become Healthy in NEG "Key{\"k8s1-75b98460-app-app-80-a291f78d\", zone: \"asia-southeast1-a\"}" attached to BackendService "Key{\"k8s1-75b98460-app-app-80-a291f78d\"}". Marking condition "cloud.google.com/load-balancer-neg-ready" to True.
+30m         Normal    ScalingReplicaSet                   deployment/app                Scaled down replica set app-6b648b7b86 from 1 to 0
+30m         Normal    Killing                             pod/app-6b648b7b86-v4g7h      Stopping container app
+30m         Normal    Killing                             pod/app-6b648b7b86-v4g7h      Stopping container cloud-sql-proxy
+30m         Normal    SuccessfulDelete                    replicaset/app-6b648b7b86     Deleted pod: app-6b648b7b86-v4g7h
+28m         Normal    ScalingReplicaSet                   deployment/app                Scaled up replica set app-6c6b9d976d from 0 to 1
+28m         Normal    SuccessfulCreate                    replicaset/app-6c6b9d976d     Created pod: app-6c6b9d976d-ccfx7
+28m         Normal    LoadBalancerNegNotReady             pod/app-6c6b9d976d-ccfx7      Waiting for pod to become healthy in at least one of the NEG(s): [k8s1-75b98460-app-app-80-a291f78d]
+28m         Normal    Scheduled                           pod/app-6c6b9d976d-ccfx7      Successfully assigned app/app-6c6b9d976d-ccfx7 to gke-cm-gke-cm-pool-404d116a-89c9
+28m         Normal    Pulled                              pod/app-6c6b9d976d-ccfx7      Container image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" already present on machine and can be accessed by the pod
+28m         Normal    Created                             pod/app-6c6b9d976d-ccfx7      Container created
+28m         Normal    Started                             pod/app-6c6b9d976d-ccfx7      Container started
+28m         Normal    Started                             pod/app-6c6b9d976d-ccfx7      Container started
+28m         Normal    Pulled                              pod/app-6c6b9d976d-ccfx7      Container image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5" already present on machine and can be accessed by the pod
+28m         Normal    Created                             pod/app-6c6b9d976d-ccfx7      Container created
+28m         Warning   Unhealthy                           pod/app-6c6b9d976d-ccfx7      Readiness probe failed: Get "http://10.20.0.10:8080/readyz": dial tcp 10.20.0.10:8080: connect: connection refused
+28m         Warning   Unhealthy                           pod/app-6c6b9d976d-ccfx7      Readiness probe failed: Get "http://10.20.0.10:8080/readyz": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+28m         Normal    LoadBalancerNegReady                pod/app-6c6b9d976d-ccfx7      Pod has become Healthy in NEG "Key{\"k8s1-75b98460-app-app-80-a291f78d\", zone: \"asia-southeast1-a\"}" attached to BackendService "Key{\"k8s1-75b98460-app-app-80-a291f78d\"}". Marking condition "cloud.google.com/load-balancer-neg-ready" to True.
+28m         Normal    Killing                             pod/app-596c56db68-g7h9p      Stopping container app
+28m         Normal    Killing                             pod/app-596c56db68-g7h9p      Stopping container cloud-sql-proxy
+28m         Normal    Scheduled                           pod/app-6c6b9d976d-p7dsb      Successfully assigned app/app-6c6b9d976d-p7dsb to gke-cm-gke-cm-pool-404d116a-fzib
+28m         Normal    LoadBalancerNegNotReady             pod/app-6c6b9d976d-p7dsb      Waiting for pod to become healthy in at least one of the NEG(s): [k8s1-75b98460-app-app-80-a291f78d]
+28m         Normal    SuccessfulCreate                    replicaset/app-6c6b9d976d     Created pod: app-6c6b9d976d-p7dsb
+28m         Normal    SuccessfulDelete                    replicaset/app-596c56db68     Deleted pod: app-596c56db68-g7h9p
+28m         Warning   Unhealthy                           pod/app-596c56db68-g7h9p      Readiness probe failed: Get "http://10.20.0.9:8080/readyz": dial tcp 10.20.0.9:8080: connect: connection refused
+28m         Normal    Created                             pod/app-6c6b9d976d-p7dsb      Container created
+28m         Normal    Pulled                              pod/app-6c6b9d976d-p7dsb      Container image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" already present on machine and can be accessed by the pod
+28m         Normal    Started                             pod/app-6c6b9d976d-p7dsb      Container started
+28m         Warning   Unhealthy                           pod/app-6c6b9d976d-p7dsb      Startup probe failed: Get "http://10.20.3.31:9090/startup": dial tcp 10.20.3.31:9090: connect: connection refused
+28m         Normal    Created                             pod/app-6c6b9d976d-p7dsb      Container created
+28m         Normal    Attach                              service/app                   Attach 1 network endpoint(s) (NEG "k8s1-75b98460-app-app-80-a291f78d" in zone "asia-southeast1-a")
+28m         Normal    Pulled                              pod/app-6c6b9d976d-p7dsb      Container image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5" already present on machine and can be accessed by the pod
+28m         Normal    Started                             pod/app-6c6b9d976d-p7dsb      Container started
+28m         Warning   Unhealthy                           pod/app-6c6b9d976d-p7dsb      Readiness probe failed: Get "http://10.20.3.31:8080/readyz": dial tcp 10.20.3.31:8080: connect: connection refused
+28m         Warning   Unhealthy                           pod/app-6c6b9d976d-p7dsb      Readiness probe failed: Get "http://10.20.3.31:8080/readyz": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+28m         Normal    LoadBalancerNegReady                pod/app-6c6b9d976d-p7dsb      Pod has become Healthy in NEG "Key{\"k8s1-75b98460-app-app-80-a291f78d\", zone: \"asia-southeast1-a\"}" attached to BackendService "Key{\"k8s1-75b98460-app-app-80-a291f78d\"}". Marking condition "cloud.google.com/load-balancer-neg-ready" to True.
+28m         Normal    Killing                             pod/app-596c56db68-pznfj      Stopping container app
+28m         Normal    SuccessfulDelete                    replicaset/app-596c56db68     Deleted pod: app-596c56db68-pznfj
+28m         Normal    Killing                             pod/app-596c56db68-pznfj      Stopping container cloud-sql-proxy
+28m         Warning   FailedGetResourceMetric             horizontalpodautoscaler/app   did not receive metrics for targeted pods (pods might be unready)
+27m         Normal    Killing                             pod/app-6c6b9d976d-p7dsb      Stopping container app
+27m         Normal    SuccessfulDelete                    replicaset/app-6c6b9d976d     Deleted pod: app-6c6b9d976d-ccfx7
+27m         Normal    SuccessfulDelete                    replicaset/app-6c6b9d976d     Deleted pod: app-6c6b9d976d-p7dsb
+27m         Normal    Killing                             pod/app-6c6b9d976d-p7dsb      Stopping container cloud-sql-proxy
+27m         Normal    Killing                             pod/app-6c6b9d976d-ccfx7      Stopping container app
+27m         Normal    Killing                             pod/app-6c6b9d976d-ccfx7      Stopping container cloud-sql-proxy
+27m         Normal    Detach                              service/app                   Detach 1 network endpoint(s) (NEG "k8s1-75b98460-app-app-80-a291f78d" in zone "asia-southeast1-a")
+27m         Warning   EnterDegradedMode                   service/app                   Entering degraded mode for NEG app/app-k8s1-75b98460-app-app-80-a291f78d-http/80-http-GCE_VM_IP_PORT-L7 due to sync err: endpoint count from endpointPodMap cannot be zero
+27m         Normal    NoPods                              poddisruptionbudget/app       No matching pods found
+27m         Warning   SyncNetworkEndpointGroupFailed      service/app                   Failed to sync NEG "k8s1-75b98460-app-app-80-a291f78d" (will retry): endpoint count from endpointPodMap cannot be zero: Detect endpoint count goes to zero
+27m         Normal    ExitDegradedMode                    service/app                   NEG app/app-k8s1-75b98460-app-app-80-a291f78d-http/80-http-GCE_VM_IP_PORT-L7 is no longer in degraded mode
+27m         Normal    Scheduled                           pod/app-6c6b9d976d-5b7z2      Successfully assigned app/app-6c6b9d976d-5b7z2 to gke-cm-gke-cm-pool-404d116a-89c9
+27m         Normal    SuccessfulCreate                    replicaset/app-6c6b9d976d     Created pod: app-6c6b9d976d-jdllv
+27m         Normal    LoadBalancerNegNotReady             pod/app-6c6b9d976d-jdllv      Waiting for pod to become healthy in at least one of the NEG(s): [k8s1-75b98460-app-app-80-a291f78d]
+27m         Normal    Scheduled                           pod/app-6c6b9d976d-jdllv      Successfully assigned app/app-6c6b9d976d-jdllv to gke-cm-gke-cm-pool-404d116a-fzib
+27m         Normal    SuccessfulCreate                    replicaset/app-6c6b9d976d     Created pod: app-6c6b9d976d-5b7z2
+27m         Normal    LoadBalancerNegNotReady             pod/app-6c6b9d976d-5b7z2      Waiting for pod to become healthy in at least one of the NEG(s): [k8s1-75b98460-app-app-80-a291f78d]
+27m         Normal    ScalingReplicaSet                   deployment/app                (combined from similar events): Scaled up replica set app-6c6b9d976d from 0 to 2
+27m         Normal    Pulled                              pod/app-6c6b9d976d-5b7z2      Container image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" already present on machine and can be accessed by the pod
+27m         Normal    Created                             pod/app-6c6b9d976d-5b7z2      Container created
+27m         Normal    Started                             pod/app-6c6b9d976d-5b7z2      Container started
+27m         Normal    Pulled                              pod/app-6c6b9d976d-jdllv      Container image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" already present on machine and can be accessed by the pod
+27m         Normal    Created                             pod/app-6c6b9d976d-jdllv      Container created
+27m         Normal    Started                             pod/app-6c6b9d976d-jdllv      Container started
+27m         Normal    Pulled                              pod/app-6c6b9d976d-jdllv      Container image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5" already present on machine and can be accessed by the pod
+27m         Normal    Created                             pod/app-6c6b9d976d-jdllv      Container created
+27m         Normal    Created                             pod/app-6c6b9d976d-5b7z2      Container created
+27m         Normal    Pulled                              pod/app-6c6b9d976d-5b7z2      Container image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5" already present on machine and can be accessed by the pod
+27m         Warning   Unhealthy                           pod/app-6c6b9d976d-5b7z2      Readiness probe failed: Get "http://10.20.0.11:8080/readyz": dial tcp 10.20.0.11:8080: connect: connection refused
+27m         Normal    Started                             pod/app-6c6b9d976d-jdllv      Container started
+27m         Normal    Started                             pod/app-6c6b9d976d-5b7z2      Container started
+27m         Warning   Unhealthy                           pod/app-6c6b9d976d-jdllv      Readiness probe failed: Get "http://10.20.3.32:8080/readyz": dial tcp 10.20.3.32:8080: connect: connection refused
+27m         Normal    Attach                              service/app                   Attach 2 network endpoint(s) (NEG "k8s1-75b98460-app-app-80-a291f78d" in zone "asia-southeast1-a")
+27m         Normal    LoadBalancerNegWithoutHealthCheck   pod/app-6c6b9d976d-jdllv      Pod is in NEG "Key{\"k8s1-75b98460-app-app-80-a291f78d\", zone: \"asia-southeast1-a\"}". NEG is not attached to any BackendService with health checking. Marking condition "cloud.google.com/load-balancer-neg-ready" to True.
+27m         Normal    LoadBalancerNegWithoutHealthCheck   pod/app-6c6b9d976d-5b7z2      Pod is in NEG "Key{\"k8s1-75b98460-app-app-80-a291f78d\", zone: \"asia-southeast1-a\"}". NEG is not attached to any BackendService with health checking. Marking condition "cloud.google.com/load-balancer-neg-ready" to True.
+27m         Warning   Unhealthy                           pod/app-6c6b9d976d-5b7z2      Readiness probe failed: Get "http://10.20.0.11:8080/readyz": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+26m         Warning   FailedGetResourceMetric             horizontalpodautoscaler/app   unable to get metric cpu: no metrics returned from resource metrics API
+5m59s       Normal    Sync                                ingress/app                   Scheduled for sync
+
+### 3. does the app answer inside the cluster? pod localhost and service clusterip
+$ kubectl -n app exec app-6c6b9d976d-5b7z2 -c app -- python -c import urllib.request,sys;r=urllib.request.urlopen(sys.argv[1],timeout=5);print(r.status, r.read().decode()) http://localhost:8080/healthz
+200 {"status":"ok"}
+
+
+$ kubectl -n app exec app-6c6b9d976d-5b7z2 -c app -- python -c import urllib.request,sys;r=urllib.request.urlopen(sys.argv[1],timeout=5);print(r.status, r.read().decode()) http://app.app.svc.cluster.local/readyz
+200 {"status":"ready"}
+
+
+### 4. health check script
+$ scripts/healthcheck.py
+{
+  "timestamp": "2026-09-27T19:11:30+08:00",
+  "target": {
+    "namespace": "app",
+    "hpa": "app",
+    "sql_instance": "cm-pg",
+    "url": "https://cm-app.sokay.my"
+  },
+  "overall": "fail",
+  "failed_checks": [
+    "endpoint"
+  ],
+  "warning_checks": [],
+  "duration_ms": 3217,
+  "checks": [
+    {
+      "name": "pods",
+      "status": "pass",
+      "summary": "2/2 pods ready",
+      "messages": [],
+      "duration_ms": 177,
+      "details": {
+        "ready": 2,
+        "total": 2,
+        "min_ready": 2,
+        "nodes": [
+          "gke-cm-gke-cm-pool-404d116a-89c9",
+          "gke-cm-gke-cm-pool-404d116a-fzib"
+        ],
+        "terminating": [],
+        "pods": [
+          {
+            "name": "app-6c6b9d976d-5b7z2",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-89c9",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          },
+          {
+            "name": "app-6c6b9d976d-jdllv",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-fzib",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "hpa",
+      "status": "pass",
+      "summary": "2 replicas (min 2, max 6), cpu 3% of target 60%",
+      "messages": [],
+      "duration_ms": 184,
+      "details": {
+        "min": 2,
+        "max": 6,
+        "current": 2,
+        "desired": 2,
+        "cpu_utilization_pct": 3,
+        "cpu_target_pct": 60,
+        "conditions": {
+          "AbleToScale": {
+            "status": "True",
+            "reason": "ReadyForNewScale"
+          },
+          "ScalingActive": {
+            "status": "True",
+            "reason": "ValidMetricFound"
+          },
+          "ScalingLimited": {
+            "status": "True",
+            "reason": "TooFewReplicas"
+          }
+        }
+      }
+    },
+    {
+      "name": "cloudsql",
+      "status": "pass",
+      "summary": "RUNNABLE, query ok via app-6c6b9d976d-5b7z2 (PostgreSQL 16.15)",
+      "messages": [],
+      "duration_ms": 2584,
+      "details": {
+        "instance": "cm-pg",
+        "state": "RUNNABLE",
+        "database_version": "POSTGRES_16",
+        "private_ip": "10.172.80.3",
+        "tested_from_pod": "app-6c6b9d976d-5b7z2",
+        "query_http_status": 200,
+        "db_version": "PostgreSQL 16.15",
+        "db_connections": 1
+      }
+    },
+    {
+      "name": "endpoint",
+      "status": "fail",
+      "summary": "https://cm-app.sokay.my/healthz returned 502",
+      "messages": [
+        "\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>502 Server Error</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Server Error</h1>\n<h2>The server"
+      ],
+      "duration_ms": 272,
+      "details": {
+        "url": "https://cm-app.sokay.my/healthz",
+        "http_status": 502,
+        "latency_ms": 148,
+        "cert_days_left": 89
+      }
+    }
+  ]
+}
+exit code: 1
+
+### 5. what does the load balancer think of the backends
+$ gcloud compute backend-services get-health k8s1-75b98460-app-app-80-a291f78d --global --project cloud-mile-assessment --format=yaml(backend,status.healthStatus)
+---
+backend: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/zones/asia-southeast1-a/networkEndpointGroups/k8s1-75b98460-app-app-80-a291f78d
+status:
+  healthStatus:
+  - healthState: UNHEALTHY
+    instance: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/zones/asia-southeast1-a/instances/gke-cm-gke-cm-pool-404d116a-fzib
+    ipAddress: 10.20.3.32
+    port: 8080
+  - healthState: UNHEALTHY
+    instance: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/zones/asia-southeast1-a/instances/gke-cm-gke-cm-pool-404d116a-89c9
+    ipAddress: 10.20.0.11
+    port: 8080
+
+### 6. load balancer request logs, last 5 min
+$ gcloud logging read resource.type="http_load_balancer" AND httpRequest.status>=500 AND timestamp>="2026-09-27T11:06:35Z" --project cloud-mile-assessment --limit 5 --format=table(timestamp,httpRequest.status,jsonPayload.statusDetails,httpRequest.requestUrl)
+TIMESTAMP                    STATUS  STATUS_DETAILS          REQUEST_URL
+2026-09-27T11:11:31.340648Z  502     failed_to_pick_backend  https://cm-app.sokay.my/
+2026-09-27T11:11:30.205120Z  502     failed_to_pick_backend  https://cm-app.sokay.my/healthz
+2026-09-27T11:11:26.304120Z  502     failed_to_pick_backend  https://cm-app.sokay.my/healthz
+2026-09-27T11:11:23.197223Z  502     failed_to_pick_backend  https://cm-app.sokay.my/healthz
+2026-09-27T11:11:23.069133Z  502     failed_to_pick_backend  https://cm-app.sokay.my/healthz
+
+### 7. what changed recently? admin activity audit log, last 30 min, compute changes
+$ gcloud logging read logName="projects/cloud-mile-assessment/logs/cloudaudit.googleapis.com%2Factivity" AND protoPayload.serviceName="compute.googleapis.com" AND timestamp>="2026-09-27T10:41:37Z" --project cloud-mile-assessment --limit 10 --format=table(timestamp,protoPayload.methodName,protoPayload.resourceName,protoPayload.authenticationInfo.principalEmail)
+TIMESTAMP                    METHOD_NAME                                                RESOURCE_NAME                                                                                                   PRINCIPAL_EMAIL
+2026-09-27T11:10:34.882455Z  v1.compute.firewalls.insert                                projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges                                       <admin user redacted>
+2026-09-27T11:10:30.108321Z  v1.compute.firewalls.insert                                projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges                                       <admin user redacted>
+2026-09-27T10:44:26.438099Z  beta.compute.networkEndpointGroups.detachNetworkEndpoints  projects/cloud-mile-assessment/zones/asia-southeast1-a/networkEndpointGroups/k8s1-75b98460-app-app-80-a291f78d  service-969886371063@container-engine-robot.iam.gserviceaccount.com
+2026-09-27T10:44:19.854081Z  beta.compute.networkEndpointGroups.attachNetworkEndpoints  projects/cloud-mile-assessment/zones/asia-southeast1-a/networkEndpointGroups/k8s1-75b98460-app-app-80-a291f78d  service-969886371063@container-engine-robot.iam.gserviceaccount.com
+2026-09-27T10:44:17.268662Z  beta.compute.networkEndpointGroups.attachNetworkEndpoints  projects/cloud-mile-assessment/zones/asia-southeast1-a/networkEndpointGroups/k8s1-75b98460-app-app-80-a291f78d  service-969886371063@container-engine-robot.iam.gserviceaccount.com
+2026-09-27T10:43:44.537739Z  beta.compute.networkEndpointGroups.detachNetworkEndpoints  projects/cloud-mile-assessment/zones/asia-southeast1-a/networkEndpointGroups/k8s1-75b98460-app-app-80-a291f78d  service-969886371063@container-engine-robot.iam.gserviceaccount.com
+2026-09-27T10:43:42.703302Z  beta.compute.networkEndpointGroups.detachNetworkEndpoints  projects/cloud-mile-assessment/zones/asia-southeast1-a/networkEndpointGroups/k8s1-75b98460-app-app-80-a291f78d  service-969886371063@container-engine-robot.iam.gserviceaccount.com
+2026-09-27T10:43:24.627923Z  beta.compute.networkEndpointGroups.detachNetworkEndpoints  projects/cloud-mile-assessment/zones/asia-southeast1-a/networkEndpointGroups/k8s1-75b98460-app-app-80-a291f78d  service-969886371063@container-engine-robot.iam.gserviceaccount.com
+2026-09-27T10:43:00.629006Z  beta.compute.networkEndpointGroups.detachNetworkEndpoints  projects/cloud-mile-assessment/zones/asia-southeast1-a/networkEndpointGroups/k8s1-75b98460-app-app-80-a291f78d  service-969886371063@container-engine-robot.iam.gserviceaccount.com
+2026-09-27T10:42:46.057464Z  beta.compute.networkEndpointGroups.attachNetworkEndpoints  projects/cloud-mile-assessment/zones/asia-southeast1-a/networkEndpointGroups/k8s1-75b98460-app-app-80-a291f78d  service-969886371063@container-engine-robot.iam.gserviceaccount.com
+
+### 8. firewall rules on cm-vpc by priority (lowest number wins)
+$ gcloud compute firewall-rules list --filter=network:cm-vpc --project cloud-mile-assessment --sort-by=priority --format=table(name,priority,direction,sourceRanges.list(),targetTags.list(),allowed[].map().firewall_rule().list(),denied[].map().firewall_rule().list(),disabled)
+NAME                         PRIORITY  DIRECTION  SOURCE_RANGES                           TARGET_TAGS               ALLOW                         DENY  DISABLED
+sec-deny-untrusted-ranges    100       INGRESS    35.191.0.0/16,130.211.0.0/22            cm-gke-node                                             tcp   False
+cm-allow-health-checks       1000      INGRESS    130.211.0.0/22,35.191.0.0/16            cm-gke-node               tcp                                 False
+cm-allow-internal            1000      INGRESS    10.10.0.0/20,10.30.0.0/20,10.20.0.0/16                            icmp,udp,tcp                        False
+gke-cm-gke-c971c71f-all      1000      INGRESS    10.20.0.0/16                            gke-cm-gke-c971c71f-node  tcp,udp,icmp,esp,ah,sctp            False
+gke-cm-gke-c971c71f-vms      1000      INGRESS    10.10.0.0/20                            gke-cm-gke-c971c71f-node  tcp:1-65535,udp:1-65535,icmp        False
+k8s-fw-l7--75b98460862e98ad  1000      INGRESS    130.211.0.0/22,35.191.0.0/16            gke-cm-gke-c971c71f-node  tcp:8080                            False
+
+$ gcloud compute firewall-rules describe sec-deny-untrusted-ranges --project cloud-mile-assessment
+creationTimestamp: '2026-09-27T04:10:30.376-07:00'
+denied:
+- IPProtocol: tcp
+description: 'security hardening: block untrusted external ranges'
+direction: INGRESS
+disabled: false
+id: '8961082518867887945'
+kind: compute#firewall
+logConfig:
+  enable: false
+name: sec-deny-untrusted-ranges
+network: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/networks/cm-vpc
+priority: 100
+selfLink: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges
+sourceRanges:
+- 35.191.0.0/16
+- 130.211.0.0/22
+targetTags:
+- cm-gke-node
+
+### 9. connectivity test: google lb / health check prober -> app pod :8080
+$ gcloud network-management connectivity-tests rerun lb-hc-to-app-pod --project cloud-mile-assessment
+Request issued for: [lb-hc-to-app-pod]
+Waiting for operation [projects/cloud-mile-assessment/locations/global/operations/operation-1790507503710-65c7503b9efa0-8edb5534-42080eb7] to complete...
+............done.
+createTime: '2026-09-27T11:09:08.118011350Z'
+destination:
+  ipAddress: 10.20.0.11
+  network: projects/cloud-mile-assessment/global/networks/cm-vpc
+  port: 8080
+name: projects/cloud-mile-assessment/locations/global/connectivityTests/lb-hc-to-app-pod
+protocol: TCP
+reachabilityDetails:
+  result: UNREACHABLE
+  traces:
+  - endpointInfo:
+      destinationIp: 10.20.0.11
+      destinationNetworkUri: projects/cloud-mile-assessment/global/networks/cm-vpc
+      destinationPort: 8080
+      protocol: TCP
+      sourceIp: 35.191.0.1
+      sourcePort: 53838
+    forwardTraceId: 1
+    steps:
+    - description: 'Initial state: packet originating from Google Service.'
+      googleService:
+        googleServiceType: GFE_PROXY_OR_HEALTH_CHECK_PROBER
+        sourceIp: 35.191.0.1
+      state: START_FROM_GOOGLE_SERVICE
+    - causesDrop: true
+      description: 'Forwarding state: arriving at a Compute Engine instance.'
+      instance:
+        displayName: gke-cm-gke-cm-pool-404d116a-89c9
+        interface: nic0
+        internalIp: 10.10.0.10
+        networkTags:
+        - cm-gke-node
+        - gke-cm-gke-c971c71f-node
+        networkUri: projects/cloud-mile-assessment/global/networks/cm-vpc
+        running: true
+        status: RUNNING
+        uri: projects/cloud-mile-assessment/zones/asia-southeast1-a/instances/gke-cm-gke-cm-pool-404d116a-89c9
+      projectId: cloud-mile-assessment
+      state: ARRIVE_AT_INSTANCE
+    - causesDrop: true
+      description: 'Config checking state: verify INGRESS firewall rule.'
+      firewall:
+        action: DENY
+        direction: INGRESS
+        displayName: sec-deny-untrusted-ranges
+        firewallRuleType: VPC_FIREWALL_RULE
+        networkUri: projects/cloud-mile-assessment/global/networks/cm-vpc
+        priority: 100
+        targetTags:
+        - cm-gke-node
+        uri: projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges
+      projectId: cloud-mile-assessment
+      state: APPLY_INGRESS_FIREWALL_RULE
+    - description: 'Final state: packet dropped due to denied by firewall rule unless
+        allowed due to connection tracking.'
+      drop:
+        cause: FIREWALL_RULE
+        destinationIp: 10.20.0.11
+        region: asia-southeast1
+        resourceUri: projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges
+        sourceIp: 35.191.0.1
+      projectId: cloud-mile-assessment
+      state: DROP
+  verifyTime: '2026-09-27T11:11:44.152724679Z'
+source:
+  ipAddress: 35.191.0.1
+updateTime: '2026-09-27T11:11:44.196023098Z'
+
+$ gcloud network-management connectivity-tests describe lb-hc-to-app-pod --project cloud-mile-assessment --format=yaml(reachabilityDetails.result,reachabilityDetails.verifyTime,reachabilityDetails.traces[0].steps)
+reachabilityDetails:
+  result: UNREACHABLE
+  traces:
+  - steps:
+    - description: 'Initial state: packet originating from Google Service.'
+      googleService:
+        googleServiceType: GFE_PROXY_OR_HEALTH_CHECK_PROBER
+        sourceIp: 35.191.0.1
+      state: START_FROM_GOOGLE_SERVICE
+    - causesDrop: true
+      description: 'Forwarding state: arriving at a Compute Engine instance.'
+      instance:
+        displayName: gke-cm-gke-cm-pool-404d116a-89c9
+        interface: nic0
+        internalIp: 10.10.0.10
+        networkTags:
+        - cm-gke-node
+        - gke-cm-gke-c971c71f-node
+        networkUri: projects/cloud-mile-assessment/global/networks/cm-vpc
+        running: true
+        status: RUNNING
+        uri: projects/cloud-mile-assessment/zones/asia-southeast1-a/instances/gke-cm-gke-cm-pool-404d116a-89c9
+      projectId: cloud-mile-assessment
+      state: ARRIVE_AT_INSTANCE
+    - causesDrop: true
+      description: 'Config checking state: verify INGRESS firewall rule.'
+      firewall:
+        action: DENY
+        direction: INGRESS
+        displayName: sec-deny-untrusted-ranges
+        firewallRuleType: VPC_FIREWALL_RULE
+        networkUri: projects/cloud-mile-assessment/global/networks/cm-vpc
+        priority: 100
+        targetTags:
+        - cm-gke-node
+        uri: projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges
+      projectId: cloud-mile-assessment
+      state: APPLY_INGRESS_FIREWALL_RULE
+    - description: 'Final state: packet dropped due to denied by firewall rule unless
+        allowed due to connection tracking.'
+      drop:
+        cause: FIREWALL_RULE
+        destinationIp: 10.20.0.11
+        region: asia-southeast1
+        resourceUri: projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges
+        sourceIp: 35.191.0.1
+      projectId: cloud-mile-assessment
+      state: DROP
+  verifyTime: '2026-09-27T11:11:44.152724679Z'
+

@@ -1,0 +1,9 @@
+$ gcloud logging read (http_load_balancer, status>=500, 19:10:30-19:21:00 MYT) | count by statusDetails
+     18 failed_to_connect_to_backend
+    110 failed_to_pick_backend
+
+$ first and last 5xx
+2026-09-27T11:10:35.440412Z	502	failed_to_connect_to_backend
+2026-09-27T11:10:35.440557Z	502	failed_to_connect_to_backend
+2026-09-27T11:10:35.440652Z	502	failed_to_connect_to_backend
+2026-09-27T11:20:33.165409Z	502	failed_to_pick_backend

@@ -1,0 +1,8 @@
+## 2026-09-27T19:10:28 MYT - FAULT INJECTION (manual change, outside terraform)
+$ gcloud compute firewall-rules create sec-deny-untrusted-ranges --network=cm-vpc --direction=INGRESS --action=DENY --rules=tcp --priority=100 --source-ranges=35.191.0.0/16,130.211.0.0/22 --target-tags=cm-gke-node --description="security hardening: block untrusted external ranges"
+Creating firewall...
+..Created [https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges].
+done.
+NAME                       NETWORK  DIRECTION  PRIORITY  ALLOW  DENY  DISABLED
+sec-deny-untrusted-ranges  cm-vpc   INGRESS    100              tcp   False
+## 2026-09-27T19:10:35 MYT - rule created

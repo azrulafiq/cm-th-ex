@@ -1,0 +1,19 @@
+## 2026-09-27T19:25:49 MYT - ROLLBACK: remove the re-injected test rule
+$ gcloud compute firewall-rules delete sec-deny-untrusted-ranges --quiet --project cloud-mile-assessment
+Deleted [https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges].
+
+$ gcloud compute firewall-rules list --filter=network:cm-vpc --project cloud-mile-assessment --sort-by=priority --format=table(name,priority,sourceRanges.list(),targetTags.list(),allowed[].map().firewall_rule().list(),denied[].map().firewall_rule().list())
+NAME                         PRIORITY  SOURCE_RANGES                           TARGET_TAGS               ALLOW                         DENY
+cm-allow-health-checks       0         130.211.0.0/22,35.191.0.0/16            cm-gke-node               tcp
+cm-allow-internal            1000      10.10.0.0/20,10.30.0.0/20,10.20.0.0/16                            icmp,udp,tcp
+gke-cm-gke-c971c71f-all      1000      10.20.0.0/16                            gke-cm-gke-c971c71f-node  tcp,udp,icmp,esp,ah,sctp
+gke-cm-gke-c971c71f-vms      1000      10.10.0.0/20                            gke-cm-gke-c971c71f-node  tcp:1-65535,udp:1-65535,icmp
+k8s-fw-l7--75b98460862e98ad  1000      130.211.0.0/22,35.191.0.0/16            gke-cm-gke-c971c71f-node  tcp:8080
+
+$ (audit log) firewall changes in the last 20 min
+TIMESTAMP                    METHOD_NAME                  RESOURCE_NAME                                                              PRINCIPAL_EMAIL
+2026-09-27T11:25:50.261657Z  v1.compute.firewalls.delete  projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges  <admin user redacted>
+2026-09-27T11:23:26.686559Z  v1.compute.firewalls.insert  projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges  <admin user redacted>
+2026-09-27T11:22:46.881047Z  v1.compute.firewalls.patch   projects/cloud-mile-assessment/global/firewalls/cm-allow-health-checks     <admin user redacted>
+2026-09-27T11:20:34.267902Z  v1.compute.firewalls.delete  projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges  <admin user redacted>
+2026-09-27T11:10:30.108321Z  v1.compute.firewalls.insert  projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges  <admin user redacted>

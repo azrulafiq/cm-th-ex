@@ -1,0 +1,30 @@
+## 2026-09-27T19:37:35 MYT - delete the unused default network (open ssh/rdp/icmp from 0.0.0.0/0)
+$ gcloud compute firewall-rules delete default-allow-icmp default-allow-internal default-allow-rdp default-allow-ssh --project cloud-mile-assessment --quiet
+Deleted [https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/firewalls/default-allow-icmp].
+Deleted [https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/firewalls/default-allow-internal].
+Deleted [https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/firewalls/default-allow-rdp].
+Deleted [https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/firewalls/default-allow-ssh].
+
+$ gcloud compute networks delete default --project cloud-mile-assessment --quiet
+Deleted [https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/networks/default].
+
+$ gcloud compute networks list --project cloud-mile-assessment
+NAME    SUBNET_MODE  BGP_ROUTING_MODE  IPV4_RANGE  GATEWAY_IPV4  INTERNAL_IPV6_RANGE
+cm-vpc  CUSTOM       REGIONAL
+
+$ gcloud compute firewall-rules list --project cloud-mile-assessment --sort-by=priority --format=table(name,network.basename(),priority,sourceRanges.list())
+NAME                         NETWORK  PRIORITY  SOURCE_RANGES
+cm-allow-health-checks       cm-vpc   0         130.211.0.0/22,35.191.0.0/16
+cm-allow-internal            cm-vpc   1000      10.10.0.0/20,10.30.0.0/20,10.20.0.0/16
+gke-cm-gke-c971c71f-all      cm-vpc   1000      10.20.0.0/16
+gke-cm-gke-c971c71f-vms      cm-vpc   1000      10.10.0.0/20
+k8s-fw-l7--75b98460862e98ad  cm-vpc   1000      130.211.0.0/22,35.191.0.0/16
+
+## 2026-09-27T19:38:45 MYT - done
+$ scripts/healthcheck.py
+  "overall": "pass",
+      "summary": "2/2 pods ready",
+      "summary": "2 replicas (min 2, max 6), cpu 3% of target 60%",
+      "summary": "RUNNABLE, query ok via app-6c6b9d976d-5b7z2 (PostgreSQL 16.15)",
+      "summary": "200 in 154ms, cert 89 days left",
+exit code: 0

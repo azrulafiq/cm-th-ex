@@ -1,0 +1,25 @@
+google_project_service.this["networkmanagement.googleapis.com"]: Creating...
+google_project_service.this["networkmanagement.googleapis.com"]: Still creating... [00m10s elapsed]
+google_project_service.this["networkmanagement.googleapis.com"]: Still creating... [00m21s elapsed]
+google_project_service.this["networkmanagement.googleapis.com"]: Creation complete after 27s [id=cloud-mile-assessment/networkmanagement.googleapis.com]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+enabled_services = tolist([
+  "artifactregistry.googleapis.com",
+  "cloudresourcemanager.googleapis.com",
+  "compute.googleapis.com",
+  "container.googleapis.com",
+  "iam.googleapis.com",
+  "iamcredentials.googleapis.com",
+  "logging.googleapis.com",
+  "monitoring.googleapis.com",
+  "networkmanagement.googleapis.com",
+  "secretmanager.googleapis.com",
+  "servicenetworking.googleapis.com",
+  "serviceusage.googleapis.com",
+  "sqladmin.googleapis.com",
+])
+tfstate_bucket = "cloud-mile-assessment-tfstate"

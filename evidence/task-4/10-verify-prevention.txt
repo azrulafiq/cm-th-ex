@@ -1,0 +1,260 @@
+## 2026-09-27T19:23:25 MYT - VERIFY PREVENTION: re-inject the same deny rule
+$ gcloud compute firewall-rules create sec-deny-untrusted-ranges --network=cm-vpc --direction=INGRESS --action=DENY --rules=tcp --priority=100 --source-ranges=35.191.0.0/16,130.211.0.0/22 --target-tags=cm-gke-node --description=security hardening: block untrusted external ranges --project=cloud-mile-assessment
+Creating firewall...
+..Created [https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/firewalls/sec-deny-untrusted-ranges].
+done.
+NAME                       NETWORK  DIRECTION  PRIORITY  ALLOW  DENY  DISABLED
+sec-deny-untrusted-ranges  cm-vpc   INGRESS    100              tcp   False
+
+## 2026-09-27T19:23:32 MYT - rule created, waiting 90s (in the incident the first 502 came after 14s)
+$ gcloud compute firewall-rules list --filter=network:cm-vpc --project cloud-mile-assessment --sort-by=priority --format=table(name,priority,sourceRanges.list(),targetTags.list(),allowed[].map().firewall_rule().list(),denied[].map().firewall_rule().list())
+NAME                         PRIORITY  SOURCE_RANGES                           TARGET_TAGS               ALLOW                         DENY
+cm-allow-health-checks       0         130.211.0.0/22,35.191.0.0/16            cm-gke-node               tcp
+sec-deny-untrusted-ranges    100       35.191.0.0/16,130.211.0.0/22            cm-gke-node                                             tcp
+cm-allow-internal            1000      10.10.0.0/20,10.30.0.0/20,10.20.0.0/16                            icmp,udp,tcp
+gke-cm-gke-c971c71f-all      1000      10.20.0.0/16                            gke-cm-gke-c971c71f-node  tcp,udp,icmp,esp,ah,sctp
+gke-cm-gke-c971c71f-vms      1000      10.10.0.0/20                            gke-cm-gke-c971c71f-node  tcp:1-65535,udp:1-65535,icmp
+k8s-fw-l7--75b98460862e98ad  1000      130.211.0.0/22,35.191.0.0/16            gke-cm-gke-c971c71f-node  tcp:8080
+
+$ gcloud compute backend-services get-health k8s1-75b98460-app-app-80-a291f78d --global --project cloud-mile-assessment --format=yaml(status.healthStatus[].healthState)
+---
+status:
+  healthStatus:
+  - healthState: HEALTHY
+  - healthState: HEALTHY
+
+$ gcloud network-management connectivity-tests rerun lb-hc-to-app-pod --project cloud-mile-assessment
+Request issued for: [lb-hc-to-app-pod]
+Waiting for operation [projects/cloud-mile-assessment/locations/global/operations/operation-1790508315386-65c75341b22fe-37f50f9f-9d377fc0] to complete...
+.............done.
+createTime: '2026-09-27T11:09:08.118011350Z'
+destination:
+  ipAddress: 10.20.0.11
+  network: projects/cloud-mile-assessment/global/networks/cm-vpc
+  port: 8080
+name: projects/cloud-mile-assessment/locations/global/connectivityTests/lb-hc-to-app-pod
+protocol: TCP
+reachabilityDetails:
+  result: REACHABLE
+  traces:
+  - endpointInfo:
+      destinationIp: 10.20.0.11
+      destinationNetworkUri: projects/cloud-mile-assessment/global/networks/cm-vpc
+      destinationPort: 8080
+      protocol: TCP
+      sourceIp: 35.191.0.1
+      sourcePort: 53997
+    forwardTraceId: 1
+    steps:
+    - description: 'Initial state: packet originating from Google Service.'
+      googleService:
+        googleServiceType: GFE_PROXY_OR_HEALTH_CHECK_PROBER
+        sourceIp: 35.191.0.1
+      state: START_FROM_GOOGLE_SERVICE
+    - description: 'Forwarding state: arriving at a Compute Engine instance.'
+      instance:
+        displayName: gke-cm-gke-cm-pool-404d116a-89c9
+        interface: nic0
+        internalIp: 10.10.0.10
+        networkTags:
+        - cm-gke-node
+        - gke-cm-gke-c971c71f-node
+        networkUri: projects/cloud-mile-assessment/global/networks/cm-vpc
+        running: true
+        status: RUNNING
+        uri: projects/cloud-mile-assessment/zones/asia-southeast1-a/instances/gke-cm-gke-cm-pool-404d116a-89c9
+      projectId: cloud-mile-assessment
+      state: ARRIVE_AT_INSTANCE
+    - description: 'Config checking state: verify INGRESS firewall rule.'
+      firewall:
+        action: ALLOW
+        direction: INGRESS
+        displayName: cm-allow-health-checks
+        firewallRuleType: VPC_FIREWALL_RULE
+        networkUri: projects/cloud-mile-assessment/global/networks/cm-vpc
+        targetTags:
+        - cm-gke-node
+        uri: projects/cloud-mile-assessment/global/firewalls/cm-allow-health-checks
+      projectId: cloud-mile-assessment
+      state: APPLY_INGRESS_FIREWALL_RULE
+    - description: 'Forwarding state: arriving at a GKE Pod.'
+      gkePod:
+        ipAddress: 10.20.0.11
+        networkUri: projects/cloud-mile-assessment/global/networks/cm-vpc
+        podUri: projects/cloud-mile-assessment/zones/asia-southeast1-a/clusters/cm-gke/k8s/namespaces/app/pods/app-6c6b9d976d-5b7z2
+      projectId: cloud-mile-assessment
+      state: ARRIVE_AT_GKE_POD
+    - description: 'Config checking state: verify ingress GKE network policy.'
+      gkeNetworkPolicy:
+        action: ALLOW
+        direction: INGRESS
+      projectId: cloud-mile-assessment
+      state: APPLY_INGRESS_GKE_NETWORK_POLICY
+    - deliver:
+        ipAddress: 10.20.0.11
+        resourceUri: projects/cloud-mile-assessment/zones/asia-southeast1-a/clusters/cm-gke/k8s/namespaces/app/pods/app-6c6b9d976d-5b7z2
+        target: GKE_POD
+      description: 'Final state: packet delivered to GKE pod.'
+      projectId: cloud-mile-assessment
+      state: DELIVER
+  verifyTime: '2026-09-27T11:25:15.975683986Z'
+source:
+  ipAddress: 35.191.0.1
+updateTime: '2026-09-27T11:25:16.008432682Z'
+
+$ gcloud network-management connectivity-tests describe lb-hc-to-app-pod --project cloud-mile-assessment --format=yaml(reachabilityDetails.result,reachabilityDetails.traces[0].steps[2].firewall)
+reachabilityDetails:
+  result: REACHABLE
+  traces:
+  - steps:
+    - null
+    - null
+    - firewall:
+        action: ALLOW
+        direction: INGRESS
+        displayName: cm-allow-health-checks
+        firewallRuleType: VPC_FIREWALL_RULE
+        networkUri: projects/cloud-mile-assessment/global/networks/cm-vpc
+        targetTags:
+        - cm-gke-node
+        uri: projects/cloud-mile-assessment/global/firewalls/cm-allow-health-checks
+
+$ scripts/healthcheck.py
+{
+  "timestamp": "2026-09-27T19:25:25+08:00",
+  "target": {
+    "namespace": "app",
+    "hpa": "app",
+    "sql_instance": "cm-pg",
+    "url": "https://cm-app.sokay.my"
+  },
+  "overall": "pass",
+  "failed_checks": [],
+  "warning_checks": [],
+  "duration_ms": 3446,
+  "checks": [
+    {
+      "name": "pods",
+      "status": "pass",
+      "summary": "2/2 pods ready",
+      "messages": [],
+      "duration_ms": 591,
+      "details": {
+        "ready": 2,
+        "total": 2,
+        "min_ready": 2,
+        "nodes": [
+          "gke-cm-gke-cm-pool-404d116a-89c9",
+          "gke-cm-gke-cm-pool-404d116a-fzib"
+        ],
+        "terminating": [],
+        "pods": [
+          {
+            "name": "app-6c6b9d976d-5b7z2",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-89c9",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          },
+          {
+            "name": "app-6c6b9d976d-jdllv",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-fzib",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "hpa",
+      "status": "pass",
+      "summary": "2 replicas (min 2, max 6), cpu 3% of target 60%",
+      "messages": [],
+      "duration_ms": 194,
+      "details": {
+        "min": 2,
+        "max": 6,
+        "current": 2,
+        "desired": 2,
+        "cpu_utilization_pct": 3,
+        "cpu_target_pct": 60,
+        "conditions": {
+          "AbleToScale": {
+            "status": "True",
+            "reason": "ReadyForNewScale"
+          },
+          "ScalingActive": {
+            "status": "True",
+            "reason": "ValidMetricFound"
+          },
+          "ScalingLimited": {
+            "status": "True",
+            "reason": "TooFewReplicas"
+          }
+        }
+      }
+    },
+    {
+      "name": "cloudsql",
+      "status": "pass",
+      "summary": "RUNNABLE, query ok via app-6c6b9d976d-5b7z2 (PostgreSQL 16.15)",
+      "messages": [],
+      "duration_ms": 2394,
+      "details": {
+        "instance": "cm-pg",
+        "state": "RUNNABLE",
+        "database_version": "POSTGRES_16",
+        "private_ip": "10.172.80.3",
+        "tested_from_pod": "app-6c6b9d976d-5b7z2",
+        "query_http_status": 200,
+        "db_version": "PostgreSQL 16.15",
+        "db_connections": 1
+      }
+    },
+    {
+      "name": "endpoint",
+      "status": "pass",
+      "summary": "200 in 149ms, cert 89 days left",
+      "messages": [],
+      "duration_ms": 267,
+      "details": {
+        "url": "https://cm-app.sokay.my/healthz",
+        "http_status": 200,
+        "latency_ms": 149,
+        "cert_days_left": 89
+      }
+    }
+  ]
+}
+exit code: 0

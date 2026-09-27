@@ -18,6 +18,7 @@ output "alert_policies" {
     node_cpu        = google_monitoring_alert_policy.node_cpu.name
     sql_connections = google_monitoring_alert_policy.sql_connections.name
     uptime          = google_monitoring_alert_policy.uptime.name
+    firewall_change = google_monitoring_alert_policy.firewall_change.name
   }
 }
 

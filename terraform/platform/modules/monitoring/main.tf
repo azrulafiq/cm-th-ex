@@ -22,7 +22,9 @@ resource "google_logging_metric" "app_errors" {
   name        = "${var.name_prefix}-app-errors"
   description = "Application log entries with severity >= ERROR in the app namespace."
   # logging query language uses resource.labels (monitoring filters use resource.label)
-  filter = "resource.type=\"k8s_container\" AND resource.labels.cluster_name=\"${var.cluster_name}\" AND resource.labels.namespace_name=\"${var.app_namespace}\" AND resource.labels.container_name=\"app\" AND severity>=ERROR"
+  # from task 4 - gunicorn writes its own [INFO] lines (boot, shutdown) to stderr and gke marks stderr as ERROR,
+  # so every pod start/stop counted ~9 fake errors. skip those, real [ERROR]/[CRITICAL] gunicorn lines still count
+  filter = "resource.type=\"k8s_container\" AND resource.labels.cluster_name=\"${var.cluster_name}\" AND resource.labels.namespace_name=\"${var.app_namespace}\" AND resource.labels.container_name=\"app\" AND severity>=ERROR AND NOT textPayload:\"[INFO]\""
 
   metric_descriptor {
     metric_kind = "DELTA"
@@ -241,6 +243,48 @@ resource "google_monitoring_alert_policy" "uptime" {
       - `curl -v https://${var.app_domain}/healthz`
       - `kubectl -n ${var.app_namespace} get pods,ingress` and the LB backend health in the console
       - `kubectl -n ${var.app_namespace} describe ingress app`, managed certificate status, dns a record
+    EOT
+    )
+  }
+}
+
+# from task 4 - alert on any manual firewall change (the task 4 outage was a firewall rule added outside terraform)
+# gke's own service agent manages the k8s-fw-* / gke-* rules, leave those out
+resource "google_monitoring_alert_policy" "firewall_change" {
+  display_name = "${var.name_prefix} vpc firewall rule changed"
+  combiner     = "OR"
+  severity     = "WARNING"
+
+  conditions {
+    display_name = "firewall insert / patch / update / delete in audit log"
+    condition_matched_log {
+      filter = "logName=\"projects/${var.project_id}/logs/cloudaudit.googleapis.com%2Factivity\" AND protoPayload.serviceName=\"compute.googleapis.com\" AND protoPayload.methodName=~\"compute\\.firewalls\\.(insert|patch|update|delete)\" AND NOT protoPayload.authenticationInfo.principalEmail=~\"container-engine-robot\""
+      label_extractors = {
+        rule   = "EXTRACT(protoPayload.resourceName)"
+        method = "EXTRACT(protoPayload.methodName)"
+        actor  = "EXTRACT(protoPayload.authenticationInfo.principalEmail)"
+      }
+    }
+  }
+
+  notification_channels = [google_monitoring_notification_channel.email.id]
+  alert_strategy {
+    notification_rate_limit {
+      period = "300s"
+    }
+    auto_close = "1800s"
+  }
+
+  documentation {
+    mime_type = "text/markdown"
+    content = chomp(<<-EOT
+      A VPC firewall rule was created, changed or deleted outside GKE. Firewall rules for `cm-vpc` should only change through Terraform.
+
+      Check:
+      - `gcloud compute firewall-rules list --filter=network:cm-vpc --sort-by=priority`
+      - is it in terraform? `terraform -chdir=terraform/platform state list | grep firewall`
+      - is the app still reachable? `scripts/healthcheck.py`
+      - a deny on 35.191.0.0/16 or 130.211.0.0/22 cuts off the load balancer (task 4 incident)
     EOT
     )
   }

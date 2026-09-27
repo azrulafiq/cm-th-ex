@@ -1,0 +1,120 @@
+module.gke.google_service_account.nodes: Refreshing state... [id=projects/cloud-mile-assessment/serviceAccounts/cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.iam.google_service_account.app: Refreshing state... [id=projects/cloud-mile-assessment/serviceAccounts/cm-app@cloud-mile-assessment.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret.db_password: Refreshing state... [id=projects/cloud-mile-assessment/secrets/cm-db-password]
+module.monitoring.google_monitoring_notification_channel.email: Refreshing state... [id=projects/cloud-mile-assessment/notificationChannels/5633695206479919101]
+module.ingress.google_compute_global_address.app: Refreshing state... [id=projects/cloud-mile-assessment/global/addresses/cm-app-ip]
+module.registry.google_artifact_registry_repository.app: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1/repositories/cm-app]
+module.network.google_compute_network.vpc: Refreshing state... [id=projects/cloud-mile-assessment/global/networks/cm-vpc]
+module.monitoring.google_monitoring_uptime_check_config.app: Refreshing state... [id=projects/cloud-mile-assessment/uptimeCheckConfigs/cm-app-https-healthz-Hj1EXMaMD9s]
+module.monitoring.google_monitoring_alert_policy.uptime: Refreshing state... [id=projects/cloud-mile-assessment/alertPolicies/4303096840742046477]
+module.network.google_compute_global_address.psa_range: Refreshing state... [id=projects/cloud-mile-assessment/global/addresses/cm-psa-range]
+module.network.google_compute_firewall.allow_internal: Refreshing state... [id=projects/cloud-mile-assessment/global/firewalls/cm-allow-internal]
+module.network.google_compute_router.router: Refreshing state... [id=projects/cloud-mile-assessment/regions/asia-southeast1/routers/cm-router]
+module.network.google_compute_subnetwork.gke: Refreshing state... [id=projects/cloud-mile-assessment/regions/asia-southeast1/subnetworks/cm-gke-subnet]
+module.network.google_compute_firewall.allow_health_checks: Refreshing state... [id=projects/cloud-mile-assessment/global/firewalls/cm-allow-health-checks]
+module.network.google_compute_router_nat.nat: Refreshing state... [id=cloud-mile-assessment/asia-southeast1/cm-router/cm-nat]
+module.network.google_service_networking_connection.psa: Refreshing state... [id=projects%2Fcloud-mile-assessment%2Fglobal%2Fnetworks%2Fcm-vpc:servicenetworking.googleapis.com]
+module.gke.google_project_iam_member.nodes_default: Refreshing state... [id=cloud-mile-assessment/roles/container.defaultNodeServiceAccount/serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.registry.google_artifact_registry_repository_iam_member.readers["gke-nodes"]: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1/repositories/cm-app/roles/artifactregistry.reader/serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.gke.google_container_cluster.this: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1-a/clusters/cm-gke]
+module.iam.google_secret_manager_secret_iam_member.app_db_password: Refreshing state... [id=projects/cloud-mile-assessment/secrets/cm-db-password/roles/secretmanager.secretAccessor/serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com]
+module.iam.google_service_account_iam_member.app_wi: Refreshing state... [id=projects/cloud-mile-assessment/serviceAccounts/cm-app@cloud-mile-assessment.iam.gserviceaccount.com/roles/iam.workloadIdentityUser/serviceAccount:cloud-mile-assessment.svc.id.goog[app/app-ksa]]
+module.monitoring.google_logging_metric.app_errors: Refreshing state... [id=cm-app-errors]
+module.gke.google_container_node_pool.primary: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1-a/clusters/cm-gke/nodePools/cm-pool]
+module.monitoring.google_monitoring_alert_policy.node_cpu: Refreshing state... [id=projects/cloud-mile-assessment/alertPolicies/18359576122370631028]
+module.monitoring.google_monitoring_alert_policy.pod_restarts: Refreshing state... [id=projects/cloud-mile-assessment/alertPolicies/2196561270371539819]
+module.cloudsql.google_sql_database_instance.this: Refreshing state... [id=cm-pg]
+module.cloudsql.random_password.db: Refreshing state... [id=none]
+module.secrets.google_secret_manager_secret_version.db_password: Refreshing state... [id=projects/969886371063/secrets/cm-db-password/versions/1]
+module.cloudsql.google_sql_database.app: Refreshing state... [id=projects/cloud-mile-assessment/instances/cm-pg/databases/appdb]
+module.cloudsql.google_sql_user.app: Refreshing state... [id=app//cm-pg]
+module.iam.google_project_iam_member.app_sql_client: Refreshing state... [id=cloud-mile-assessment/roles/cloudsql.client/serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com/only-cm-pg//resource.name == "projects/cloud-mile-assessment/instances/cm-pg" && resource.type == "sqladmin.googleapis.com/Instance"]
+module.monitoring.google_monitoring_dashboard.ops: Refreshing state... [id=projects/969886371063/dashboards/eae33331-2d4d-49f2-b4c6-79028e916524]
+module.monitoring.google_monitoring_alert_policy.sql_connections: Refreshing state... [id=projects/cloud-mile-assessment/alertPolicies/2196561270371538581]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # module.monitoring.google_logging_metric.app_errors will be updated in-place
+  ~ resource "google_logging_metric" "app_errors" {
+      ~ filter           = "resource.type=\"k8s_container\" AND resource.labels.cluster_name=\"cm-gke\" AND resource.labels.namespace_name=\"app\" AND resource.labels.container_name=\"app\" AND severity>=ERROR" -> "resource.type=\"k8s_container\" AND resource.labels.cluster_name=\"cm-gke\" AND resource.labels.namespace_name=\"app\" AND resource.labels.container_name=\"app\" AND severity>=ERROR AND NOT textPayload:\"[INFO]\""
+        id               = "cm-app-errors"
+        name             = "cm-app-errors"
+        # (7 unchanged attributes hidden)
+
+        # (1 unchanged block hidden)
+    }
+
+  # module.monitoring.google_monitoring_alert_policy.firewall_change will be created
+  + resource "google_monitoring_alert_policy" "firewall_change" {
+      + combiner              = "OR"
+      + creation_record       = (known after apply)
+      + deletion_policy       = "DELETE"
+      + display_name          = "cm vpc firewall rule changed"
+      + enabled               = true
+      + id                    = (known after apply)
+      + name                  = (known after apply)
+      + notification_channels = [
+          + "projects/cloud-mile-assessment/notificationChannels/5633695206479919101",
+        ]
+      + project               = "cloud-mile-assessment"
+      + severity              = "WARNING"
+
+      + alert_strategy {
+          + auto_close = "1800s"
+
+          + notification_rate_limit {
+              + period = "300s"
+            }
+        }
+
+      + conditions {
+          + display_name = "firewall insert / patch / update / delete in audit log"
+          + name         = (known after apply)
+
+          + condition_matched_log {
+              + filter           = "logName=\"projects/cloud-mile-assessment/logs/cloudaudit.googleapis.com%2Factivity\" AND protoPayload.serviceName=\"compute.googleapis.com\" AND protoPayload.methodName=~\"compute\\.firewalls\\.(insert|patch|update|delete)\" AND NOT protoPayload.authenticationInfo.principalEmail=~\"container-engine-robot\""
+              + label_extractors = {
+                  + "actor"  = "EXTRACT(protoPayload.authenticationInfo.principalEmail)"
+                  + "method" = "EXTRACT(protoPayload.methodName)"
+                  + "rule"   = "EXTRACT(protoPayload.resourceName)"
+                }
+            }
+        }
+
+      + documentation {
+          + content   = <<-EOT
+                A VPC firewall rule was created, changed or deleted outside GKE. Firewall rules for `cm-vpc` should only change through Terraform.
+                
+                Check:
+                - `gcloud compute firewall-rules list --filter=network:cm-vpc --sort-by=priority`
+                - is it in terraform? `terraform -chdir=terraform/platform state list | grep firewall`
+                - is the app still reachable? `scripts/healthcheck.py`
+                - a deny on 35.191.0.0/16 or 130.211.0.0/22 cuts off the load balancer (task 4 incident)
+            EOT
+          + mime_type = "text/markdown"
+        }
+    }
+
+  # module.network.google_compute_firewall.allow_health_checks will be updated in-place
+  ~ resource "google_compute_firewall" "allow_health_checks" {
+        id                      = "projects/cloud-mile-assessment/global/firewalls/cm-allow-health-checks"
+        name                    = "cm-allow-health-checks"
+      ~ priority                = 1000 -> 0
+        # (14 unchanged attributes hidden)
+
+        # (1 unchanged block hidden)
+    }
+
+Plan: 1 to add, 2 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: platform.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "platform.tfplan"

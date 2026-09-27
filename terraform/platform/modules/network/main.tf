@@ -52,7 +52,9 @@ resource "google_compute_firewall" "allow_health_checks" {
   name      = "${var.name_prefix}-allow-health-checks"
   network   = google_compute_network.vpc.id
   direction = "INGRESS"
-  priority  = 1000
+  # from task 4 - was 1000, a manual deny at priority 100 cut off the lb (502 for ~10 min)
+  # 0 = highest, lowest number wins so only a deny also at 0 can override this now
+  priority = 0
 
   source_ranges = ["35.191.0.0/16", "130.211.0.0/22"]
   target_tags   = [var.node_tag]

@@ -1,0 +1,21 @@
+$ curl -H "Authorization: Bearer $(gcloud auth print-access-token)" https://monitoring.googleapis.com/v3/projects/cloud-mile-assessment/alerts  (times converted to MYT)
+state: OPEN
+  policy: cm vpc firewall rule changed | severity: WARNING
+  open:  2026-09-27 19:26:16 MYT
+  close: -
+
+state: CLOSED
+  policy: cm app uptime check failing | severity: CRITICAL
+  open:  2026-09-27 19:13:42 MYT
+  close: 2026-09-27 19:22:51 MYT
+
+state: CLOSED
+  policy: cm app uptime check failing | severity: CRITICAL
+  open:  2026-09-27 18:46:35 MYT
+  close: 2026-09-27 18:46:58 MYT
+
+state: CLOSED
+  policy: cm cloud sql connections above 80% | severity: WARNING
+  open:  2026-09-27 18:04:35 MYT
+  close: 2026-09-27 18:09:42 MYT
+

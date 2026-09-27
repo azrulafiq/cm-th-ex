@@ -234,6 +234,11 @@ Notes:
 - The HPA does not act on a Deployment at 0 replicas, which is why scaling back to 2 was done by hand. The HPA took over again once pods were running.
 - Cloud SQL itself was healthy the whole time; the `cloudsql` check failed because there was no app pod to prove connectivity from. The instance state (`RUNNABLE`) is still in the check details, which helps separate "database down" from "app down" during triage.
 - After recovery the pods were again one per node (`89c9` and `fzib`).
+- The outage also fired the Task 3 uptime alert: `cm app uptime check failing` (CRITICAL) opened at 18:46:35 and closed at 18:46:58. It opened after the app was already back, because uptime checks run every 60 seconds and the condition needs failures from more than one region for 60 seconds. A 1 minute outage is at the edge of what this alert catches, which is expected for a check tuned to avoid paging on one flaky region.
+
+![Uptime alert email during scale to zero](../src/task5-12-uptime-alert-email-scale-to-zero.png)
+
+![Alerting console, uptime alert opened and closed](../src/task5-11-alerting-uptime-scale-to-zero.png)
 
 Raw output: [10-run-fail-scale-to-zero.txt](../evidence/task-5/10-run-fail-scale-to-zero.txt)
 

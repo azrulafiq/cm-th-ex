@@ -1,0 +1,46 @@
+google_project_service.this["servicenetworking.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/servicenetworking.googleapis.com]
+google_project_service.this["monitoring.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/monitoring.googleapis.com]
+google_project_service.this["artifactregistry.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/artifactregistry.googleapis.com]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/cloudresourcemanager.googleapis.com]
+google_project_service.this["container.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/container.googleapis.com]
+google_project_service.this["compute.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/compute.googleapis.com]
+google_project_service.this["logging.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/logging.googleapis.com]
+google_project_service.this["sqladmin.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/sqladmin.googleapis.com]
+google_project_service.this["serviceusage.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/serviceusage.googleapis.com]
+google_project_service.this["secretmanager.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/secretmanager.googleapis.com]
+google_project_service.this["iamcredentials.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/iamcredentials.googleapis.com]
+google_project_service.this["iam.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/iam.googleapis.com]
+google_storage_bucket.tfstate: Refreshing state... [id=cloud-mile-assessment-tfstate]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # google_project_service.this["networkmanagement.googleapis.com"] will be created
+  + resource "google_project_service" "this" {
+      + deletion_policy    = "DELETE"
+      + disable_on_destroy = false
+      + id                 = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + service            = "networkmanagement.googleapis.com"
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  ~ enabled_services = [
+        # (7 unchanged elements hidden)
+        "monitoring.googleapis.com",
+      + "networkmanagement.googleapis.com",
+        "secretmanager.googleapis.com",
+        # (3 unchanged elements hidden)
+    ]
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: b.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "b.tfplan"

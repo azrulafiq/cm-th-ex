@@ -27,5 +27,7 @@ variable "services" {
     "artifactregistry.googleapis.com",
     "logging.googleapis.com",
     "monitoring.googleapis.com",
+    # from task 4 - connectivity tests to trace where traffic gets dropped
+    "networkmanagement.googleapis.com",
   ]
 }
