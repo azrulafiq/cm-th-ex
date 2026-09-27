@@ -122,7 +122,7 @@ Image: `python:3.12-slim`, runs as non root UID 10001, read only root filesystem
 |---------|-------|--------|
 | Replicas | Not set in the manifest | The HPA owns the replica count; setting it would fight the HPA on every apply |
 | Strategy | RollingUpdate, `maxSurge: 1`, `maxUnavailable: 0` | New pod is ready before an old one is removed, no capacity drop |
-| Topology spread | `maxSkew: 1` across nodes, `ScheduleAnyway` | Pods spread over nodes so one node failure does not take out all replicas |
+| Topology spread | `maxSkew: 1` across nodes, `DoNotSchedule`, `matchLabelKeys: [pod-template-hash]`, `nodeTaintsPolicy: Honor` (hardened in Task 5, was `ScheduleAnyway`) | One pod per node so one node failure does not take out all replicas. Counting only the current revision stops old pods that are shutting down from skewing placement during a rollout. |
 | Pod security | `runAsNonRoot`, seccomp `RuntimeDefault`, no privilege escalation, all capabilities dropped, read only root filesystem | Hardened defaults |
 | Cloud SQL proxy | Native sidecar (`initContainers` with `restartPolicy: Always`) | Starts and passes its startup probe before the app starts, stops after the app on shutdown |
 | Proxy flags | `--private-ip`, `--port=5432`, `--structured-logs`, `--health-check`, `--exit-zero-on-sigterm` | Private path to Cloud SQL, JSON logs, health endpoints for probes |
@@ -364,7 +364,7 @@ curl -sS -H "Accept: text/html" https://cm-app.sokay.my/ | grep version-badge   
 
 Result: `successfully rolled out`, history now shows revision 4 `v3 web ui`. Security headers on every response: `Content-Security-Policy: default-src 'self'; frame-ancestors 'none'`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`.
 
-Live demo in the defense: open the page, then `kubectl -n app set image deploy/app app=$REPO:v4` and watch the load balancing panel move from v3 pods to v4 pods.
+Live demo in the defense: open the page, then `kubectl -n app set image deploy/app app=$REPO:v6` and watch the load balancing panel move from v5 pods to v6 pods. (Since Task 5 the running version is `v5`, which only changes the chaos button to hold 20 connections; `v6` is the same code, kept as the spare for this demo.)
 
 Raw output: [14-ui-update-v3.txt](../evidence/task-2/14-ui-update-v3.txt)
 

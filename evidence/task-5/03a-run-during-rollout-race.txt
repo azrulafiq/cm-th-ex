@@ -1,0 +1,159 @@
+$ scripts/healthcheck.py
+{
+  "timestamp": "2026-09-27T18:39:33+08:00",
+  "target": {
+    "namespace": "app",
+    "hpa": "app",
+    "sql_instance": "cm-pg",
+    "url": "https://cm-app.sokay.my"
+  },
+  "overall": "fail",
+  "failed_checks": [
+    "cloudsql"
+  ],
+  "warning_checks": [
+    "endpoint"
+  ],
+  "duration_ms": 6199,
+  "checks": [
+    {
+      "name": "pods",
+      "status": "pass",
+      "summary": "3/3 pods ready",
+      "messages": [],
+      "duration_ms": 217,
+      "details": {
+        "ready": 3,
+        "total": 3,
+        "min_ready": 2,
+        "nodes": [
+          "gke-cm-gke-cm-pool-404d116a-89c9",
+          "gke-cm-gke-cm-pool-404d116a-fzib"
+        ],
+        "pods": [
+          {
+            "name": "app-589cbfbdf6-fq8lk",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-fzib",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          },
+          {
+            "name": "app-6b648b7b86-8lcq7",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-89c9",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          },
+          {
+            "name": "app-6b648b7b86-v4g7h",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-89c9",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "hpa",
+      "status": "pass",
+      "summary": "2 replicas (min 2, max 6), cpu 4% of target 60%",
+      "messages": [],
+      "duration_ms": 170,
+      "details": {
+        "min": 2,
+        "max": 6,
+        "current": 2,
+        "desired": 2,
+        "cpu_utilization_pct": 4,
+        "cpu_target_pct": 60,
+        "conditions": {
+          "AbleToScale": {
+            "status": "True",
+            "reason": "ReadyForNewScale"
+          },
+          "ScalingActive": {
+            "status": "True",
+            "reason": "ValidMetricFound"
+          },
+          "ScalingLimited": {
+            "status": "False",
+            "reason": "DesiredWithinRange"
+          }
+        }
+      }
+    },
+    {
+      "name": "cloudsql",
+      "status": "fail",
+      "summary": "check could not complete",
+      "messages": [
+        "kubectl -n app exec ... failed: error: cannot exec into a container in a completed pod; current phase is Succeeded"
+      ],
+      "duration_ms": 1115,
+      "details": {}
+    },
+    {
+      "name": "endpoint",
+      "status": "warn",
+      "summary": "200 in 4568ms",
+      "messages": [
+        "latency 4568ms over 1000ms"
+      ],
+      "duration_ms": 4698,
+      "details": {
+        "url": "https://cm-app.sokay.my/healthz",
+        "http_status": 200,
+        "latency_ms": 4568,
+        "cert_days_left": 89
+      }
+    }
+  ]
+}
+exit code: 1

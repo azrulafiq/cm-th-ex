@@ -11,7 +11,7 @@ Prerequisites (tools, credentials, APIs, state bucket) are covered in [00-prereq
 | VPC and subnet | `cm-vpc` (custom mode) and `cm-gke-subnet` with pod and service secondary ranges | [14-vpc-subnet-describe.txt](../evidence/task-1/platform/14-vpc-subnet-describe.txt) |
 | Cloud Router and Cloud NAT | `cm-router`, `cm-nat` | [15-router-nat-describe.txt](../evidence/task-1/platform/15-router-nat-describe.txt) |
 | Firewall rules for health checks and internal traffic | `cm-allow-health-checks`, `cm-allow-internal` | [16-firewall.txt](../evidence/task-1/platform/16-firewall.txt) |
-| Private GKE cluster with Workload Identity, autoscaling, node service account | `cm-gke` (private nodes), node pool `cm-pool` (1 to 3 nodes), node SA `cm-gke-nodes` | [10-gke-cluster-describe.txt](../evidence/task-1/platform/10-gke-cluster-describe.txt), [11-gke-nodepool-describe.txt](../evidence/task-1/platform/11-gke-nodepool-describe.txt) |
+| Private GKE cluster with Workload Identity, autoscaling, node service account | `cm-gke` (private nodes), node pool `cm-pool` (2 to 3 nodes, min raised from 1 in Task 5), node SA `cm-gke-nodes` | [10-gke-cluster-describe.txt](../evidence/task-1/platform/10-gke-cluster-describe.txt), [11-gke-nodepool-describe.txt](../evidence/task-1/platform/11-gke-nodepool-describe.txt) |
 | Cloud SQL for PostgreSQL with private IP | `cm-pg`, PostgreSQL 16, private IP `10.172.80.3`, public IP disabled | [12-sql-instance-describe.txt](../evidence/task-1/platform/12-sql-instance-describe.txt), [17-private-services-access.txt](../evidence/task-1/platform/17-private-services-access.txt) |
 | Secret Manager secret for DB credentials | `cm-db-password` | [19-secret-manager.txt](../evidence/task-1/platform/19-secret-manager.txt) |
 | Least privilege service account for the application | `cm-app`, bound to Kubernetes SA `app/app-ksa` via Workload Identity | [18-service-accounts-iam.txt](../evidence/task-1/platform/18-service-accounts-iam.txt) |
@@ -35,7 +35,7 @@ flowchart LR
             subgraph subnet["Subnet cm-gke-subnet 10.10.0.0/20<br/>pods 10.20.0.0/16, services 10.30.0.0/20<br/>Private Google Access on"]
                 subgraph gke["GKE cm-gke (zonal, asia-southeast1-a)"]
                     cp["Control plane<br/>public endpoint, authorized networks only"]
-                    pool["Node pool cm-pool<br/>e2-standard-2, autoscale 1 to 3<br/>private nodes, no external IP<br/>node SA cm-gke-nodes"]
+                    pool["Node pool cm-pool<br/>e2-standard-2, autoscale 2 to 3<br/>private nodes, no external IP<br/>node SA cm-gke-nodes"]
                 end
             end
             fw["Firewall<br/>cm-allow-health-checks<br/>cm-allow-internal"]
@@ -134,7 +134,7 @@ GKE also creates its own rules (`gke-cm-gke-...-all`, `gke-cm-gke-...-vms`). The
 | Setting | Value | Reason |
 |---------|-------|--------|
 | Machine type | `e2-standard-2` (changed from `e2-medium`, see step 6) | Enough allocatable CPU for GKE system pods plus the app |
-| Autoscaling | 1 to 3 nodes | Free trial `E2_CPUS` quota is 8: 3 nodes x 2 vCPU plus 1 surge node = 8 |
+| Autoscaling | 2 to 3 nodes (min was 1, raised to 2 after the Task 5 health check found both app pods on a single node) | Free trial `E2_CPUS` quota is 8: 3 nodes x 2 vCPU plus 1 surge node = 8. A minimum of 2 keeps the app on 2 nodes. |
 | Upgrade | Surge 1, unavailable 0 | A new node is added before an old one is removed |
 | Disk | `pd-balanced`, 50 GB | Stays under the 250 GB SSD quota with 4 nodes during a surge |
 | Image | Container-Optimized OS with containerd | Default hardened node image |
@@ -342,7 +342,7 @@ gcloud artifacts repositories get-iam-policy cm-app --location $R --project $P
 | Cluster private nodes | `enablePrivateNodes: true` |
 | Authorized networks | Enabled, single admin `/32` |
 | Workload Identity | `workloadPool: cloud-mile-assessment.svc.id.goog` |
-| Node pool | `e2-standard-2`, autoscaling 1 to 3, `GKE_METADATA`, SA `cm-gke-nodes` |
+| Node pool | `e2-standard-2`, autoscaling 1 to 3 at the time of Task 1 (2 to 3 since Task 5), `GKE_METADATA`, SA `cm-gke-nodes` |
 | Cloud SQL | `ipv4Enabled: false`, private IP `10.172.80.3`, `ENCRYPTED_ONLY` |
 | Subnet | `privateIpGoogleAccess: true`, secondary ranges `pods`, `services` |
 | NAT | `AUTO_ONLY`, all subnet ranges, error logging |

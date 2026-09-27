@@ -1,0 +1,43 @@
+## 2026-09-27T18:25:44+0800 build and push v5 (chaos button holds 20 db conns) and v6 (same code, spare for live rolling update demo)
+$ docker build -q --build-arg APP_VERSION=v5 -t asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5 app/
+sha256:7ee45c087b175c46b813c0ed7a9bd2f2a532635fb691cd6eff3b93c637f3ffe3
+
+$ docker push asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5
+v5: digest: sha256:7ee45c087b175c46b813c0ed7a9bd2f2a532635fb691cd6eff3b93c637f3ffe3 size: 856
+
+$ docker build -q --build-arg APP_VERSION=v6 -t asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v6 app/
+sha256:59865567be4060a2652c0427162aa5a50cc4bdbd5e01941eb2d6e5013e34ef7e
+
+$ docker push asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v6
+v6: digest: sha256:59865567be4060a2652c0427162aa5a50cc4bdbd5e01941eb2d6e5013e34ef7e size: 856
+
+$ kubectl apply -f k8s/05-deployment.yaml
+deployment.apps/app configured
+
+$ kubectl -n app rollout status deploy/app --timeout=300s
+Waiting for deployment "app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+deployment "app" successfully rolled out
+
+$ kubectl -n app rollout history deploy/app
+deployment.apps/app 
+REVISION  CHANGE-CAUSE
+2         update to v2
+3         initial deploy v1
+4         v3 web ui
+5         v5 chaos button 20 conns
+
+
+$ kubectl -n app get pods -o wide
+NAME                   READY   STATUS        RESTARTS   AGE   IP           NODE                               NOMINATED NODE   READINESS GATES
+app-589cbfbdf6-fq8lk   2/2     Running       0          11s   10.20.3.28   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+app-589cbfbdf6-fx6bm   2/2     Running       0          28s   10.20.3.27   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+app-68cf846886-5mntv   2/2     Terminating   0          51m   10.20.3.25   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+
+$ curl -sS -H "Accept: text/html" https://cm-app.sokay.my/ | grep connections
+        <dt>connections</dt><dd id="db-conns">-</dd>
+        <button data-chaos="/connections?n=20&amp;seconds=300">hold 20 db conns</button>

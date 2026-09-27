@@ -1,0 +1,141 @@
+$ scripts/healthcheck.py
+{
+  "timestamp": "2026-09-27T18:25:23+08:00",
+  "target": {
+    "namespace": "app",
+    "hpa": "app",
+    "sql_instance": "cm-pg",
+    "url": "https://cm-app.sokay.my"
+  },
+  "overall": "warn",
+  "failed_checks": [],
+  "warning_checks": [
+    "pods"
+  ],
+  "duration_ms": 3010,
+  "checks": [
+    {
+      "name": "pods",
+      "status": "warn",
+      "summary": "2/2 pods ready, recent restarts",
+      "messages": [
+        "all 2 ready pods are on one node (gke-cm-gke-cm-pool-404d116a-fzib)"
+      ],
+      "duration_ms": 186,
+      "details": {
+        "ready": 2,
+        "total": 2,
+        "min_ready": 2,
+        "nodes": [
+          "gke-cm-gke-cm-pool-404d116a-fzib"
+        ],
+        "pods": [
+          {
+            "name": "app-68cf846886-2q27j",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-fzib",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          },
+          {
+            "name": "app-68cf846886-5mntv",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-fzib",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "hpa",
+      "status": "pass",
+      "summary": "2 replicas (min 2, max 6), cpu 4% of target 60%",
+      "messages": [],
+      "duration_ms": 137,
+      "details": {
+        "min": 2,
+        "max": 6,
+        "current": 2,
+        "desired": 2,
+        "cpu_utilization_pct": 4,
+        "cpu_target_pct": 60,
+        "conditions": {
+          "AbleToScale": {
+            "status": "True",
+            "reason": "ReadyForNewScale"
+          },
+          "ScalingActive": {
+            "status": "True",
+            "reason": "ValidMetricFound"
+          },
+          "ScalingLimited": {
+            "status": "True",
+            "reason": "TooFewReplicas"
+          }
+        }
+      }
+    },
+    {
+      "name": "cloudsql",
+      "status": "pass",
+      "summary": "RUNNABLE, query ok via app-68cf846886-2q27j (PostgreSQL 16.15)",
+      "messages": [],
+      "duration_ms": 2419,
+      "details": {
+        "instance": "cm-pg",
+        "state": "RUNNABLE",
+        "database_version": "POSTGRES_16",
+        "private_ip": "10.172.80.3",
+        "tested_from_pod": "app-68cf846886-2q27j",
+        "query_http_status": 200,
+        "db_version": "PostgreSQL 16.15",
+        "db_connections": 1
+      }
+    },
+    {
+      "name": "endpoint",
+      "status": "pass",
+      "summary": "200 in 147ms, cert 89 days left",
+      "messages": [],
+      "duration_ms": 267,
+      "details": {
+        "url": "https://cm-app.sokay.my/healthz",
+        "http_status": 200,
+        "latency_ms": 147,
+        "cert_days_left": 89
+      }
+    }
+  ]
+}
+exit code: 0

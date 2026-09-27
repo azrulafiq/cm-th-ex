@@ -1,0 +1,43 @@
+## 2026-09-27T18:35:35+0800 node pool autoscaling min raised 1 -> 2 by terraform, but gke does not scale up to a new min on its own, resize once
+$ gcloud container node-pools describe cm-pool --cluster cm-gke --zone asia-southeast1-a --format=yaml(autoscaling)
+autoscaling:
+  enabled: true
+  locationPolicy: BALANCED
+  maxNodeCount: 3
+  minNodeCount: 2
+
+$ gcloud container clusters resize cm-gke --node-pool cm-pool --num-nodes 2 --zone asia-southeast1-a --quiet
+Resizing cm-gke...
+...........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................done.
+Updated [https://container.googleapis.com/v1/projects/cloud-mile-assessment/zones/asia-southeast1-a/clusters/cm-gke].
+
+$ kubectl get nodes -o wide
+NAME                               STATUS   ROLES    AGE    VERSION               INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                             KERNEL-VERSION   CONTAINER-RUNTIME
+gke-cm-gke-cm-pool-404d116a-89c9   Ready    <none>   22s    v1.35.8-gke.1225000   10.10.0.10    <none>        Container-Optimized OS from Google   6.12.94+         containerd://2.2.7
+gke-cm-gke-cm-pool-404d116a-fzib   Ready    <none>   3h1m   v1.35.8-gke.1225000   10.10.0.7     <none>        Container-Optimized OS from Google   6.12.94+         containerd://2.2.7
+
+## 2026-09-27T18:37:45+0800 reschedule pods so the topology spread puts one per node
+$ kubectl -n app get pods -o wide
+NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE                               NOMINATED NODE   READINESS GATES
+app-589cbfbdf6-fq8lk   2/2     Running   0          11m   10.20.3.28   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+app-589cbfbdf6-fx6bm   2/2     Running   0          11m   10.20.3.27   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+
+$ kubectl -n app rollout restart deploy/app
+deployment.apps/app restarted
+
+$ kubectl -n app rollout status deploy/app --timeout=300s
+Waiting for deployment "app" rollout to finish: 0 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+deployment "app" successfully rolled out
+
+$ kubectl -n app get pods -o wide
+NAME                   READY   STATUS        RESTARTS   AGE    IP           NODE                               NOMINATED NODE   READINESS GATES
+app-589cbfbdf6-fq8lk   2/2     Terminating   0          13m    10.20.3.28   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+app-6b648b7b86-8lcq7   2/2     Running       0          101s   10.20.0.7    gke-cm-gke-cm-pool-404d116a-89c9   <none>           1/1
+app-6b648b7b86-v4g7h   2/2     Running       0          11s    10.20.0.8    gke-cm-gke-cm-pool-404d116a-89c9   <none>           1/1
+

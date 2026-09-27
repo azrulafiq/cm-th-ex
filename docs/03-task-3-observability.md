@@ -17,7 +17,7 @@ All times in this document are MYT (UTC+8). Raw evidence files are captured in U
 | Log based metric for application errors, capturing data | `cm-app-errors` | [10-log-metric-evidence.txt](../evidence/task-3/10-log-metric-evidence.txt) |
 | Uptime check with an attached alert policy | `cm app https healthz` on `https://cm-app.sokay.my/healthz` | [task3-07](../src/task3-07-uptime-check.png) |
 | At least one alert firing and resolving, with a timeline | Cloud SQL connections alert, opened 18:04:35, closed 18:09:42 | [09-alert-sql-connections-timeline.txt](../evidence/task-3/09-alert-sql-connections-timeline.txt), [task3-03](../src/task3-03-alerting-incident-open.png), [task3-09](../src/task3-09-alerting-incident-closed.png) |
-| gcloud outputs and console screenshots | Captured | [evidence/task-3/](../evidence/task-3/) |
+| gcloud outputs and console screenshots | List and full describe of every resource, 9 screenshots | [08-gcloud-monitoring-resources.txt](../evidence/task-3/08-gcloud-monitoring-resources.txt), [11-gcloud-monitoring-describe.txt](../evidence/task-3/11-gcloud-monitoring-describe.txt) |
 
 Everything is in Terraform, in a new module [terraform/platform/modules/monitoring/](../terraform/platform/modules/monitoring/).
 
@@ -181,7 +181,17 @@ gcloud monitoring dashboards list
 
 Result: 1 email channel enabled, 4 policies enabled with the expected severities and conditions, 1 uptime check on `/healthz` port 443 every 60s, the log metric with the expected filter, and the dashboard.
 
-Raw output: [08-gcloud-monitoring-resources.txt](../evidence/task-3/08-gcloud-monitoring-resources.txt)
+Full configuration of every resource was then captured (alert email redacted):
+
+```bash
+gcloud beta monitoring channels describe <channel-id>
+gcloud alpha monitoring policies describe <policy-id>      # x4
+gcloud monitoring uptime describe cm-app-https-healthz-Hj1EXMaMD9s
+gcloud logging metrics describe cm-app-errors
+gcloud monitoring dashboards describe <dashboard-id>
+```
+
+Raw output: [08-gcloud-monitoring-resources.txt](../evidence/task-3/08-gcloud-monitoring-resources.txt), [11-gcloud-monitoring-describe.txt](../evidence/task-3/11-gcloud-monitoring-describe.txt)
 
 ### Step 5: Fire and resolve an alert (Cloud SQL connections)
 
@@ -291,3 +301,4 @@ Raw output: [10-log-metric-evidence.txt](../evidence/task-3/10-log-metric-eviden
 | [08-gcloud-monitoring-resources.txt](../evidence/task-3/08-gcloud-monitoring-resources.txt) | Channels, policies, uptime check, log metric, dashboard |
 | [09-alert-sql-connections-timeline.txt](../evidence/task-3/09-alert-sql-connections-timeline.txt) | Alert test timeline (UTC) |
 | [10-log-metric-evidence.txt](../evidence/task-3/10-log-metric-evidence.txt) | Error log entries and log metric time series |
+| [11-gcloud-monitoring-describe.txt](../evidence/task-3/11-gcloud-monitoring-describe.txt) | Full describe of channel, 4 policies, uptime check, log metric, dashboard |

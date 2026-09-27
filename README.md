@@ -9,6 +9,7 @@ Cloudmile Take-home Exercise: GCP Cloud Operations hands-on homework.
 | [01-task-1-infrastructure.md](docs/01-task-1-infrastructure.md) | Task 1: Terraform platform (VPC, NAT, firewall, private GKE, Cloud SQL, Secret Manager, IAM), architecture diagram |
 | [02-task-2-gke-deployment.md](docs/02-task-2-gke-deployment.md) | Task 2: sample app on GKE, Cloud SQL via Auth Proxy, HTTPS Ingress, rolling update, rollback, scaling, HPA |
 | [03-task-3-observability.md](docs/03-task-3-observability.md) | Task 3: dashboard, 4 alert policies, email channel, uptime check, log based metric, alert fire and resolve timeline |
+| [05-task-5-healthcheck.md](docs/05-task-5-healthcheck.md) | Task 5: health check script (pods, HPA, Cloud SQL, endpoint), JSON output, pass and fail runs |
 
 ## Repository layout
 
@@ -45,4 +46,7 @@ gcloud container clusters get-credentials cm-gke --zone asia-southeast1-a --proj
 kubectl apply -f k8s/00-namespace.yaml
 scripts/create-app-secret.sh
 kubectl apply -f k8s/
+
+# 5. health check (Task 5), prints json, exit 1 if unhealthy
+scripts/healthcheck.py
 ```

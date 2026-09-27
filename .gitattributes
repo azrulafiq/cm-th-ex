@@ -1,0 +1,6 @@
+# keep unix line endings so scripts run in wsl/linux
+*.sh   text eol=lf
+*.py   text eol=lf
+*.tf   text eol=lf
+*.yaml text eol=lf
+*.md   text eol=lf

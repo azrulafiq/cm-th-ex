@@ -31,13 +31,19 @@ spec:
           type: RuntimeDefault
 
       # spread pods over nodes so one node going down doesnt take all of them
+      # from task 5 - was ScheduleAnyway without matchLabelKeys, both pods ended up on one node after a rollout
+      # pod-template-hash = only count pods of the same revision, old pods shutting down dont skew it
+      # nodeTaintsPolicy Honor = cordoned/draining nodes are left out so they cant block scheduling
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
+          whenUnsatisfiable: DoNotSchedule
+          nodeTaintsPolicy: Honor
           labelSelector:
             matchLabels:
               app: cm-app
+          matchLabelKeys:
+            - pod-template-hash
 
       # native sidecar (restartPolicy Always), starts before the app and stops after it
       initContainers:
@@ -83,7 +89,7 @@ spec:
 
       containers:
         - name: app
-          image: asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v3
+          image: asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v5
           ports:
             - name: http
               containerPort: 8080

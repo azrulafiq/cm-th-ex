@@ -1,0 +1,259 @@
+## 2026-09-27T18:43:40+0800 failure test: scale the deployment to 0 (outage)
+$ kubectl -n app get pods -o wide
+NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE                               NOMINATED NODE   READINESS GATES
+app-6c6b9d976d-ccfx7   2/2     Running   0          71s   10.20.0.10   gke-cm-gke-cm-pool-404d116a-89c9   <none>           1/1
+app-6c6b9d976d-p7dsb   2/2     Running   0          60s   10.20.3.31   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+
+$ kubectl -n app scale deploy/app --replicas=0
+deployment.apps/app scaled
+
+$ kubectl -n app get pods
+No resources found in app namespace.
+
+$ scripts/healthcheck.py
+{
+  "timestamp": "2026-09-27T18:44:13+08:00",
+  "target": {
+    "namespace": "app",
+    "hpa": "app",
+    "sql_instance": "cm-pg",
+    "url": "https://cm-app.sokay.my"
+  },
+  "overall": "fail",
+  "failed_checks": [
+    "pods",
+    "hpa",
+    "cloudsql",
+    "endpoint"
+  ],
+  "warning_checks": [],
+  "duration_ms": 1430,
+  "checks": [
+    {
+      "name": "pods",
+      "status": "fail",
+      "summary": "0/0 pods ready, need at least 2",
+      "messages": [],
+      "duration_ms": 190,
+      "details": {
+        "ready": 0,
+        "total": 0,
+        "min_ready": 2,
+        "nodes": [],
+        "terminating": [],
+        "pods": []
+      }
+    },
+    {
+      "name": "hpa",
+      "status": "fail",
+      "summary": "hpa cannot scale",
+      "messages": [
+        "ScalingActive=False (FailedGetResourceMetric): the HPA was unable to compute the replica count: unable to get metric cpu: no metrics returned from resource metrics API"
+      ],
+      "duration_ms": 182,
+      "details": {
+        "min": 2,
+        "max": 6,
+        "current": 2,
+        "desired": 2,
+        "cpu_utilization_pct": null,
+        "cpu_target_pct": 60,
+        "conditions": {
+          "AbleToScale": {
+            "status": "True",
+            "reason": "ReadyForNewScale"
+          },
+          "ScalingActive": {
+            "status": "False",
+            "reason": "FailedGetResourceMetric"
+          },
+          "ScalingLimited": {
+            "status": "False",
+            "reason": "DesiredWithinRange"
+          }
+        }
+      }
+    },
+    {
+      "name": "cloudsql",
+      "status": "fail",
+      "summary": "no running app pod to test the db connection from",
+      "messages": [
+        "no pod available"
+      ],
+      "duration_ms": 806,
+      "details": {
+        "instance": "cm-pg",
+        "state": "RUNNABLE",
+        "database_version": "POSTGRES_16",
+        "private_ip": "10.172.80.3"
+      }
+    },
+    {
+      "name": "endpoint",
+      "status": "fail",
+      "summary": "https://cm-app.sokay.my/healthz returned 502",
+      "messages": [
+        "\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>502 Server Error</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Server Error</h1>\n<h2>The server"
+      ],
+      "duration_ms": 252,
+      "details": {
+        "url": "https://cm-app.sokay.my/healthz",
+        "http_status": 502,
+        "latency_ms": 138,
+        "cert_days_left": 89
+      }
+    }
+  ]
+}
+exit code: 1
+## 2026-09-27T18:44:13+0800 restore: scale back to 2, hpa takes over again
+$ kubectl -n app scale deploy/app --replicas=2
+deployment.apps/app scaled
+
+$ kubectl -n app rollout status deploy/app --timeout=300s
+Waiting for deployment "app" rollout to finish: 0 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "app" rollout to finish: 1 of 2 updated replicas are available...
+deployment "app" successfully rolled out
+
+$ scripts/healthcheck.py
+{
+  "timestamp": "2026-09-27T18:44:57+08:00",
+  "target": {
+    "namespace": "app",
+    "hpa": "app",
+    "sql_instance": "cm-pg",
+    "url": "https://cm-app.sokay.my"
+  },
+  "overall": "pass",
+  "failed_checks": [],
+  "warning_checks": [],
+  "duration_ms": 2994,
+  "checks": [
+    {
+      "name": "pods",
+      "status": "pass",
+      "summary": "2/2 pods ready",
+      "messages": [],
+      "duration_ms": 235,
+      "details": {
+        "ready": 2,
+        "total": 2,
+        "min_ready": 2,
+        "nodes": [
+          "gke-cm-gke-cm-pool-404d116a-89c9",
+          "gke-cm-gke-cm-pool-404d116a-fzib"
+        ],
+        "terminating": [],
+        "pods": [
+          {
+            "name": "app-6c6b9d976d-5b7z2",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-89c9",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          },
+          {
+            "name": "app-6c6b9d976d-jdllv",
+            "phase": "Running",
+            "ready": true,
+            "node": "gke-cm-gke-cm-pool-404d116a-fzib",
+            "containers": [
+              {
+                "name": "app",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              },
+              {
+                "name": "cloud-sql-proxy",
+                "ready": true,
+                "restarts": 0,
+                "state": "running",
+                "last_terminated_reason": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "hpa",
+      "status": "pass",
+      "summary": "2 replicas (min 2, max 6), cpu 4% of target 60%",
+      "messages": [],
+      "duration_ms": 169,
+      "details": {
+        "min": 2,
+        "max": 6,
+        "current": 2,
+        "desired": 2,
+        "cpu_utilization_pct": 4,
+        "cpu_target_pct": 60,
+        "conditions": {
+          "AbleToScale": {
+            "status": "True",
+            "reason": "ScaleDownStabilized"
+          },
+          "ScalingActive": {
+            "status": "True",
+            "reason": "ValidMetricFound"
+          },
+          "ScalingLimited": {
+            "status": "False",
+            "reason": "DesiredWithinRange"
+          }
+        }
+      }
+    },
+    {
+      "name": "cloudsql",
+      "status": "pass",
+      "summary": "RUNNABLE, query ok via app-6c6b9d976d-5b7z2 (PostgreSQL 16.15)",
+      "messages": [],
+      "duration_ms": 2301,
+      "details": {
+        "instance": "cm-pg",
+        "state": "RUNNABLE",
+        "database_version": "POSTGRES_16",
+        "private_ip": "10.172.80.3",
+        "tested_from_pod": "app-6c6b9d976d-5b7z2",
+        "query_http_status": 200,
+        "db_version": "PostgreSQL 16.15",
+        "db_connections": 1
+      }
+    },
+    {
+      "name": "endpoint",
+      "status": "pass",
+      "summary": "200 in 155ms, cert 89 days left",
+      "messages": [],
+      "duration_ms": 289,
+      "details": {
+        "url": "https://cm-app.sokay.my/healthz",
+        "http_status": 200,
+        "latency_ms": 155,
+        "cert_days_left": 89
+      }
+    }
+  ]
+}
+exit code: 0

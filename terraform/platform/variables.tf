@@ -66,10 +66,11 @@ variable "node_machine_type" {
   default     = "e2-standard-2"
 }
 
+# from task 5 - was 1, autoscaler shrank to 1 node and both app pods ended up on it (health check warned)
 variable "node_min_count" {
   description = "Min nodes for the autoscaler."
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "node_max_count" {

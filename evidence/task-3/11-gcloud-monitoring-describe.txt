@@ -1,0 +1,512 @@
+## notification channel
+$ gcloud beta monitoring channels describe 5633695206479919101 --project cloud-mile-assessment
+creationRecord:
+  mutateTime: '2026-09-27T09:54:02.799456655Z'
+displayName: cm alerts email
+enabled: true
+labels:
+  email_address: <alert email redacted>
+mutationRecords:
+- mutateTime: '2026-09-27T09:54:02.799456655Z'
+name: projects/cloud-mile-assessment/notificationChannels/5633695206479919101
+type: email
+
+## alert policies
+$ gcloud alpha monitoring policies describe 2196561270371539819 --project cloud-mile-assessment
+alertStrategy:
+  autoClose: 1800s
+combiner: OR
+conditions:
+- conditionThreshold:
+    aggregations:
+    - alignmentPeriod: 300s
+      crossSeriesReducer: REDUCE_SUM
+      groupByFields:
+      - resource.label.pod_name
+      - resource.label.container_name
+      perSeriesAligner: ALIGN_DELTA
+    comparison: COMPARISON_GT
+    duration: 0s
+    filter: metric.type="kubernetes.io/container/restart_count" AND resource.type="k8s_container"
+      AND resource.label.cluster_name="cm-gke" AND resource.label.namespace_name="app"
+    thresholdValue: 2.0
+    trigger:
+      count: 1
+  displayName: more than 2 container restarts in 5 min
+  name: projects/cloud-mile-assessment/alertPolicies/2196561270371539819/conditions/2196561270371538714
+creationRecord:
+  mutateTime: '2026-09-27T09:54:09.054504857Z'
+  mutatedBy: <alert email redacted>
+displayName: cm app pod restarting (CrashLoopBackOff)
+documentation:
+  content: |-
+    Container in namespace `app` restarted more than 2 times in 5 minutes. Usually CrashLoopBackOff.
+
+    Check:
+    - `kubectl -n app get pods`
+    - `kubectl -n app describe pod <pod>` (Last State, Reason, Exit Code, OOMKilled)
+    - `kubectl -n app logs <pod> -c <container> --previous`
+    - recent changes: `kubectl -n app rollout history deploy/app`, configmap `app-config` (CRASH_ON_START)
+  mimeType: text/markdown
+enabled: true
+mutationRecord:
+  mutateTime: '2026-09-27T09:56:40.069701931Z'
+  mutatedBy: <alert email redacted>
+name: projects/cloud-mile-assessment/alertPolicies/2196561270371539819
+notificationChannels:
+- projects/cloud-mile-assessment/notificationChannels/5633695206479919101
+severity: ERROR
+
+$ gcloud alpha monitoring policies describe 18359576122370631028 --project cloud-mile-assessment
+alertStrategy:
+  autoClose: 1800s
+combiner: OR
+conditions:
+- conditionThreshold:
+    aggregations:
+    - alignmentPeriod: 60s
+      perSeriesAligner: ALIGN_MEAN
+    comparison: COMPARISON_GT
+    duration: 300s
+    filter: metric.type="kubernetes.io/node/cpu/allocatable_utilization" AND resource.type="k8s_node"
+      AND resource.label.cluster_name="cm-gke"
+    thresholdValue: 0.8
+    trigger:
+      count: 1
+  displayName: node cpu allocatable utilization > 0.8 for 5 min
+  name: projects/cloud-mile-assessment/alertPolicies/18359576122370631028/conditions/18359576122370633315
+creationRecord:
+  mutateTime: '2026-09-27T09:54:04.878873137Z'
+  mutatedBy: <alert email redacted>
+displayName: cm gke node cpu above 80% for 5 min
+documentation:
+  content: |-
+    A GKE node in `cm-gke` has used more than 80% of its allocatable CPU for 5 minutes.
+
+    Check:
+    - `kubectl top nodes` and `kubectl top pods -A --sort-by=cpu`
+    - `kubectl -n app get hpa app` (is the HPA at max?)
+    - node pool autoscaler max (3 nodes, limited by the E2 CPU quota)
+  mimeType: text/markdown
+enabled: true
+mutationRecord:
+  mutateTime: '2026-09-27T09:56:42.554623589Z'
+  mutatedBy: <alert email redacted>
+name: projects/cloud-mile-assessment/alertPolicies/18359576122370631028
+notificationChannels:
+- projects/cloud-mile-assessment/notificationChannels/5633695206479919101
+severity: WARNING
+
+$ gcloud alpha monitoring policies describe 2196561270371538581 --project cloud-mile-assessment
+alertStrategy:
+  autoClose: 1800s
+combiner: OR
+conditions:
+- conditionThreshold:
+    aggregations:
+    - alignmentPeriod: 60s
+      crossSeriesReducer: REDUCE_SUM
+      groupByFields:
+      - resource.label.database_id
+      perSeriesAligner: ALIGN_MEAN
+    comparison: COMPARISON_GT
+    duration: 60s
+    filter: metric.type="cloudsql.googleapis.com/database/postgresql/num_backends"
+      AND resource.type="cloudsql_database" AND resource.label.database_id="cloud-mile-assessment:cm-pg"
+    thresholdValue: 20.0
+    trigger:
+      count: 1
+  displayName: num_backends > 20 (80% of max_connections 25)
+  name: projects/cloud-mile-assessment/alertPolicies/2196561270371538581/conditions/2196561270371537476
+creationRecord:
+  mutateTime: '2026-09-27T09:54:07.119988732Z'
+  mutatedBy: <alert email redacted>
+displayName: cm cloud sql connections above 80%
+documentation:
+  content: |-
+    Cloud SQL `cm-pg` has more than 20 connections (80% of max_connections 25). New connections will soon be refused.
+
+    Check:
+    - `SELECT datname, usename, state, count(*) FROM pg_stat_activity GROUP BY 1,2,3;`
+    - app pods holding connections (`kubectl -n app logs deploy/app -c app | grep "holding db connections"`)
+    - number of app replicas (`kubectl -n app get hpa app`)
+  mimeType: text/markdown
+enabled: true
+mutationRecord:
+  mutateTime: '2026-09-27T09:56:43.680110448Z'
+  mutatedBy: <alert email redacted>
+name: projects/cloud-mile-assessment/alertPolicies/2196561270371538581
+notificationChannels:
+- projects/cloud-mile-assessment/notificationChannels/5633695206479919101
+severity: WARNING
+
+$ gcloud alpha monitoring policies describe 4303096840742046477 --project cloud-mile-assessment
+alertStrategy:
+  autoClose: 1800s
+combiner: OR
+conditions:
+- conditionThreshold:
+    aggregations:
+    - alignmentPeriod: 60s
+      crossSeriesReducer: REDUCE_COUNT_FALSE
+      groupByFields:
+      - resource.label.host
+      perSeriesAligner: ALIGN_NEXT_OLDER
+    comparison: COMPARISON_GT
+    duration: 60s
+    filter: metric.type="monitoring.googleapis.com/uptime_check/check_passed" AND
+      resource.type="uptime_url" AND metric.label.check_id="cm-app-https-healthz-Hj1EXMaMD9s"
+    thresholdValue: 1.0
+    trigger:
+      count: 1
+  displayName: https://cm-app.sokay.my/healthz failing from more than 1 region
+  name: projects/cloud-mile-assessment/alertPolicies/4303096840742046477/conditions/4303096840742047382
+creationRecord:
+  mutateTime: '2026-09-27T09:54:11.259310352Z'
+  mutatedBy: <alert email redacted>
+displayName: cm app uptime check failing
+documentation:
+  content: |-
+    `https://cm-app.sokay.my/healthz` is failing from more than one checker region.
+
+    Check:
+    - `curl -v https://cm-app.sokay.my/healthz`
+    - `kubectl -n app get pods,ingress` and the LB backend health in the console
+    - `kubectl -n app describe ingress app`, managed certificate status, dns a record
+  mimeType: text/markdown
+enabled: true
+mutationRecord:
+  mutateTime: '2026-09-27T09:56:41.209113053Z'
+  mutatedBy: <alert email redacted>
+name: projects/cloud-mile-assessment/alertPolicies/4303096840742046477
+notificationChannels:
+- projects/cloud-mile-assessment/notificationChannels/5633695206479919101
+severity: CRITICAL
+
+## uptime check
+$ gcloud monitoring uptime describe cm-app-https-healthz-Hj1EXMaMD9s --project cloud-mile-assessment
+checkerType: STATIC_IP_CHECKERS
+contentMatchers:
+- content: '"status":"ok"'
+  matcher: CONTAINS_STRING
+displayName: cm app https healthz
+httpCheck:
+  acceptedResponseStatusCodes:
+  - statusClass: STATUS_CLASS_2XX
+  path: /healthz
+  port: 443
+  requestMethod: GET
+  useSsl: true
+  validateSsl: true
+monitoredResource:
+  labels:
+    host: cm-app.sokay.my
+    project_id: cloud-mile-assessment
+  type: uptime_url
+name: projects/cloud-mile-assessment/uptimeCheckConfigs/cm-app-https-healthz-Hj1EXMaMD9s
+period: 60s
+timeout: 10s
+
+## log based metric
+$ gcloud logging metrics describe cm-app-errors --project cloud-mile-assessment
+createTime: '2026-09-27T09:54:42.066527120Z'
+description: Application log entries with severity >= ERROR in the app namespace.
+filter: resource.type="k8s_container" AND resource.labels.cluster_name="cm-gke" AND
+  resource.labels.namespace_name="app" AND resource.labels.container_name="app" AND
+  severity>=ERROR
+labelExtractors:
+  path: EXTRACT(jsonPayload.path)
+metricDescriptor:
+  description: Application log entries with severity >= ERROR in the app namespace.
+  labels:
+  - description: Request path from the app json log
+    key: path
+  metricKind: DELTA
+  name: projects/cloud-mile-assessment/metricDescriptors/logging.googleapis.com/user/cm-app-errors
+  type: logging.googleapis.com/user/cm-app-errors
+  unit: '1'
+  valueType: INT64
+name: cm-app-errors
+resourceName: projects/cloud-mile-assessment/metrics/cm-app-errors
+updateTime: '2026-09-27T09:54:42.066527120Z'
+
+## dashboard
+$ gcloud monitoring dashboards describe eae33331-2d4d-49f2-b4c6-79028e916524 --project cloud-mile-assessment
+displayName: cm ops dashboard
+etag: 769551b7fde4ddab0698506b689f6d75
+mosaicLayout:
+  columns: 48
+  tiles:
+  - height: 16
+    widget:
+      title: GKE node CPU (allocatable utilization)
+      xyChart:
+        dataSets:
+        - plotType: LINE
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_MEAN
+                groupByFields:
+                - resource.label.node_name
+                perSeriesAligner: ALIGN_MEAN
+              filter: metric.type="kubernetes.io/node/cpu/allocatable_utilization"
+                AND resource.type="k8s_node" AND resource.label.cluster_name="cm-gke"
+        thresholds:
+        - label: alert 80%
+          value: 0.8
+        yAxis:
+          scale: LINEAR
+    width: 24
+  - height: 16
+    widget:
+      title: GKE node memory (allocatable utilization)
+      xyChart:
+        dataSets:
+        - plotType: LINE
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_SUM
+                groupByFields:
+                - resource.label.node_name
+                perSeriesAligner: ALIGN_MEAN
+              filter: metric.type="kubernetes.io/node/memory/allocatable_utilization"
+                AND resource.type="k8s_node" AND resource.label.cluster_name="cm-gke"
+        yAxis:
+          scale: LINEAR
+    width: 24
+    xPos: 24
+  - height: 16
+    widget:
+      title: App container CPU (cores) per pod
+      xyChart:
+        dataSets:
+        - plotType: LINE
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_SUM
+                groupByFields:
+                - resource.label.pod_name
+                perSeriesAligner: ALIGN_RATE
+              filter: metric.type="kubernetes.io/container/cpu/core_usage_time" AND
+                resource.type="k8s_container" AND resource.label.cluster_name="cm-gke"
+                AND resource.label.namespace_name="app" AND resource.label.container_name="app"
+        yAxis:
+          scale: LINEAR
+    width: 24
+    yPos: 16
+  - height: 16
+    widget:
+      title: App container memory used per pod
+      xyChart:
+        dataSets:
+        - plotType: LINE
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_SUM
+                groupByFields:
+                - resource.label.pod_name
+                perSeriesAligner: ALIGN_MEAN
+              filter: metric.type="kubernetes.io/container/memory/used_bytes" AND
+                resource.type="k8s_container" AND resource.label.cluster_name="cm-gke"
+                AND resource.label.namespace_name="app" AND resource.label.container_name="app"
+        yAxis:
+          scale: LINEAR
+    width: 24
+    xPos: 24
+    yPos: 16
+  - height: 16
+    widget:
+      title: Pod restarts (per minute)
+      xyChart:
+        dataSets:
+        - plotType: STACKED_BAR
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_SUM
+                groupByFields:
+                - resource.label.pod_name
+                - resource.label.container_name
+                perSeriesAligner: ALIGN_DELTA
+              filter: metric.type="kubernetes.io/container/restart_count" AND resource.type="k8s_container"
+                AND resource.label.cluster_name="cm-gke" AND resource.label.namespace_name="app"
+        yAxis:
+          scale: LINEAR
+    width: 24
+    yPos: 32
+  - height: 16
+    widget:
+      title: Cloud SQL connections (num_backends)
+      xyChart:
+        dataSets:
+        - plotType: LINE
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_SUM
+                groupByFields:
+                - metric.label.database
+                perSeriesAligner: ALIGN_MEAN
+              filter: metric.type="cloudsql.googleapis.com/database/postgresql/num_backends"
+                AND resource.type="cloudsql_database" AND resource.label.database_id="cloud-mile-assessment:cm-pg"
+        thresholds:
+        - label: alert 80%
+          value: 20.0
+        yAxis:
+          scale: LINEAR
+    width: 24
+    xPos: 24
+    yPos: 32
+  - height: 16
+    widget:
+      title: LB latency p50 / p95 / p99 (ms)
+      xyChart:
+        dataSets:
+        - legendTemplate: p50
+          plotType: LINE
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_PERCENTILE_50
+                perSeriesAligner: ALIGN_DELTA
+              filter: metric.type="loadbalancing.googleapis.com/https/total_latencies"
+                AND resource.type="https_lb_rule" AND resource.label.url_map_name=monitoring.regex.full_match("k8s2-um-.*-app-app-.*")
+        - legendTemplate: p95
+          plotType: LINE
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_PERCENTILE_95
+                perSeriesAligner: ALIGN_DELTA
+              filter: metric.type="loadbalancing.googleapis.com/https/total_latencies"
+                AND resource.type="https_lb_rule" AND resource.label.url_map_name=monitoring.regex.full_match("k8s2-um-.*-app-app-.*")
+        - legendTemplate: p99
+          plotType: LINE
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_PERCENTILE_99
+                perSeriesAligner: ALIGN_DELTA
+              filter: metric.type="loadbalancing.googleapis.com/https/total_latencies"
+                AND resource.type="https_lb_rule" AND resource.label.url_map_name=monitoring.regex.full_match("k8s2-um-.*-app-app-.*")
+        yAxis:
+          scale: LINEAR
+    width: 24
+    yPos: 48
+  - height: 16
+    widget:
+      title: LB requests per second by response class
+      xyChart:
+        dataSets:
+        - plotType: STACKED_AREA
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_SUM
+                groupByFields:
+                - metric.label.response_code_class
+                perSeriesAligner: ALIGN_RATE
+              filter: metric.type="loadbalancing.googleapis.com/https/request_count"
+                AND resource.type="https_lb_rule" AND resource.label.url_map_name=monitoring.regex.full_match("k8s2-um-.*-app-app-.*")
+        yAxis:
+          scale: LINEAR
+    width: 24
+    xPos: 24
+    yPos: 48
+  - height: 16
+    widget:
+      title: Error rate (5xx / all requests)
+      xyChart:
+        dataSets:
+        - plotType: LINE
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilterRatio:
+              denominator:
+                aggregation:
+                  alignmentPeriod: 60s
+                  crossSeriesReducer: REDUCE_SUM
+                  perSeriesAligner: ALIGN_RATE
+                filter: metric.type="loadbalancing.googleapis.com/https/request_count"
+                  AND resource.type="https_lb_rule" AND resource.label.url_map_name=monitoring.regex.full_match("k8s2-um-.*-app-app-.*")
+              numerator:
+                aggregation:
+                  alignmentPeriod: 60s
+                  crossSeriesReducer: REDUCE_SUM
+                  perSeriesAligner: ALIGN_RATE
+                filter: metric.type="loadbalancing.googleapis.com/https/request_count"
+                  AND resource.type="https_lb_rule" AND resource.label.url_map_name=monitoring.regex.full_match("k8s2-um-.*-app-app-.*")
+                  AND metric.label.response_code_class=500
+        yAxis:
+          scale: LINEAR
+    width: 24
+    yPos: 64
+  - height: 16
+    widget:
+      title: App error logs per minute (log based metric)
+      xyChart:
+        dataSets:
+        - plotType: STACKED_BAR
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_SUM
+                groupByFields:
+                - metric.label.path
+                perSeriesAligner: ALIGN_DELTA
+              filter: metric.type="logging.googleapis.com/user/cm-app-errors" AND
+                resource.type="k8s_container"
+        yAxis:
+          scale: LINEAR
+    width: 24
+    xPos: 24
+    yPos: 64
+  - height: 12
+    widget:
+      title: Uptime check pass ratio by region
+      xyChart:
+        dataSets:
+        - plotType: LINE
+          targetAxis: Y1
+          timeSeriesQuery:
+            timeSeriesFilter:
+              aggregation:
+                alignmentPeriod: 60s
+                crossSeriesReducer: REDUCE_MEAN
+                groupByFields:
+                - metric.label.checker_location
+                perSeriesAligner: ALIGN_FRACTION_TRUE
+              filter: metric.type="monitoring.googleapis.com/uptime_check/check_passed"
+                AND resource.type="uptime_url" AND metric.label.check_id="cm-app-https-healthz-Hj1EXMaMD9s"
+        yAxis:
+          scale: LINEAR
+    width: 48
+    yPos: 80
+name: projects/969886371063/dashboards/eae33331-2d4d-49f2-b4c6-79028e916524
+

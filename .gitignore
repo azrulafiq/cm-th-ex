@@ -20,3 +20,7 @@ admin.auto.tfvars
 credentials*.json
 .env
 .env.*
+
+# python
+__pycache__/
+*.pyc
