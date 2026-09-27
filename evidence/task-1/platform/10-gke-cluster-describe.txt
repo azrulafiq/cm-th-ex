@@ -1,0 +1,271 @@
+$ gcloud container clusters describe cm-gke --zone asia-southeast1-a --project cloud-mile-assessment
+addonsConfig:
+  dnsCacheConfig:
+    enabled: true
+  gcePersistentDiskCsiDriverConfig:
+    enabled: true
+  horizontalPodAutoscaling: {}
+  httpLoadBalancing: {}
+  kubernetesDashboard:
+    disabled: true
+  networkPolicyConfig:
+    disabled: true
+  nodeReadinessConfig: {}
+anonymousAuthenticationConfig:
+  mode: LIMITED
+autopilot: {}
+autoscaling:
+  autoprovisioningNodePoolDefaults:
+    imageType: COS_CONTAINERD
+    management:
+      autoRepair: true
+      autoUpgrade: true
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/service.management.readonly
+    - https://www.googleapis.com/auth/servicecontrol
+    - https://www.googleapis.com/auth/trace.append
+    serviceAccount: default
+  autoscalingProfile: BALANCED
+binaryAuthorization: {}
+clusterIpv4Cidr: 10.20.0.0/16
+controlPlaneEgress:
+  mode: VIA_CONTROL_PLANE
+controlPlaneEndpointsConfig:
+  dnsEndpointConfig:
+    allowExternalTraffic: false
+    enableK8sCertsViaDns: false
+    enableK8sTokensViaDns: false
+    endpoint: gke-c971c71f199949fa9b18db3b86c1960a1078-969886371063.asia-southeast1-a.gke.goog
+  ipEndpointsConfig:
+    authorizedNetworksConfig:
+      cidrBlocks:
+      - cidrBlock: x.x.x.x/32  # redacted admin ip
+        displayName: admin-workstation
+      enabled: true
+      gcpPublicCidrsAccessEnabled: false
+      privateEndpointEnforcementEnabled: true
+    enablePublicEndpoint: true
+    enabled: true
+    privateEndpoint: 10.10.0.2
+    publicEndpoint: y.y.y.y  # redacted control plane ip
+createTime: '2026-09-27T06:51:58+00:00'
+currentMasterVersion: 1.35.8-gke.1225000
+currentNodeCount: 4
+currentNodeVersion: 1.35.8-gke.1225000
+databaseEncryption:
+  currentState: CURRENT_STATE_DECRYPTED
+  state: DECRYPTED
+defaultMaxPodsConstraint:
+  maxPodsPerNode: '110'
+endpoint: y.y.y.y  # redacted control plane ip
+enterpriseConfig:
+  clusterTier: STANDARD
+etag: 453e2754-2128-4a26-bf60-e82d6a093218
+id: c971c71f199949fa9b18db3b86c1960a1078648e1f054ee686fdd2f7df6050d8
+initialClusterVersion: 1.35.8-gke.1225000
+initialNodeCount: 1
+instanceGroupUrls:
+- https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/zones/asia-southeast1-a/instanceGroupManagers/gke-cm-gke-cm-pool-404d116a-grp
+ipAllocationPolicy:
+  clusterIpv4Cidr: 10.20.0.0/16
+  clusterIpv4CidrBlock: 10.20.0.0/16
+  clusterSecondaryRangeName: pods
+  defaultPodIpv4RangeUtilization: 0.0156
+  networkTierConfig:
+    networkTier: NETWORK_TIER_DEFAULT
+  podCidrOverprovisionConfig: {}
+  servicesIpv4Cidr: 10.30.0.0/20
+  servicesIpv4CidrBlock: 10.30.0.0/20
+  servicesSecondaryRangeName: services
+  stackType: IPV4
+  useIpAliases: true
+labelFingerprint: 78cdf2f6
+legacyAbac: {}
+location: asia-southeast1-a
+locations:
+- asia-southeast1-a
+loggingConfig:
+  componentConfig:
+    enableComponents:
+    - SYSTEM_COMPONENTS
+    - WORKLOADS
+loggingService: logging.googleapis.com/kubernetes
+maintenancePolicy:
+  resourceVersion: e3b0c442
+masterAuth:
+  clientCertificateConfig: {}
+  clusterCaCertificate: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVMVENDQXBXZ0F3SUJBZ0lSQUxKbm5QckNZNXhCWnUzT2dNT3V5ak13RFFZSktvWklodmNOQVFFTEJRQXcKTHpFdE1Dc0dBMVVFQXhNa1ltWTRNV1EzTW1FdE56UTBZeTAwWldFMkxXSXlZekl0WlRRNVlqbGtNREV6Tm1FMQpNQ0FYRFRJMk1Ea3lOekExTlRJd00xb1lEekl3TlRZd09URTVNRFkxTWpBeldqQXZNUzB3S3dZRFZRUURFeVJpClpqZ3haRGN5WVMwM05EUmpMVFJsWVRZdFlqSmpNaTFsTkRsaU9XUXdNVE0yWVRVd2dnR2lNQTBHQ1NxR1NJYjMKRFFFQkFRVUFBNElCandBd2dnR0tBb0lCZ1FDY0tyRkFCVGxzNjJ2SUNLUi9IK2VOZTVLK3ZTaVEyNUl1RmNxMwprbWZRSEpMRlVCbDFlMk1lajhxbm9oVGRvb3hIWVhhUXFBeXhJVm94amQxbjREVkJBS0R5cDcyNi8xcDRjdC95CkZlOUcrNExnVklSWEZQRFZjdzV0eHR6YXFweitDaHg4UzZza3hld1VqdTl0bGliQ0FEcUgvcWY2OFhDZFVBSVIKTnc3Nmh1UEVIK1lkYzJPQ1JNWTM2Nm1nbFdPRjN1QUFmL29sUnR6Zzg4M1F1dldBR3NwZk41TUVwYm5JNU91ZQpjMTdzVnpGZUQ2enIxTTAzWFpXUzNxaDhSbVcrNzNhRkxXQkZuUXJoa3F0cEZ0UEp1YmVTRHBDclY4T1hibkdLClBISGpyMDNzdlNBV29CclhyZXkrT0JsTmVGS3pkRSt2OHJkUjJyeEEvZWNXV0xKVDAxMGpPaUdPRVlPUkw3UzMKVHN1enNRZkpJeTEwSmo0RWlhaGYyR0dia1JVRldOa3FuZzFqRkVCK2QydXZkSGRVMElnN2tvKzVvN2oxbFY3YgpWQWlsZ2d3dEFONm1jK1JXNTJrSWdsakx1ZTNmMHl4MDBHNDVVRGFEU3pPbjE0Tm9TWVMrUUpNQW05QWYvaW9ICkFTS3NWOThwNWdpZEhpYmNseStQMG95dUlyTUNBd0VBQWFOQ01FQXdEZ1lEVlIwUEFRSC9CQVFEQWdJRU1BOEcKQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGUGkwZzByaXFYRk5sOWdoYnMzSWJXQTdMVWx1TUEwRwpDU3FHU0liM0RRRUJDd1VBQTRJQmdRQmNJekkxUVhySml4M0R4dTBuUXVEeEliWGFOaTlveFI2cGk0UUZlYVZ4CmlncXYwNGZ2cUluanVJaUJQQ3ZtcjNGSGV2WmRNZmpYbDMzN1FGNjBFaFlvVEJxRWlqWVlnM1liekxIcjA0L1AKbTB2bGE1UWt2ZWR3OTB5dE5DTmZMWUtLL0J5WlAyUW5taTFOSHN5c1RlUGJBOW16YXlhQXRLUWgzNTNmNEJpbwpPYStmT0pxNm93ejlLdy84R1oxQmFKODZpZEh3UldNdE9hUXR4OHF3NG5jeGYxOWovZXJRTlRqTGZyb2hoMFJrCklGRE5OcE5tUXloZGRLaXF2SWtKMHBwYkVmRDVKZGpiUEovU01rMXQ4OHJSU3F4dTR1bjBoUW9PckdjYm1udlcKdFJzdjdib1h0Z0Voa3ZiMmtRcHpZQTlERUxjL3dMRXVwR1RKWGQrNHBCRnlBeUVveDB2cmdYZjZicnZHZ3RWbQprN3BoNExUa3Z3TTU4d0ZONjRrSi9mT1JFMERJZ2M0RDBpL081bGgva3Q3RUhmOXN4c2dRbXB2eExrazlORVVyCkVNdEFqVjNveWRIM2V3bldWME1CWjFnM2hjUllhN3V0aURmUDVIZWl3MEJMOUZBbWw4VFJDOEE1dVVIMEVOekwKZ0IvNzZLM3NxSjZzV0dZeUEyOXl6MXM9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+masterAuthorizedNetworksConfig:
+  cidrBlocks:
+  - cidrBlock: x.x.x.x/32  # redacted admin ip
+    displayName: admin-workstation
+  enabled: true
+  gcpPublicCidrsAccessEnabled: false
+  privateEndpointEnforcementEnabled: true
+monitoringConfig:
+  advancedDatapathObservabilityConfig: {}
+  componentConfig:
+    enableComponents:
+    - SYSTEM_COMPONENTS
+    - HPA
+    - POD
+    - DEPLOYMENT
+  managedPrometheusConfig:
+    enabled: true
+monitoringService: monitoring.googleapis.com/kubernetes
+name: cm-gke
+network: cm-vpc
+networkConfig:
+  datapathProvider: ADVANCED_DATAPATH
+  defaultEnablePrivateNodes: true
+  defaultSnatStatus: {}
+  network: projects/cloud-mile-assessment/global/networks/cm-vpc
+  serviceExternalIpsConfig: {}
+  subnetwork: projects/cloud-mile-assessment/regions/asia-southeast1/subnetworks/cm-gke-subnet
+nodeConfig:
+  bootDisk:
+    diskType: pd-balanced
+    sizeGb: '50'
+  diskSizeGb: 50
+  diskType: pd-balanced
+  effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+  imageType: COS_CONTAINERD
+  kubeletConfig:
+    insecureKubeletReadonlyPortEnabled: false
+    maxParallelImagePulls: 3
+  labels:
+    pool: primary
+  loggingConfig: {}
+  machineType: e2-standard-2
+  metadata:
+    disable-legacy-endpoints: 'true'
+  nodeImageConfig:
+    image: gke-1358-gke1225000-cos-125-19216-532-135-c-pre
+    imageProject: gke-node-images
+  oauthScopes:
+  - https://www.googleapis.com/auth/cloud-platform
+  resourceLabels:
+    goog-gke-node-pool-provisioning-model: on-demand
+  serviceAccount: cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com
+  shieldedInstanceConfig:
+    enableIntegrityMonitoring: true
+    enableSecureBoot: true
+  tags:
+  - cm-gke-node
+  windowsNodeConfig: {}
+  workloadMetadataConfig:
+    mode: GKE_METADATA
+nodeCreationConfig:
+  nodeCreationMode: VIA_KUBELET
+nodePoolAutoConfig:
+  nodeKubeletConfig:
+    insecureKubeletReadonlyPortEnabled: false
+nodePoolDefaults:
+  nodeConfigDefaults:
+    loggingConfig:
+      variantConfig:
+        variant: DEFAULT
+    nodeKubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+nodePools:
+- autoscaling:
+    enabled: true
+    locationPolicy: BALANCED
+    maxNodeCount: 3
+    minNodeCount: 1
+  config:
+    bootDisk:
+      diskType: pd-balanced
+      sizeGb: '50'
+    diskSizeGb: 50
+    diskType: pd-balanced
+    effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+    imageType: COS_CONTAINERD
+    kubeletConfig:
+      insecureKubeletReadonlyPortEnabled: false
+      maxParallelImagePulls: 3
+    labels:
+      pool: primary
+    loggingConfig: {}
+    machineType: e2-standard-2
+    metadata:
+      disable-legacy-endpoints: 'true'
+    nodeImageConfig:
+      image: gke-1358-gke1225000-cos-125-19216-532-135-c-pre
+      imageProject: gke-node-images
+    oauthScopes:
+    - https://www.googleapis.com/auth/cloud-platform
+    resourceLabels:
+      goog-gke-node-pool-provisioning-model: on-demand
+    serviceAccount: cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+      enableSecureBoot: true
+    tags:
+    - cm-gke-node
+    windowsNodeConfig: {}
+    workloadMetadataConfig:
+      mode: GKE_METADATA
+  etag: 91d20869-600f-492e-b8e0-6735cad8797f
+  initialNodeCount: 1
+  instanceGroupUrls:
+  - https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/zones/asia-southeast1-a/instanceGroupManagers/gke-cm-gke-cm-pool-404d116a-grp
+  kubeletCertInfo:
+    tpmBootstrapCertExpireTime: '2031-09-26T07:35:13Z'
+  locations:
+  - asia-southeast1-a
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsConstraint:
+    maxPodsPerNode: '110'
+  name: cm-pool
+  networkConfig:
+    enablePrivateNodes: true
+    networkTierConfig:
+      networkTier: NETWORK_TIER_DEFAULT
+    podIpv4CidrBlock: 10.20.0.0/16
+    podIpv4RangeUtilization: 0.0156
+    podRange: pods
+    subnetwork: projects/cloud-mile-assessment/regions/asia-southeast1/subnetworks/cm-gke-subnet
+  podIpv4CidrSize: 24
+  selfLink: https://container.googleapis.com/v1/projects/cloud-mile-assessment/zones/asia-southeast1-a/clusters/cm-gke/nodePools/cm-pool
+  status: RUNNING
+  upgradeSettings:
+    maxSurge: 1
+    strategy: SURGE
+  version: 1.35.8-gke.1225000
+notificationConfig:
+  pubsub: {}
+podAutoscaling:
+  hpaProfile: PERFORMANCE
+privateClusterConfig:
+  enablePrivateNodes: true
+  privateEndpoint: 10.10.0.2
+  publicEndpoint: y.y.y.y  # redacted control plane ip
+rbacBindingConfig:
+  enableInsecureBindingSystemAuthenticated: true
+  enableInsecureBindingSystemUnauthenticated: true
+releaseChannel:
+  channel: REGULAR
+resourceLabels:
+  goog-terraform-provisioned: 'true'
+secretManagerConfig:
+  enabled: true
+securityPostureConfig:
+  mode: BASIC
+  vulnerabilityMode: VULNERABILITY_MODE_UNSPECIFIED
+selfLink: https://container.googleapis.com/v1/projects/cloud-mile-assessment/zones/asia-southeast1-a/clusters/cm-gke
+servicesIpv4Cidr: 10.30.0.0/20
+shieldedNodes:
+  enabled: true
+status: RUNNING
+subnetwork: cm-gke-subnet
+userManagedKeysConfig: {}
+workloadIdentityConfig:
+  workloadPool: cloud-mile-assessment.svc.id.goog
+zone: asia-southeast1-a
+

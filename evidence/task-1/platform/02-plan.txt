@@ -1,0 +1,877 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.cloudsql.google_sql_database.app will be created
+  + resource "google_sql_database" "app" {
+      + charset         = (known after apply)
+      + collation       = (known after apply)
+      + deletion_policy = "DELETE"
+      + id              = (known after apply)
+      + instance        = "cm-pg"
+      + name            = "appdb"
+      + project         = "cloud-mile-assessment"
+      + self_link       = (known after apply)
+    }
+
+  # module.cloudsql.google_sql_database_instance.this will be created
+  + resource "google_sql_database_instance" "this" {
+      + available_maintenance_versions       = (known after apply)
+      + connection_name                      = (known after apply)
+      + database_version                     = "POSTGRES_16"
+      + deletion_policy                      = "DELETE"
+      + deletion_protection                  = true
+      + dns_name                             = (known after apply)
+      + dns_names                            = (known after apply)
+      + encryption_key_name                  = (known after apply)
+      + enforce_new_sql_network_architecture = (known after apply)
+      + first_ip_address                     = (known after apply)
+      + id                                   = (known after apply)
+      + instance_type                        = (known after apply)
+      + ip_address                           = (known after apply)
+      + maintenance_version                  = (known after apply)
+      + master_instance_name                 = (known after apply)
+      + name                                 = "cm-pg"
+      + node_count                           = (known after apply)
+      + private_ip_address                   = (known after apply)
+      + project                              = "cloud-mile-assessment"
+      + psc_service_attachment_link          = (known after apply)
+      + public_ip_address                    = (known after apply)
+      + region                               = "asia-southeast1"
+      + replica_names                        = (known after apply)
+      + root_password_wo                     = (write-only attribute)
+      + self_link                            = (known after apply)
+      + server_ca_cert                       = (sensitive value)
+      + service_account_email_address        = (known after apply)
+
+      + replica_configuration (known after apply)
+
+      + replication_cluster (known after apply)
+
+      + settings {
+          + activation_policy                = "ALWAYS"
+          + availability_type                = "ZONAL"
+          + connector_enforcement            = (known after apply)
+          + data_api_access                  = (known after apply)
+          + data_disk_provisioned_iops       = (known after apply)
+          + data_disk_provisioned_throughput = (known after apply)
+          + deletion_protection_enabled      = true
+          + disk_autoresize                  = true
+          + disk_autoresize_limit            = 0
+          + disk_size                        = 10
+          + disk_type                        = "PD_SSD"
+          + edition                          = "ENTERPRISE"
+          + effective_availability_type      = (known after apply)
+          + pricing_plan                     = "PER_USE"
+          + replication_lag_max_seconds      = (known after apply)
+          + tier                             = "db-f1-micro"
+          + user_labels                      = (known after apply)
+          + version                          = (known after apply)
+
+          + backup_configuration {
+              + backup_tier                    = (known after apply)
+              + enabled                        = true
+              + start_time                     = "18:00"
+              + transaction_log_retention_days = (known after apply)
+
+              + backup_retention_settings {
+                  + retained_backups = 7
+                  + retention_unit   = "COUNT"
+                }
+            }
+
+          + connection_pool_config (known after apply)
+
+          + data_cache_config (known after apply)
+
+          + insights_config {
+              + query_insights_enabled = true
+              + query_plans_per_minute = (known after apply)
+              + query_string_length    = (known after apply)
+            }
+
+          + ip_configuration {
+              + ipv4_enabled    = false
+              + private_network = (known after apply)
+              + server_ca_mode  = (known after apply)
+              + ssl_mode        = "ENCRYPTED_ONLY"
+            }
+
+          + location_preference {
+              + zone = "asia-southeast1-a"
+            }
+
+          + maintenance_window {
+              + day  = 6
+              + hour = 19
+            }
+
+          + read_pool_auto_scale_config (known after apply)
+        }
+    }
+
+  # module.cloudsql.google_sql_user.app will be created
+  + resource "google_sql_user" "app" {
+      + deletion_policy         = "DELETE"
+      + host                    = (known after apply)
+      + iam_email               = (known after apply)
+      + id                      = (known after apply)
+      + instance                = "cm-pg"
+      + name                    = "app"
+      + password                = (sensitive value)
+      + password_wo             = (write-only attribute)
+      + project                 = "cloud-mile-assessment"
+      + sql_server_user_details = (known after apply)
+    }
+
+  # module.cloudsql.random_password.db will be created
+  + resource "random_password" "db" {
+      + bcrypt_hash      = (sensitive value)
+      + id               = (known after apply)
+      + length           = 24
+      + lower            = true
+      + min_lower        = 0
+      + min_numeric      = 0
+      + min_special      = 0
+      + min_upper        = 0
+      + number           = true
+      + numeric          = true
+      + override_special = "-_"
+      + result           = (sensitive value)
+      + special          = true
+      + upper            = true
+    }
+
+  # module.gke.google_container_cluster.this will be created
+  + resource "google_container_cluster" "this" {
+      + autopilot_privileged_admission           = (known after apply)
+      + cluster_ipv4_cidr                        = (known after apply)
+      + datapath_provider                        = "ADVANCED_DATAPATH"
+      + default_max_pods_per_node                = (known after apply)
+      + deletion_policy                          = "DELETE"
+      + deletion_protection                      = true
+      + disable_l4_lb_firewall_reconciliation    = false
+      + effective_labels                         = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + emulated_version                         = (known after apply)
+      + enable_cilium_clusterwide_network_policy = false
+      + enable_fqdn_network_policy               = false
+      + enable_intranode_visibility              = (known after apply)
+      + enable_kubernetes_alpha                  = false
+      + enable_l4_ilb_subsetting                 = (known after apply)
+      + enable_legacy_abac                       = false
+      + enable_multi_networking                  = false
+      + enable_shielded_nodes                    = true
+      + endpoint                                 = (known after apply)
+      + id                                       = (known after apply)
+      + initial_node_count                       = 1
+      + label_fingerprint                        = (known after apply)
+      + location                                 = "asia-southeast1-a"
+      + logging_service                          = (known after apply)
+      + master_version                           = (known after apply)
+      + monitoring_service                       = (known after apply)
+      + name                                     = "cm-gke"
+      + network                                  = (known after apply)
+      + networking_mode                          = "VPC_NATIVE"
+      + node_locations                           = (known after apply)
+      + node_version                             = (known after apply)
+      + operation                                = (known after apply)
+      + private_ipv6_google_access               = (known after apply)
+      + project                                  = (known after apply)
+      + remove_default_node_pool                 = true
+      + self_link                                = (known after apply)
+      + services_ipv4_cidr                       = (known after apply)
+      + subnetwork                               = "cm-gke-subnet"
+      + terraform_labels                         = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + tpu_ipv4_cidr_block                      = (known after apply)
+
+      + addons_config {
+          + agent_sandbox_config (known after apply)
+          + cloudrun_config (known after apply)
+          + config_connector_config (known after apply)
+          + dns_cache_config (known after apply)
+          + gce_persistent_disk_csi_driver_config (known after apply)
+          + gcp_filestore_csi_driver_config (known after apply)
+          + gcs_fuse_csi_driver_config (known after apply)
+          + gke_backup_agent_config (known after apply)
+          + high_scale_checkpointing_config (known after apply)
+          + horizontal_pod_autoscaling {
+              + disabled = false
+            }
+          + http_load_balancing {
+              + disabled = false
+            }
+          + lustre_csi_driver_config (known after apply)
+          + network_policy_config (known after apply)
+          + node_readiness_config (known after apply)
+          + parallelstore_csi_driver_config (known after apply)
+          + pod_snapshot_config (known after apply)
+          + ray_operator_config (known after apply)
+          + slice_controller_config (known after apply)
+          + slurm_operator_config (known after apply)
+          + stateful_ha_config (known after apply)
+        }
+
+      + anonymous_authentication_config (known after apply)
+
+      + authenticator_groups_config (known after apply)
+
+      + autopilot_cluster_policy_config (known after apply)
+
+      + cluster_autoscaling (known after apply)
+
+      + confidential_nodes (known after apply)
+
+      + control_plane_endpoints_config (known after apply)
+
+      + cost_management_config (known after apply)
+
+      + database_encryption (known after apply)
+
+      + default_snat_status (known after apply)
+
+      + enterprise_config (known after apply)
+
+      + gateway_api_config (known after apply)
+
+      + gke_auto_upgrade_config (known after apply)
+
+      + identity_service_config (known after apply)
+
+      + ip_allocation_policy {
+          + cluster_ipv4_cidr_block       = (known after apply)
+          + cluster_secondary_range_name  = "pods"
+          + services_ipv4_cidr_block      = (known after apply)
+          + services_secondary_range_name = "services"
+          + stack_type                    = "IPV4"
+
+          + auto_ipam_config (known after apply)
+
+          + network_tier_config (known after apply)
+
+          + pod_cidr_overprovision_config (known after apply)
+        }
+
+      + logging_config {
+          + enable_components = [
+              + "SYSTEM_COMPONENTS",
+              + "WORKLOADS",
+            ]
+        }
+
+      + master_auth (known after apply)
+
+      + master_authorized_networks_config {
+          + gcp_public_cidrs_access_enabled      = false
+          + private_endpoint_enforcement_enabled = (known after apply)
+
+          + cidr_blocks {
+              + cidr_block   = "x.x.x.x/32  # redacted"
+              + display_name = "admin-workstation"
+            }
+        }
+
+      + mesh_certificates (known after apply)
+
+      + monitoring_config {
+          + enable_components = [
+              + "SYSTEM_COMPONENTS",
+              + "POD",
+              + "DEPLOYMENT",
+              + "HPA",
+            ]
+
+          + advanced_datapath_observability_config (known after apply)
+
+          + managed_prometheus {
+              + enabled = true
+
+              + auto_monitoring_config (known after apply)
+            }
+        }
+
+      + node_config {
+          + disk_size_gb       = 50
+          + disk_type          = "pd-balanced"
+          + effective_taints   = (known after apply)
+          + gpudirect_strategy = (known after apply)
+          + image_type         = (known after apply)
+          + labels             = (known after apply)
+          + local_ssd_count    = (known after apply)
+          + logging_variant    = (known after apply)
+          + machine_type       = (known after apply)
+          + metadata           = (known after apply)
+          + min_cpu_platform   = (known after apply)
+          + oauth_scopes       = [
+              + "https://www.googleapis.com/auth/cloud-platform",
+            ]
+          + preemptible        = false
+          + service_account    = "cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+          + spot               = false
+
+          + boot_disk (known after apply)
+
+          + confidential_nodes (known after apply)
+
+          + containerd_config (known after apply)
+
+          + gcfs_config (known after apply)
+
+          + guest_accelerator (known after apply)
+
+          + kubelet_config (known after apply)
+
+          + linux_node_config (known after apply)
+
+          + node_image_config (known after apply)
+
+          + shielded_instance_config (known after apply)
+
+          + windows_node_config (known after apply)
+
+          + workload_metadata_config (known after apply)
+        }
+
+      + node_creation_config (known after apply)
+
+      + node_pool (known after apply)
+
+      + node_pool_auto_config (known after apply)
+
+      + node_pool_defaults (known after apply)
+
+      + notification_config (known after apply)
+
+      + pod_autoscaling (known after apply)
+
+      + private_cluster_config {
+          + enable_private_nodes   = true
+          + master_ipv4_cidr_block = (known after apply)
+          + peering_name           = (known after apply)
+          + private_endpoint       = (known after apply)
+          + public_endpoint        = (known after apply)
+
+          + master_global_access_config (known after apply)
+        }
+
+      + rbac_binding_config (known after apply)
+
+      + release_channel {
+          + channel = "REGULAR"
+        }
+
+      + secret_manager_config {
+          + enabled = true
+
+          + rotation_config (known after apply)
+        }
+
+      + security_posture_config (known after apply)
+
+      + service_external_ips_config (known after apply)
+
+      + vertical_pod_autoscaling (known after apply)
+
+      + workload_identity_config {
+          + workload_pool = "cloud-mile-assessment.svc.id.goog"
+        }
+    }
+
+  # module.gke.google_container_node_pool.primary will be created
+  + resource "google_container_node_pool" "primary" {
+      + cluster                     = (known after apply)
+      + deletion_policy             = "DELETE"
+      + id                          = (known after apply)
+      + initial_node_count          = 1
+      + instance_group_urls         = (known after apply)
+      + location                    = "asia-southeast1-a"
+      + managed_instance_group_urls = (known after apply)
+      + max_pods_per_node           = (known after apply)
+      + name                        = "cm-pool"
+      + name_prefix                 = (known after apply)
+      + node_count                  = (known after apply)
+      + node_locations              = (known after apply)
+      + operation                   = (known after apply)
+      + project                     = "cloud-mile-assessment"
+      + version                     = (known after apply)
+
+      + autoscaling {
+          + location_policy = (known after apply)
+          + max_node_count  = 3
+          + min_node_count  = 1
+        }
+
+      + management {
+          + auto_repair  = true
+          + auto_upgrade = true
+        }
+
+      + network_config (known after apply)
+
+      + node_config {
+          + disk_size_gb       = 50
+          + disk_type          = "pd-balanced"
+          + effective_taints   = (known after apply)
+          + gpudirect_strategy = (known after apply)
+          + image_type         = "COS_CONTAINERD"
+          + labels             = {
+              + "pool" = "primary"
+            }
+          + local_ssd_count    = (known after apply)
+          + logging_variant    = (known after apply)
+          + machine_type       = "e2-medium"
+          + metadata           = (known after apply)
+          + min_cpu_platform   = (known after apply)
+          + oauth_scopes       = [
+              + "https://www.googleapis.com/auth/cloud-platform",
+            ]
+          + preemptible        = false
+          + service_account    = "cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+          + spot               = false
+          + tags               = [
+              + "cm-gke-node",
+            ]
+
+          + boot_disk (known after apply)
+
+          + confidential_nodes (known after apply)
+
+          + containerd_config (known after apply)
+
+          + gcfs_config (known after apply)
+
+          + guest_accelerator (known after apply)
+
+          + kubelet_config (known after apply)
+
+          + linux_node_config (known after apply)
+
+          + node_image_config (known after apply)
+
+          + shielded_instance_config {
+              + enable_integrity_monitoring = true
+              + enable_secure_boot          = true
+            }
+
+          + windows_node_config (known after apply)
+
+          + workload_metadata_config {
+              + mode = "GKE_METADATA"
+            }
+        }
+
+      + node_drain_config (known after apply)
+
+      + upgrade_settings {
+          + max_surge       = 1
+          + max_unavailable = 0
+          + strategy        = "SURGE"
+
+          + blue_green_settings (known after apply)
+        }
+    }
+
+  # module.gke.google_project_iam_member.nodes_default will be created
+  + resource "google_project_iam_member" "nodes_default" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+      + project = "cloud-mile-assessment"
+      + role    = "roles/container.defaultNodeServiceAccount"
+    }
+
+  # module.gke.google_service_account.nodes will be created
+  + resource "google_service_account" "nodes" {
+      + account_id      = "cm-gke-nodes"
+      + deletion_policy = "DELETE"
+      + disabled        = false
+      + display_name    = "GKE node pool service account"
+      + email           = "cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+      + id              = (known after apply)
+      + member          = "serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+      + name            = (known after apply)
+      + project         = "cloud-mile-assessment"
+      + unique_id       = (known after apply)
+    }
+
+  # module.iam.google_project_iam_member.app_sql_client will be created
+  + resource "google_project_iam_member" "app_sql_client" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + member  = "serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com"
+      + project = "cloud-mile-assessment"
+      + role    = "roles/cloudsql.client"
+
+      + condition {
+          + expression = "resource.name == \"projects/cloud-mile-assessment/instances/cm-pg\" && resource.type == \"sqladmin.googleapis.com/Instance\""
+          + title      = "only-cm-pg"
+        }
+    }
+
+  # module.iam.google_secret_manager_secret_iam_member.app_db_password will be created
+  + resource "google_secret_manager_secret_iam_member" "app_db_password" {
+      + etag      = (known after apply)
+      + id        = (known after apply)
+      + member    = "serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com"
+      + project   = (known after apply)
+      + role      = "roles/secretmanager.secretAccessor"
+      + secret_id = (known after apply)
+    }
+
+  # module.iam.google_service_account.app will be created
+  + resource "google_service_account" "app" {
+      + account_id      = "cm-app"
+      + deletion_policy = "DELETE"
+      + disabled        = false
+      + display_name    = "Sample app workload service account"
+      + email           = "cm-app@cloud-mile-assessment.iam.gserviceaccount.com"
+      + id              = (known after apply)
+      + member          = "serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com"
+      + name            = (known after apply)
+      + project         = "cloud-mile-assessment"
+      + unique_id       = (known after apply)
+    }
+
+  # module.iam.google_service_account_iam_member.app_wi will be created
+  + resource "google_service_account_iam_member" "app_wi" {
+      + etag               = (known after apply)
+      + id                 = (known after apply)
+      + member             = "serviceAccount:cloud-mile-assessment.svc.id.goog[app/app-ksa]"
+      + role               = "roles/iam.workloadIdentityUser"
+      + service_account_id = (known after apply)
+    }
+
+  # module.network.google_compute_firewall.allow_health_checks will be created
+  + resource "google_compute_firewall" "allow_health_checks" {
+      + creation_timestamp = (known after apply)
+      + deletion_policy    = "DELETE"
+      + destination_ranges = (known after apply)
+      + direction          = "INGRESS"
+      + enable_logging     = (known after apply)
+      + id                 = (known after apply)
+      + name               = "cm-allow-health-checks"
+      + network            = (known after apply)
+      + priority           = 1000
+      + project            = "cloud-mile-assessment"
+      + self_link          = (known after apply)
+      + source_ranges      = [
+          + "130.211.0.0/22",
+          + "35.191.0.0/16",
+        ]
+      + target_tags        = [
+          + "cm-gke-node",
+        ]
+
+      + allow {
+          + ports    = []
+          + protocol = "tcp"
+        }
+    }
+
+  # module.network.google_compute_firewall.allow_internal will be created
+  + resource "google_compute_firewall" "allow_internal" {
+      + creation_timestamp = (known after apply)
+      + deletion_policy    = "DELETE"
+      + destination_ranges = (known after apply)
+      + direction          = "INGRESS"
+      + enable_logging     = (known after apply)
+      + id                 = (known after apply)
+      + name               = "cm-allow-internal"
+      + network            = (known after apply)
+      + priority           = 1000
+      + project            = "cloud-mile-assessment"
+      + self_link          = (known after apply)
+      + source_ranges      = [
+          + "10.10.0.0/20",
+          + "10.20.0.0/16",
+          + "10.30.0.0/20",
+        ]
+
+      + allow {
+          + ports    = []
+          + protocol = "icmp"
+        }
+      + allow {
+          + ports    = []
+          + protocol = "tcp"
+        }
+      + allow {
+          + ports    = []
+          + protocol = "udp"
+        }
+    }
+
+  # module.network.google_compute_global_address.psa_range will be created
+  + resource "google_compute_global_address" "psa_range" {
+      + address            = (known after apply)
+      + address_type       = "INTERNAL"
+      + creation_timestamp = (known after apply)
+      + deletion_policy    = "DELETE"
+      + effective_labels   = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                 = (known after apply)
+      + label_fingerprint  = (known after apply)
+      + name               = "cm-psa-range"
+      + network            = (known after apply)
+      + prefix_length      = 20
+      + project            = "cloud-mile-assessment"
+      + purpose            = "VPC_PEERING"
+      + self_link          = (known after apply)
+      + terraform_labels   = {
+          + "goog-terraform-provisioned" = "true"
+        }
+    }
+
+  # module.network.google_compute_network.vpc will be created
+  + resource "google_compute_network" "vpc" {
+      + auto_create_subnetworks                   = false
+      + bgp_always_compare_med                    = (known after apply)
+      + bgp_best_path_selection_mode              = (known after apply)
+      + bgp_inter_region_cost                     = (known after apply)
+      + delete_bgp_always_compare_med             = false
+      + delete_default_routes_on_create           = false
+      + deletion_policy                           = "DELETE"
+      + gateway_ipv4                              = (known after apply)
+      + id                                        = (known after apply)
+      + internal_ipv6_range                       = (known after apply)
+      + mtu                                       = (known after apply)
+      + name                                      = "cm-vpc"
+      + network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
+      + network_id                                = (known after apply)
+      + numeric_id                                = (known after apply)
+      + project                                   = "cloud-mile-assessment"
+      + routing_mode                              = "REGIONAL"
+      + self_link                                 = (known after apply)
+    }
+
+  # module.network.google_compute_router.router will be created
+  + resource "google_compute_router" "router" {
+      + creation_timestamp = (known after apply)
+      + deletion_policy    = "DELETE"
+      + id                 = (known after apply)
+      + name               = "cm-router"
+      + network            = (known after apply)
+      + project            = "cloud-mile-assessment"
+      + region             = "asia-southeast1"
+      + self_link          = (known after apply)
+    }
+
+  # module.network.google_compute_router_nat.nat will be created
+  + resource "google_compute_router_nat" "nat" {
+      + auto_network_tier                   = (known after apply)
+      + deletion_policy                     = "DELETE"
+      + drain_nat_ips                       = (known after apply)
+      + enable_dynamic_port_allocation      = (known after apply)
+      + enable_endpoint_independent_mapping = (known after apply)
+      + endpoint_types                      = (known after apply)
+      + icmp_idle_timeout_sec               = 30
+      + id                                  = (known after apply)
+      + min_ports_per_vm                    = (known after apply)
+      + name                                = "cm-nat"
+      + nat_ip_allocate_option              = "AUTO_ONLY"
+      + nat_ips                             = (known after apply)
+      + project                             = "cloud-mile-assessment"
+      + region                              = "asia-southeast1"
+      + router                              = "cm-router"
+      + source_subnetwork_ip_ranges_to_nat  = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+      + tcp_established_idle_timeout_sec    = 1200
+      + tcp_time_wait_timeout_sec           = 120
+      + tcp_transitory_idle_timeout_sec     = 30
+      + type                                = "PUBLIC"
+      + udp_idle_timeout_sec                = 30
+
+      + log_config {
+          + enable = true
+          + filter = "ERRORS_ONLY"
+        }
+    }
+
+  # module.network.google_compute_subnetwork.gke will be created
+  + resource "google_compute_subnetwork" "gke" {
+      + allow_subnet_cidr_routes_overlap = (known after apply)
+      + creation_timestamp               = (known after apply)
+      + deletion_policy                  = "DELETE"
+      + external_ipv6_prefix             = (known after apply)
+      + fingerprint                      = (known after apply)
+      + gateway_address                  = (known after apply)
+      + id                               = (known after apply)
+      + internal_ipv6_prefix             = (known after apply)
+      + ip_cidr_range                    = "10.10.0.0/20"
+      + ipv6_cidr_range                  = (known after apply)
+      + ipv6_gce_endpoint                = (known after apply)
+      + name                             = "cm-gke-subnet"
+      + network                          = (known after apply)
+      + private_ip_google_access         = true
+      + private_ipv6_google_access       = (known after apply)
+      + project                          = "cloud-mile-assessment"
+      + purpose                          = (known after apply)
+      + region                           = "asia-southeast1"
+      + self_link                        = (known after apply)
+      + stack_type                       = (known after apply)
+      + state                            = (known after apply)
+      + subnetwork_id                    = (known after apply)
+
+      + secondary_ip_range {
+          + ip_cidr_range = "10.20.0.0/16"
+          + range_name    = "pods"
+        }
+      + secondary_ip_range {
+          + ip_cidr_range = "10.30.0.0/20"
+          + range_name    = "services"
+        }
+    }
+
+  # module.network.google_service_networking_connection.psa will be created
+  + resource "google_service_networking_connection" "psa" {
+      + deletion_policy         = "ABANDON"
+      + id                      = (known after apply)
+      + network                 = (known after apply)
+      + peering                 = (known after apply)
+      + reserved_peering_ranges = [
+          + "cm-psa-range",
+        ]
+      + service                 = "servicenetworking.googleapis.com"
+    }
+
+  # module.registry.google_artifact_registry_repository.app will be created
+  + resource "google_artifact_registry_repository" "app" {
+      + create_time      = (known after apply)
+      + deletion_policy  = "DELETE"
+      + description      = "Sample app images"
+      + effective_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + format           = "DOCKER"
+      + id               = (known after apply)
+      + location         = "asia-southeast1"
+      + mode             = "STANDARD_REPOSITORY"
+      + name             = (known after apply)
+      + project          = "cloud-mile-assessment"
+      + registry_uri     = (known after apply)
+      + repository_id    = "cm-app"
+      + terraform_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + update_time      = (known after apply)
+
+      + cleanup_policies {
+          + action = "DELETE"
+          + id     = "delete-old"
+
+          + condition {
+              + older_than            = "2592000s"
+              + package_name_prefixes = []
+              + tag_prefixes          = []
+              + tag_state             = "ANY"
+              + version_name_prefixes = []
+                # (1 unchanged attribute hidden)
+            }
+        }
+      + cleanup_policies {
+          + action = "KEEP"
+          + id     = "keep-last-10"
+
+          + most_recent_versions {
+              + keep_count            = 10
+              + package_name_prefixes = []
+            }
+        }
+
+      + vulnerability_scanning_config (known after apply)
+    }
+
+  # module.registry.google_artifact_registry_repository_iam_member.readers["gke-nodes"] will be created
+  + resource "google_artifact_registry_repository_iam_member" "readers" {
+      + etag       = (known after apply)
+      + id         = (known after apply)
+      + location   = "asia-southeast1"
+      + member     = "serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+      + project    = (known after apply)
+      + repository = (known after apply)
+      + role       = "roles/artifactregistry.reader"
+    }
+
+  # module.secrets.google_secret_manager_secret.db_password will be created
+  + resource "google_secret_manager_secret" "db_password" {
+      + create_time           = (known after apply)
+      + deletion_policy       = "DELETE"
+      + deletion_protection   = false
+      + effective_annotations = (known after apply)
+      + effective_labels      = {
+          + "app"                        = "sample-app"
+          + "goog-terraform-provisioned" = "true"
+        }
+      + expire_time           = (known after apply)
+      + id                    = (known after apply)
+      + labels                = {
+          + "app" = "sample-app"
+        }
+      + name                  = (known after apply)
+      + project               = "cloud-mile-assessment"
+      + secret_id             = "cm-db-password"
+      + terraform_labels      = {
+          + "app"                        = "sample-app"
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + replication {
+          + user_managed {
+              + replicas {
+                  + location = "asia-southeast1"
+                }
+            }
+        }
+    }
+
+  # module.secrets.google_secret_manager_secret_version.db_password will be created
+  + resource "google_secret_manager_secret_version" "db_password" {
+      + create_time            = (known after apply)
+      + deletion_policy        = (known after apply)
+      + destroy_time           = (known after apply)
+      + enabled                = true
+      + id                     = (known after apply)
+      + name                   = (known after apply)
+      + project                = (known after apply)
+      + secret                 = (known after apply)
+      + secret_data            = (sensitive value)
+      + secret_data_wo         = (write-only attribute)
+      + secret_data_wo_version = 0
+      + version                = (known after apply)
+    }
+
+Plan: 24 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + app_ksa                  = "app/app-ksa"
+  + app_service_account      = "cm-app@cloud-mile-assessment.iam.gserviceaccount.com"
+  + artifact_registry_url    = "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app"
+  + db_name                  = "appdb"
+  + db_password_secret       = "cm-db-password"
+  + db_user                  = "app"
+  + destroy_command          = "terraform apply -var=deletion_protection=false && terraform destroy -var=deletion_protection=false"
+  + gke_cluster_location     = "asia-southeast1-a"
+  + gke_cluster_name         = "cm-gke"
+  + gke_get_credentials      = "gcloud container clusters get-credentials cm-gke --zone asia-southeast1-a --project cloud-mile-assessment"
+  + gke_node_pool            = "cm-pool"
+  + gke_node_service_account = "cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+  + nat_name                 = "cm-nat"
+  + network_name             = "cm-vpc"
+  + router_name              = "cm-router"
+  + sql_connection_name      = (known after apply)
+  + sql_instance_name        = "cm-pg"
+  + sql_private_ip           = (known after apply)
+  + subnet_name              = "cm-gke-subnet"
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: platform.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "platform.tfplan"

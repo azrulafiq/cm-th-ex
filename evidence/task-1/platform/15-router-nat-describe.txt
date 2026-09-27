@@ -1,0 +1,47 @@
+$ gcloud compute routers describe cm-router --region asia-southeast1 --project cloud-mile-assessment
+creationTimestamp: '2026-09-26T23:51:19.814-07:00'
+encryptedInterconnectRouter: false
+id: '7264179225556746762'
+kind: compute#router
+name: cm-router
+nats:
+- autoNetworkTier: PREMIUM
+  effectiveTcpTimeWaitTimeoutSec: 120
+  enableEndpointIndependentMapping: false
+  endpointTypes:
+  - ENDPOINT_TYPE_VM
+  icmpIdleTimeoutSec: 30
+  logConfig:
+    enable: true
+    filter: ERRORS_ONLY
+  name: cm-nat
+  natIpAllocateOption: AUTO_ONLY
+  sourceSubnetworkIpRangesToNat: ALL_SUBNETWORKS_ALL_IP_RANGES
+  tcpEstablishedIdleTimeoutSec: 1200
+  tcpTimeWaitTimeoutSec: 120
+  tcpTransitoryIdleTimeoutSec: 30
+  type: PUBLIC
+  udpIdleTimeoutSec: 30
+network: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/networks/cm-vpc
+region: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/regions/asia-southeast1
+selfLink: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/regions/asia-southeast1/routers/cm-router
+
+$ gcloud compute routers nats describe cm-nat --router cm-router --region asia-southeast1 --project cloud-mile-assessment
+autoNetworkTier: PREMIUM
+effectiveTcpTimeWaitTimeoutSec: 120
+enableEndpointIndependentMapping: false
+endpointTypes:
+- ENDPOINT_TYPE_VM
+icmpIdleTimeoutSec: 30
+logConfig:
+  enable: true
+  filter: ERRORS_ONLY
+name: cm-nat
+natIpAllocateOption: AUTO_ONLY
+sourceSubnetworkIpRangesToNat: ALL_SUBNETWORKS_ALL_IP_RANGES
+tcpEstablishedIdleTimeoutSec: 1200
+tcpTimeWaitTimeoutSec: 120
+tcpTransitoryIdleTimeoutSec: 30
+type: PUBLIC
+udpIdleTimeoutSec: 30
+

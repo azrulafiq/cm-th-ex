@@ -1,0 +1,8 @@
+# copy to admin.auto.tfvars (gitignored) and put your own public ip
+# curl -s -4 https://ifconfig.me
+authorized_networks = [
+  {
+    cidr_block   = "203.0.113.10/32"
+    display_name = "admin-workstation"
+  },
+]

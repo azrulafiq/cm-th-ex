@@ -1,0 +1,39 @@
+$ gcloud artifacts repositories describe cm-app --location asia-southeast1 --project cloud-mile-assessment
+Encryption: Google-managed key
+Repository Size: 0.000MB
+cleanupPolicies:
+  delete-old:
+    action: DELETE
+    condition:
+      olderThan: 2592000s
+      tagState: ANY
+    id: delete-old
+  keep-last-10:
+    action: KEEP
+    id: keep-last-10
+    mostRecentVersions:
+      keepCount: 10
+createTime: '2026-09-27T06:51:11.616652Z'
+description: Sample app images
+format: DOCKER
+labels:
+  goog-terraform-provisioned: 'true'
+mode: STANDARD_REPOSITORY
+name: projects/cloud-mile-assessment/locations/asia-southeast1/repositories/cm-app
+registryUri: asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app
+satisfiesPzi: true
+satisfiesPzs: true
+updateTime: '2026-09-27T06:51:11.616652Z'
+vulnerabilityScanningConfig:
+  enablementState: SCANNING_DISABLED
+  enablementStateReason: API containerscanning.googleapis.com is not enabled.
+  lastEnableTime: '2026-09-27T06:50:54.857538559Z'
+
+$ gcloud artifacts repositories get-iam-policy cm-app --location asia-southeast1 --project cloud-mile-assessment
+bindings:
+- members:
+  - serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com
+  role: roles/artifactregistry.reader
+etag: BwZccWBEUcc=
+version: 1
+

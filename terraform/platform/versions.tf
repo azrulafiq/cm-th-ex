@@ -1,4 +1,4 @@
-# from task 1 - bootstrap versions and provider
+# from task 1 - versions and provider
 terraform {
   required_version = ">= 1.9"
 
@@ -7,10 +7,15 @@ terraform {
       source  = "hashicorp/google"
       version = "~> 7.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.6"
+    }
   }
 }
 
 provider "google" {
   project = var.project_id
   region  = var.region
+  zone    = var.zone
 }

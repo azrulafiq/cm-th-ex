@@ -1,0 +1,26 @@
+$ gcloud compute addresses describe cm-psa-range --global --project cloud-mile-assessment
+address: 10.172.80.0
+addressType: INTERNAL
+creationTimestamp: '2026-09-26T23:51:17.859-07:00'
+description: ''
+id: '2969698854294061578'
+kind: compute#address
+labelFingerprint: vezUS-42LLM=
+labels:
+  goog-terraform-provisioned: 'true'
+name: cm-psa-range
+network: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/networks/cm-vpc
+networkTier: PREMIUM
+prefixLength: 20
+purpose: VPC_PEERING
+selfLink: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/addresses/cm-psa-range
+status: RESERVED
+
+$ gcloud services vpc-peerings list --network cm-vpc --project cloud-mile-assessment
+---
+network: projects/969886371063/global/networks/cm-vpc
+peering: servicenetworking-googleapis-com
+reservedPeeringRanges:
+- cm-psa-range
+service: services/servicenetworking.googleapis.com
+

@@ -1,0 +1,10 @@
+$ gcloud sql databases list --instance cm-pg --project cloud-mile-assessment
+NAME      CHARSET  COLLATION
+postgres  UTF8     en_US.UTF8
+appdb     UTF8     en_US.UTF8
+
+$ gcloud sql users list --instance cm-pg --project cloud-mile-assessment
+NAME      HOST  TYPE      PASSWORD_POLICY
+app             BUILT_IN
+postgres        BUILT_IN
+

@@ -1,0 +1,97 @@
+{
+  "app_ksa": {
+    "sensitive": false,
+    "type": "string",
+    "value": "app/app-ksa"
+  },
+  "app_service_account": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cm-app@cloud-mile-assessment.iam.gserviceaccount.com"
+  },
+  "artifact_registry_url": {
+    "sensitive": false,
+    "type": "string",
+    "value": "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app"
+  },
+  "db_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "appdb"
+  },
+  "db_password_secret": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cm-db-password"
+  },
+  "db_user": {
+    "sensitive": false,
+    "type": "string",
+    "value": "app"
+  },
+  "destroy_command": {
+    "sensitive": false,
+    "type": "string",
+    "value": "terraform apply -var=deletion_protection=false \u0026\u0026 terraform destroy -var=deletion_protection=false"
+  },
+  "gke_cluster_location": {
+    "sensitive": false,
+    "type": "string",
+    "value": "asia-southeast1-a"
+  },
+  "gke_cluster_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cm-gke"
+  },
+  "gke_get_credentials": {
+    "sensitive": false,
+    "type": "string",
+    "value": "gcloud container clusters get-credentials cm-gke --zone asia-southeast1-a --project cloud-mile-assessment"
+  },
+  "gke_node_pool": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cm-pool"
+  },
+  "gke_node_service_account": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+  },
+  "nat_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cm-nat"
+  },
+  "network_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cm-vpc"
+  },
+  "router_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cm-router"
+  },
+  "sql_connection_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cloud-mile-assessment:asia-southeast1:cm-pg"
+  },
+  "sql_instance_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cm-pg"
+  },
+  "sql_private_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "10.172.80.3"
+  },
+  "subnet_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "cm-gke-subnet"
+  }
+}

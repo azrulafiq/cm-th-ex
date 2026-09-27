@@ -1,0 +1,63 @@
+$ gcloud compute networks describe cm-vpc --project cloud-mile-assessment
+autoCreateSubnetworks: false
+creationTimestamp: '2026-09-26T23:50:55.087-07:00'
+id: '2529654509648806432'
+kind: compute#network
+name: cm-vpc
+networkFirewallPolicyEnforcementOrder: AFTER_CLASSIC_FIREWALL
+peerings:
+- autoCreateRoutes: true
+  connectionStatus:
+    trafficConfiguration:
+      exportCustomRoutesToPeer: false
+      exportSubnetRoutesWithPublicIpToPeer: false
+      importCustomRoutesFromPeer: false
+      importSubnetRoutesWithPublicIpFromPeer: false
+      stackType: IPV4_ONLY
+    updateStrategy: INDEPENDENT
+  exchangeSubnetRoutes: true
+  exportCustomRoutes: false
+  exportSubnetRoutesWithPublicIp: false
+  importCustomRoutes: false
+  importSubnetRoutesWithPublicIp: false
+  name: servicenetworking-googleapis-com
+  network: https://www.googleapis.com/compute/v1/projects/qbc048137b07aa641p-tp/global/networks/servicenetworking
+  stackType: IPV4_ONLY
+  state: ACTIVE
+  stateDetails: '[2026-09-26T23:54:19.548-07:00]: Connected.'
+  updateStrategy: INDEPENDENT
+routingConfig:
+  bgpBestPathSelectionMode: LEGACY
+  routingMode: REGIONAL
+selfLink: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/networks/cm-vpc
+selfLinkWithId: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/networks/2529654509648806432
+subnetworks:
+- https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/regions/asia-southeast1/subnetworks/cm-gke-subnet
+x_gcloud_bgp_routing_mode: REGIONAL
+x_gcloud_subnet_mode: CUSTOM
+
+$ gcloud compute networks subnets describe cm-gke-subnet --region asia-southeast1 --project cloud-mile-assessment
+allowSubnetCidrRoutesOverlap: false
+creationTimestamp: '2026-09-26T23:51:18.060-07:00'
+enableFlowLogs: false
+fingerprint: CfZ63bTpYG0=
+gatewayAddress: 10.10.0.1
+id: '7899239141552226825'
+ipCidrRange: 10.10.0.0/20
+kind: compute#subnetwork
+logConfig:
+  enable: false
+name: cm-gke-subnet
+network: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/networks/cm-vpc
+privateIpGoogleAccess: true
+privateIpv6GoogleAccess: DISABLE_GOOGLE_ACCESS
+purpose: PRIVATE
+region: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/regions/asia-southeast1
+secondaryIpRanges:
+- ipCidrRange: 10.20.0.0/16
+  rangeName: pods
+- ipCidrRange: 10.30.0.0/20
+  rangeName: services
+selfLink: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/regions/asia-southeast1/subnetworks/cm-gke-subnet
+stackType: IPV4_ONLY
+

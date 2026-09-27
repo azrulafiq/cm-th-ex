@@ -1,0 +1,31 @@
+$ terraform plan -detailed-exitcode
+module.gke.google_service_account.nodes: Refreshing state... [id=projects/cloud-mile-assessment/serviceAccounts/cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.network.google_compute_network.vpc: Refreshing state... [id=projects/cloud-mile-assessment/global/networks/cm-vpc]
+module.iam.google_service_account.app: Refreshing state... [id=projects/cloud-mile-assessment/serviceAccounts/cm-app@cloud-mile-assessment.iam.gserviceaccount.com]
+module.secrets.google_secret_manager_secret.db_password: Refreshing state... [id=projects/cloud-mile-assessment/secrets/cm-db-password]
+module.registry.google_artifact_registry_repository.app: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1/repositories/cm-app]
+module.network.google_compute_global_address.psa_range: Refreshing state... [id=projects/cloud-mile-assessment/global/addresses/cm-psa-range]
+module.network.google_compute_firewall.allow_health_checks: Refreshing state... [id=projects/cloud-mile-assessment/global/firewalls/cm-allow-health-checks]
+module.network.google_compute_subnetwork.gke: Refreshing state... [id=projects/cloud-mile-assessment/regions/asia-southeast1/subnetworks/cm-gke-subnet]
+module.network.google_compute_router.router: Refreshing state... [id=projects/cloud-mile-assessment/regions/asia-southeast1/routers/cm-router]
+module.network.google_compute_firewall.allow_internal: Refreshing state... [id=projects/cloud-mile-assessment/global/firewalls/cm-allow-internal]
+module.network.google_compute_router_nat.nat: Refreshing state... [id=cloud-mile-assessment/asia-southeast1/cm-router/cm-nat]
+module.network.google_service_networking_connection.psa: Refreshing state... [id=projects%2Fcloud-mile-assessment%2Fglobal%2Fnetworks%2Fcm-vpc:servicenetworking.googleapis.com]
+module.gke.google_project_iam_member.nodes_default: Refreshing state... [id=cloud-mile-assessment/roles/container.defaultNodeServiceAccount/serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.registry.google_artifact_registry_repository_iam_member.readers["gke-nodes"]: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1/repositories/cm-app/roles/artifactregistry.reader/serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.iam.google_secret_manager_secret_iam_member.app_db_password: Refreshing state... [id=projects/cloud-mile-assessment/secrets/cm-db-password/roles/secretmanager.secretAccessor/serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com]
+module.gke.google_container_cluster.this: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1-a/clusters/cm-gke]
+module.iam.google_service_account_iam_member.app_wi: Refreshing state... [id=projects/cloud-mile-assessment/serviceAccounts/cm-app@cloud-mile-assessment.iam.gserviceaccount.com/roles/iam.workloadIdentityUser/serviceAccount:cloud-mile-assessment.svc.id.goog[app/app-ksa]]
+module.gke.google_container_node_pool.primary: Refreshing state... [id=projects/cloud-mile-assessment/locations/asia-southeast1-a/clusters/cm-gke/nodePools/cm-pool]
+module.cloudsql.random_password.db: Refreshing state... [id=none]
+module.cloudsql.google_sql_database_instance.this: Refreshing state... [id=cm-pg]
+module.secrets.google_secret_manager_secret_version.db_password: Refreshing state... [id=projects/969886371063/secrets/cm-db-password/versions/1]
+module.cloudsql.google_sql_database.app: Refreshing state... [id=projects/cloud-mile-assessment/instances/cm-pg/databases/appdb]
+module.cloudsql.google_sql_user.app: Refreshing state... [id=app//cm-pg]
+module.iam.google_project_iam_member.app_sql_client: Refreshing state... [id=cloud-mile-assessment/roles/cloudsql.client/serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com/only-cm-pg//resource.name == "projects/cloud-mile-assessment/instances/cm-pg" && resource.type == "sqladmin.googleapis.com/Instance"]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+exit code: 0

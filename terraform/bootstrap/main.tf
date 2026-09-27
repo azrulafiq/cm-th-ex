@@ -1,16 +1,14 @@
-# One-time bootstrap: enables project APIs and creates the GCS bucket that
-# holds remote state for this and the main Terraform configuration.
-
+# from task 1 - turn on the apis the platform needs
 resource "google_project_service" "this" {
   for_each = var.services
 
   service = each.value
 
-  # Keep APIs enabled if this config is ever destroyed, so other
-  # configurations in the project are not broken.
+  # keep apis on even if this gets destroyed
   disable_on_destroy = false
 }
 
+# from task 1 - gcs bucket for remote state
 resource "google_storage_bucket" "tfstate" {
   name     = "${var.project_id}-tfstate"
   location = var.region
@@ -23,7 +21,7 @@ resource "google_storage_bucket" "tfstate" {
     enabled = true
   }
 
-  # Keep the last 10 noncurrent state versions for recovery.
+  # only keep last 10 old state versions
   lifecycle_rule {
     condition {
       num_newer_versions = 10

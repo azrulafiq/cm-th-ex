@@ -1,0 +1,68 @@
+$ gcloud container node-pools describe cm-pool --cluster cm-gke --zone asia-southeast1-a --project cloud-mile-assessment
+autoscaling:
+  enabled: true
+  locationPolicy: BALANCED
+  maxNodeCount: 3
+  minNodeCount: 1
+config:
+  bootDisk:
+    diskType: pd-balanced
+    sizeGb: '50'
+  diskSizeGb: 50
+  diskType: pd-balanced
+  effectiveCgroupMode: EFFECTIVE_CGROUP_MODE_V2
+  imageType: COS_CONTAINERD
+  kubeletConfig:
+    insecureKubeletReadonlyPortEnabled: false
+    maxParallelImagePulls: 3
+  labels:
+    pool: primary
+  loggingConfig: {}
+  machineType: e2-standard-2
+  metadata:
+    disable-legacy-endpoints: 'true'
+  nodeImageConfig:
+    image: gke-1358-gke1225000-cos-125-19216-532-135-c-pre
+    imageProject: gke-node-images
+  oauthScopes:
+  - https://www.googleapis.com/auth/cloud-platform
+  resourceLabels:
+    goog-gke-node-pool-provisioning-model: on-demand
+  serviceAccount: cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com
+  shieldedInstanceConfig:
+    enableIntegrityMonitoring: true
+    enableSecureBoot: true
+  tags:
+  - cm-gke-node
+  windowsNodeConfig: {}
+  workloadMetadataConfig:
+    mode: GKE_METADATA
+etag: 91d20869-600f-492e-b8e0-6735cad8797f
+initialNodeCount: 1
+instanceGroupUrls:
+- https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/zones/asia-southeast1-a/instanceGroupManagers/gke-cm-gke-cm-pool-404d116a-grp
+kubeletCertInfo:
+  tpmBootstrapCertExpireTime: '2031-09-26T07:35:13Z'
+locations:
+- asia-southeast1-a
+management:
+  autoRepair: true
+  autoUpgrade: true
+maxPodsConstraint:
+  maxPodsPerNode: '110'
+name: cm-pool
+networkConfig:
+  enablePrivateNodes: true
+  networkTierConfig:
+    networkTier: NETWORK_TIER_DEFAULT
+  podIpv4CidrBlock: 10.20.0.0/16
+  podRange: pods
+  subnetwork: projects/cloud-mile-assessment/regions/asia-southeast1/subnetworks/cm-gke-subnet
+podIpv4CidrSize: 24
+selfLink: https://container.googleapis.com/v1/projects/cloud-mile-assessment/zones/asia-southeast1-a/clusters/cm-gke/nodePools/cm-pool
+status: RUNNING
+upgradeSettings:
+  maxSurge: 1
+  strategy: SURGE
+version: 1.35.8-gke.1225000
+

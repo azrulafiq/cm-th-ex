@@ -1,0 +1,222 @@
+module.network.google_compute_network.vpc: Creating...
+module.iam.google_service_account.app: Creating...
+module.gke.google_service_account.nodes: Creating...
+module.secrets.google_secret_manager_secret.db_password: Creating...
+module.registry.google_artifact_registry_repository.app: Creating...
+module.secrets.google_secret_manager_secret.db_password: Creation complete after 2s [id=projects/cloud-mile-assessment/secrets/cm-db-password]
+module.network.google_compute_network.vpc: Still creating... [00m10s elapsed]
+module.iam.google_service_account.app: Still creating... [00m10s elapsed]
+module.gke.google_service_account.nodes: Still creating... [00m10s elapsed]
+module.registry.google_artifact_registry_repository.app: Still creating... [00m10s elapsed]
+module.gke.google_service_account.nodes: Creation complete after 14s [id=projects/cloud-mile-assessment/serviceAccounts/cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.gke.google_project_iam_member.nodes_default: Creating...
+module.iam.google_service_account.app: Creation complete after 19s [id=projects/cloud-mile-assessment/serviceAccounts/cm-app@cloud-mile-assessment.iam.gserviceaccount.com]
+module.iam.google_secret_manager_secret_iam_member.app_db_password: Creating...
+module.network.google_compute_network.vpc: Still creating... [00m20s elapsed]
+module.registry.google_artifact_registry_repository.app: Still creating... [00m20s elapsed]
+module.registry.google_artifact_registry_repository.app: Creation complete after 20s [id=projects/cloud-mile-assessment/locations/asia-southeast1/repositories/cm-app]
+module.registry.google_artifact_registry_repository_iam_member.readers["gke-nodes"]: Creating...
+module.network.google_compute_network.vpc: Creation complete after 22s [id=projects/cloud-mile-assessment/global/networks/cm-vpc]
+module.network.google_compute_router.router: Creating...
+module.network.google_compute_global_address.psa_range: Creating...
+module.network.google_compute_firewall.allow_health_checks: Creating...
+module.network.google_compute_firewall.allow_internal: Creating...
+module.network.google_compute_subnetwork.gke: Creating...
+module.gke.google_project_iam_member.nodes_default: Still creating... [00m10s elapsed]
+module.iam.google_secret_manager_secret_iam_member.app_db_password: Creation complete after 6s [id=projects/cloud-mile-assessment/secrets/cm-db-password/roles/secretmanager.secretAccessor/serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com]
+module.gke.google_project_iam_member.nodes_default: Creation complete after 11s [id=cloud-mile-assessment/roles/container.defaultNodeServiceAccount/serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.registry.google_artifact_registry_repository_iam_member.readers["gke-nodes"]: Creation complete after 6s [id=projects/cloud-mile-assessment/locations/asia-southeast1/repositories/cm-app/roles/artifactregistry.reader/serviceAccount:cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com]
+module.network.google_compute_router.router: Still creating... [00m10s elapsed]
+module.network.google_compute_global_address.psa_range: Still creating... [00m10s elapsed]
+module.network.google_compute_firewall.allow_health_checks: Still creating... [00m10s elapsed]
+module.network.google_compute_firewall.allow_internal: Still creating... [00m10s elapsed]
+module.network.google_compute_subnetwork.gke: Still creating... [00m10s elapsed]
+module.network.google_compute_firewall.allow_internal: Creation complete after 12s [id=projects/cloud-mile-assessment/global/firewalls/cm-allow-internal]
+module.network.google_compute_firewall.allow_health_checks: Creation complete after 12s [id=projects/cloud-mile-assessment/global/firewalls/cm-allow-health-checks]
+module.network.google_compute_global_address.psa_range: Creation complete after 15s [id=projects/cloud-mile-assessment/global/addresses/cm-psa-range]
+module.network.google_service_networking_connection.psa: Creating...
+module.network.google_compute_router.router: Creation complete after 19s [id=projects/cloud-mile-assessment/regions/asia-southeast1/routers/cm-router]
+module.network.google_compute_router_nat.nat: Creating...
+module.network.google_compute_subnetwork.gke: Still creating... [00m20s elapsed]
+module.network.google_service_networking_connection.psa: Still creating... [00m10s elapsed]
+module.network.google_compute_router_nat.nat: Still creating... [00m10s elapsed]
+module.network.google_compute_router_nat.nat: Creation complete after 11s [id=cloud-mile-assessment/asia-southeast1/cm-router/cm-nat]
+module.network.google_compute_subnetwork.gke: Still creating... [00m30s elapsed]
+module.network.google_service_networking_connection.psa: Still creating... [00m20s elapsed]
+module.network.google_compute_subnetwork.gke: Still creating... [00m40s elapsed]
+module.network.google_compute_subnetwork.gke: Creation complete after 42s [id=projects/cloud-mile-assessment/regions/asia-southeast1/subnetworks/cm-gke-subnet]
+module.gke.google_container_cluster.this: Creating...
+module.network.google_service_networking_connection.psa: Still creating... [00m30s elapsed]
+module.gke.google_container_cluster.this: Still creating... [00m10s elapsed]
+module.network.google_service_networking_connection.psa: Still creating... [00m40s elapsed]
+module.gke.google_container_cluster.this: Still creating... [00m20s elapsed]
+module.network.google_service_networking_connection.psa: Still creating... [00m50s elapsed]
+module.network.google_service_networking_connection.psa: Creation complete after 55s [id=projects%2Fcloud-mile-assessment%2Fglobal%2Fnetworks%2Fcm-vpc:servicenetworking.googleapis.com]
+module.cloudsql.google_sql_database_instance.this: Creating...
+module.cloudsql.random_password.db: Creating...
+module.cloudsql.random_password.db: Creation complete after 0s [id=none]
+module.secrets.google_secret_manager_secret_version.db_password: Creating...
+module.gke.google_container_cluster.this: Still creating... [00m30s elapsed]
+module.secrets.google_secret_manager_secret_version.db_password: Creation complete after 3s [id=projects/969886371063/secrets/cm-db-password/versions/1]
+module.cloudsql.google_sql_database_instance.this: Still creating... [00m10s elapsed]
+module.gke.google_container_cluster.this: Still creating... [00m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [00m20s elapsed]
+module.gke.google_container_cluster.this: Still creating... [00m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [00m30s elapsed]
+module.gke.google_container_cluster.this: Still creating... [01m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [00m40s elapsed]
+module.gke.google_container_cluster.this: Still creating... [01m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [00m50s elapsed]
+module.gke.google_container_cluster.this: Still creating... [01m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [01m00s elapsed]
+module.gke.google_container_cluster.this: Still creating... [01m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [01m10s elapsed]
+module.gke.google_container_cluster.this: Still creating... [01m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [01m20s elapsed]
+module.gke.google_container_cluster.this: Still creating... [01m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [01m30s elapsed]
+module.gke.google_container_cluster.this: Still creating... [02m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [01m40s elapsed]
+module.gke.google_container_cluster.this: Still creating... [02m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [01m50s elapsed]
+module.gke.google_container_cluster.this: Still creating... [02m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [02m00s elapsed]
+module.gke.google_container_cluster.this: Still creating... [02m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [02m10s elapsed]
+module.gke.google_container_cluster.this: Still creating... [02m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [02m20s elapsed]
+module.gke.google_container_cluster.this: Still creating... [02m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [02m30s elapsed]
+module.gke.google_container_cluster.this: Still creating... [03m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [02m40s elapsed]
+module.gke.google_container_cluster.this: Still creating... [03m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [02m50s elapsed]
+module.gke.google_container_cluster.this: Still creating... [03m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [03m00s elapsed]
+module.gke.google_container_cluster.this: Still creating... [03m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [03m10s elapsed]
+module.gke.google_container_cluster.this: Still creating... [03m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [03m20s elapsed]
+module.gke.google_container_cluster.this: Still creating... [03m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [03m30s elapsed]
+module.gke.google_container_cluster.this: Still creating... [04m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [03m40s elapsed]
+module.gke.google_container_cluster.this: Still creating... [04m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [03m50s elapsed]
+module.gke.google_container_cluster.this: Still creating... [04m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [04m00s elapsed]
+module.gke.google_container_cluster.this: Still creating... [04m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [04m10s elapsed]
+module.gke.google_container_cluster.this: Still creating... [04m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [04m20s elapsed]
+module.gke.google_container_cluster.this: Still creating... [04m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [04m30s elapsed]
+module.gke.google_container_cluster.this: Still creating... [05m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [04m40s elapsed]
+module.gke.google_container_cluster.this: Still creating... [05m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [04m50s elapsed]
+module.gke.google_container_cluster.this: Still creating... [05m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [05m00s elapsed]
+module.gke.google_container_cluster.this: Still creating... [05m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [05m10s elapsed]
+module.gke.google_container_cluster.this: Still creating... [05m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [05m20s elapsed]
+module.gke.google_container_cluster.this: Still creating... [05m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [05m30s elapsed]
+module.gke.google_container_cluster.this: Still creating... [06m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [05m40s elapsed]
+module.gke.google_container_cluster.this: Still creating... [06m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [05m50s elapsed]
+module.gke.google_container_cluster.this: Still creating... [06m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [06m00s elapsed]
+module.gke.google_container_cluster.this: Still creating... [06m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [06m10s elapsed]
+module.gke.google_container_cluster.this: Still creating... [06m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [06m20s elapsed]
+module.gke.google_container_cluster.this: Still creating... [06m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [06m30s elapsed]
+module.gke.google_container_cluster.this: Still creating... [07m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [06m40s elapsed]
+module.gke.google_container_cluster.this: Still creating... [07m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [06m50s elapsed]
+module.gke.google_container_cluster.this: Still creating... [07m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [07m00s elapsed]
+module.gke.google_container_cluster.this: Still creating... [07m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [07m10s elapsed]
+module.gke.google_container_cluster.this: Still creating... [07m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [07m20s elapsed]
+module.gke.google_container_cluster.this: Still creating... [07m50s elapsed]
+module.gke.google_container_cluster.this: Creation complete after 7m51s [id=projects/cloud-mile-assessment/locations/asia-southeast1-a/clusters/cm-gke]
+module.iam.google_service_account_iam_member.app_wi: Creating...
+module.gke.google_container_node_pool.primary: Creating...
+module.cloudsql.google_sql_database_instance.this: Still creating... [07m30s elapsed]
+module.iam.google_service_account_iam_member.app_wi: Creation complete after 8s [id=projects/cloud-mile-assessment/serviceAccounts/cm-app@cloud-mile-assessment.iam.gserviceaccount.com/roles/iam.workloadIdentityUser/serviceAccount:cloud-mile-assessment.svc.id.goog[app/app-ksa]]
+module.gke.google_container_node_pool.primary: Still creating... [00m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [07m40s elapsed]
+module.gke.google_container_node_pool.primary: Still creating... [00m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [07m50s elapsed]
+module.gke.google_container_node_pool.primary: Still creating... [00m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [08m00s elapsed]
+module.gke.google_container_node_pool.primary: Still creating... [00m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [08m10s elapsed]
+module.gke.google_container_node_pool.primary: Still creating... [00m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [08m20s elapsed]
+module.gke.google_container_node_pool.primary: Still creating... [01m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [08m30s elapsed]
+module.gke.google_container_node_pool.primary: Still creating... [01m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [08m40s elapsed]
+module.gke.google_container_node_pool.primary: Still creating... [01m20s elapsed]
+module.gke.google_container_node_pool.primary: Creation complete after 1m22s [id=projects/cloud-mile-assessment/locations/asia-southeast1-a/clusters/cm-gke/nodePools/cm-pool]
+module.cloudsql.google_sql_database_instance.this: Still creating... [08m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [09m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [09m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [09m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [09m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [09m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [09m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [10m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [10m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [10m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [10m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [10m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [10m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [11m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [11m10s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [11m20s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [11m30s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [11m40s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [11m50s elapsed]
+module.cloudsql.google_sql_database_instance.this: Still creating... [12m00s elapsed]
+module.cloudsql.google_sql_database_instance.this: Creation complete after 12m6s [id=cm-pg]
+module.cloudsql.google_sql_user.app: Creating...
+module.cloudsql.google_sql_database.app: Creating...
+module.iam.google_project_iam_member.app_sql_client: Creating...
+module.cloudsql.google_sql_database.app: Creation complete after 8s [id=projects/cloud-mile-assessment/instances/cm-pg/databases/appdb]
+module.cloudsql.google_sql_user.app: Creation complete after 10s [id=app//cm-pg]
+module.iam.google_project_iam_member.app_sql_client: Still creating... [00m10s elapsed]
+module.iam.google_project_iam_member.app_sql_client: Creation complete after 11s [id=cloud-mile-assessment/roles/cloudsql.client/serviceAccount:cm-app@cloud-mile-assessment.iam.gserviceaccount.com/only-cm-pg//resource.name == "projects/cloud-mile-assessment/instances/cm-pg" && resource.type == "sqladmin.googleapis.com/Instance"]
+
+Apply complete! Resources: 24 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+app_ksa = "app/app-ksa"
+app_service_account = "cm-app@cloud-mile-assessment.iam.gserviceaccount.com"
+artifact_registry_url = "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app"
+db_name = "appdb"
+db_password_secret = "cm-db-password"
+db_user = "app"
+destroy_command = "terraform apply -var=deletion_protection=false && terraform destroy -var=deletion_protection=false"
+gke_cluster_location = "asia-southeast1-a"
+gke_cluster_name = "cm-gke"
+gke_get_credentials = "gcloud container clusters get-credentials cm-gke --zone asia-southeast1-a --project cloud-mile-assessment"
+gke_node_pool = "cm-pool"
+gke_node_service_account = "cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+nat_name = "cm-nat"
+network_name = "cm-vpc"
+router_name = "cm-router"
+sql_connection_name = "cloud-mile-assessment:asia-southeast1:cm-pg"
+sql_instance_name = "cm-pg"
+sql_private_ip = "10.172.80.3"
+subnet_name = "cm-gke-subnet"
+apply exit: 0

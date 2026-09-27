@@ -1,0 +1,116 @@
+$ gcloud sql instances describe cm-pg --project cloud-mile-assessment
+backendType: SECOND_GEN
+connectionName: cloud-mile-assessment:asia-southeast1:cm-pg
+createTime: '2026-09-27T06:52:29.230Z'
+databaseInstalledVersion: POSTGRES_16_15
+databaseVersion: POSTGRES_16
+etag: e861d283a3edaa196db01d586341a8253c4ca82e14ca17a267203ea8e8317ee9
+gceZone: asia-southeast1-a
+geminiConfig:
+  activeQueryEnabled: true
+  entitled: false
+  googleVacuumMgmtEnabled: false
+  indexAdvisorEnabled: false
+  oomSessionCancelEnabled: true
+includeReplicasForMajorVersionUpgrade: false
+instanceType: CLOUD_SQL_INSTANCE
+ipAddresses:
+- ipAddress: 10.172.80.3
+  type: PRIVATE
+kind: sql#instance
+maintenanceVersion: POSTGRES_16_15.R20260712.01_31
+name: cm-pg
+project: cloud-mile-assessment
+region: asia-southeast1
+satisfiesPzi: true
+selfLink: https://sqladmin.googleapis.com/sql/v1beta4/projects/cloud-mile-assessment/instances/cm-pg
+serverCaCert:
+  cert: |-
+    -----BEGIN CERTIFICATE-----
+    MIIDcTCCAlmgAwIBAgIBADANBgkqhkiG9w0BAQsFADBwMS0wKwYDVQQuEyQzN2M4
+    OGExZC1mMzM3LTQxZWQtYWZiNi05Yzc4ZmQxNmNjOWQxHDAaBgNVBAMTE0Nsb3Vk
+    IFNRTCBTZXJ2ZXIgQ0ExFDASBgNVBAoTC0dvb2dsZSwgSW5jMQswCQYDVQQGEwJV
+    UzAeFw0yNjA5MjcwNjU1NTlaFw0zNjA5MjQwNjU2NTlaMHAxLTArBgNVBC4TJDM3
+    Yzg4YTFkLWYzMzctNDFlZC1hZmI2LTljNzhmZDE2Y2M5ZDEcMBoGA1UEAxMTQ2xv
+    dWQgU1FMIFNlcnZlciBDQTEUMBIGA1UEChMLR29vZ2xlLCBJbmMxCzAJBgNVBAYT
+    AlVTMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwALUEWjbDyRJ0iVC
+    DAa8g6vBAG7NfuCUdfQZ/C4GRbvBeDc55hrcjHV0aIhSIGtTOlIQaBWA5V2vdL7U
+    gZC4Or8NF6/63puHzv3T8LpdFVg2lfXmQ+rRV4yjUtJu3utujTmRsRcqOAHYWAId
+    9eRLERh2OBh3aGj/DvWPPYkdlea6YI4AMqoGodIbCbwWkWyWuuvAJawLdL0lHu0b
+    NIumxqVdtv1dEkAO/GaXXdmNhIwXtUmXV6/650738lP0sCrEzPIvxof+TVp9Q+7f
+    nN7UEiUBKwkRjcP6rtJk+o32hBOh19AI2BzuGmiyPLeQkja7yISc4FRxeIPq9MM6
+    mE0TswIDAQABoxYwFDASBgNVHRMBAf8ECDAGAQH/AgEAMA0GCSqGSIb3DQEBCwUA
+    A4IBAQAee7CBxCgJAG0NQVgbo/6fjnd+V8Ni1lUiUjx5J+D0fXO7PKbb9Lea3aw3
+    1mtRrRkXwgjqAPB5MPtqHdqXkkhnEyjUDP//pf+mHbdJMf/nqOQ+jovOngZqKs3C
+    7eOwgVyNsmVXdsaU/g4bzN75MRxlKdUPy4NUuWrSTuzps0ffSS3F3siD6ix7vZQG
+    k8A0/LOeMGR+Yl9zUp2ZOgq4FINcNYmAPyNS0R6jXMst6dlxG6b0G48BnMugNNYP
+    lz3aBRUCoCGLw6fJO9fV5OnQzdK74H1U6anYSC8yobYHtW/8UV5yR/etZf7O7UiZ
+    2MpImBJmqVaDcIFJjM6Bco6qdbbV
+    -----END CERTIFICATE-----
+  certSerialNumber: '0'
+  commonName: C=US,O=Google\, Inc,CN=Cloud SQL Server CA,dnQualifier=37c88a1d-f337-41ed-afb6-9c78fd16cc9d
+  createTime: '2026-09-27T06:55:59.957Z'
+  expirationTime: '2036-09-24T06:56:59.957Z'
+  instance: cm-pg
+  kind: sql#sslCert
+  sha1Fingerprint: f812b0a31aceed70c41e73e460e6f2cafb2d61b1
+serviceAccountEmailAddress: p969886371063-5glgrm@gcp-sa-cloud-sql.iam.gserviceaccount.com
+settings:
+  activationPolicy: ALWAYS
+  availabilityType: ZONAL
+  backupConfiguration:
+    backupRetentionSettings:
+      retainedBackups: 7
+      retentionUnit: COUNT
+    backupTier: STANDARD
+    enabled: true
+    kind: sql#backupConfiguration
+    pointInTimeRecoveryEnabled: false
+    replicationLogArchivingEnabled: false
+    startTime: 18:00
+    transactionLogRetentionDays: 7
+    transactionalLogStorageState: TRANSACTIONAL_LOG_STORAGE_STATE_UNSPECIFIED
+  connectorEnforcement: NOT_REQUIRED
+  dataDiskSizeGb: '10'
+  dataDiskType: PD_SSD
+  deletionProtectionEnabled: true
+  edition: ENTERPRISE
+  enableDataplexIntegration: false
+  enableGoogleMlIntegration: false
+  insightsConfig:
+    enhancedQueryInsightsEnabled: false
+    queryInsightsEnabled: true
+  ipConfiguration:
+    enablePrivatePathForGoogleCloudServices: false
+    ipv4Enabled: false
+    privateNetwork: projects/cloud-mile-assessment/global/networks/cm-vpc
+    requireSsl: false
+    serverCaMode: GOOGLE_MANAGED_INTERNAL_CA
+    serverCertificateRotationMode: SERVER_CERTIFICATE_ROTATION_MODE_UNSPECIFIED
+    sslMode: ENCRYPTED_ONLY
+  kind: sql#settings
+  locationPreference:
+    kind: sql#locationPreference
+    zone: asia-southeast1-a
+  maintenanceWindow:
+    day: 6
+    hour: 19
+    kind: sql#maintenanceWindow
+  pricingPlan: PER_USE
+  replicationLagMaxSeconds: 31536000
+  replicationType: SYNCHRONOUS
+  retainBackupsOnDelete: false
+  settingsVersion: '1'
+  storageAutoResize: true
+  storageAutoResizeLimit: '0'
+  tier: db-f1-micro
+sqlNetworkArchitecture: NEW_NETWORK_ARCHITECTURE
+state: RUNNABLE
+upgradableDatabaseVersions:
+- displayName: PostgreSQL 17
+  majorVersion: POSTGRES_17
+  name: POSTGRES_17
+- displayName: PostgreSQL 18
+  majorVersion: POSTGRES_18
+  name: POSTGRES_18
+

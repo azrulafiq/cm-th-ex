@@ -1,0 +1,54 @@
+$ gcloud compute firewall-rules list --filter=network:cm-vpc --project cloud-mile-assessment
+NAME                     NETWORK  DIRECTION  PRIORITY  ALLOW                         DENY  DISABLED
+cm-allow-health-checks   cm-vpc   INGRESS    1000      tcp                                 False
+cm-allow-internal        cm-vpc   INGRESS    1000      icmp,udp,tcp                        False
+gke-cm-gke-c971c71f-all  cm-vpc   INGRESS    1000      tcp,udp,icmp,esp,ah,sctp            False
+gke-cm-gke-c971c71f-vms  cm-vpc   INGRESS    1000      tcp:1-65535,udp:1-65535,icmp        False
+
+To show all fields of the firewall, please show in JSON format: --format=json
+To show all fields in table format, please see the examples in --help.
+
+
+$ gcloud compute firewall-rules describe cm-allow-health-checks --project cloud-mile-assessment
+allowed:
+- IPProtocol: tcp
+creationTimestamp: '2026-09-26T23:51:17.581-07:00'
+description: ''
+direction: INGRESS
+disabled: false
+id: '6795518729293988362'
+kind: compute#firewall
+logConfig:
+  enable: false
+name: cm-allow-health-checks
+network: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/networks/cm-vpc
+priority: 1000
+selfLink: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/firewalls/cm-allow-health-checks
+sourceRanges:
+- 130.211.0.0/22
+- 35.191.0.0/16
+targetTags:
+- cm-gke-node
+
+$ gcloud compute firewall-rules describe cm-allow-internal --project cloud-mile-assessment
+allowed:
+- IPProtocol: icmp
+- IPProtocol: udp
+- IPProtocol: tcp
+creationTimestamp: '2026-09-26T23:51:17.607-07:00'
+description: ''
+direction: INGRESS
+disabled: false
+id: '7947666894974419466'
+kind: compute#firewall
+logConfig:
+  enable: false
+name: cm-allow-internal
+network: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/networks/cm-vpc
+priority: 1000
+selfLink: https://www.googleapis.com/compute/v1/projects/cloud-mile-assessment/global/firewalls/cm-allow-internal
+sourceRanges:
+- 10.10.0.0/20
+- 10.30.0.0/20
+- 10.20.0.0/16
+

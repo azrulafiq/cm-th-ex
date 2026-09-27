@@ -11,6 +11,8 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
+# local only, has admin public ip
+admin.auto.tfvars
 
 # Credentials and secrets
 *.json.key

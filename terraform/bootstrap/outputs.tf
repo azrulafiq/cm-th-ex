@@ -1,3 +1,5 @@
+# from task 1 - bootstrap outputs
+
 output "tfstate_bucket" {
   description = "GCS bucket for Terraform remote state."
   value       = google_storage_bucket.tfstate.name

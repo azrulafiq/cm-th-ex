@@ -1,0 +1,72 @@
+$ kubectl get nodes -o wide -L node.kubernetes.io/instance-type
+NAME                               STATUS   ROLES    AGE     VERSION               INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                             KERNEL-VERSION   CONTAINER-RUNTIME    INSTANCE-TYPE
+gke-cm-gke-cm-pool-404d116a-2pvm   Ready    <none>   7m14s   v1.35.8-gke.1225000   10.10.0.8     <none>        Container-Optimized OS from Google   6.12.94+         containerd://2.2.7   e2-standard-2
+gke-cm-gke-cm-pool-404d116a-fzib   Ready    <none>   13m     v1.35.8-gke.1225000   10.10.0.7     <none>        Container-Optimized OS from Google   6.12.94+         containerd://2.2.7   e2-standard-2
+gke-cm-gke-cm-pool-404d116a-ge3c   Ready    <none>   3m16s   v1.35.8-gke.1225000   10.10.0.9     <none>        Container-Optimized OS from Google   6.12.94+         containerd://2.2.7   e2-standard-2
+
+$ kubectl get pods -A
+NAMESPACE         NAME                                                       READY   STATUS    RESTARTS        AGE
+gke-managed-cim   kube-state-metrics-0                                       2/2     Running   0               12m
+gmp-system        collector-44grp                                            2/2     Running   0               7m14s
+gmp-system        collector-4lhvb                                            2/2     Running   0               3m16s
+gmp-system        collector-pb7f4                                            2/2     Running   0               13m
+gmp-system        collector-v8hpw                                            2/2     Running   0               45m
+gmp-system        gmp-operator-94dff58d7-v2n6g                               1/1     Running   0               6m34s
+kube-system       anetd-ggfss                                                3/3     Running   0               7m14s
+kube-system       anetd-rm9n6                                                3/3     Running   0               3m16s
+kube-system       anetd-s6wsk                                                3/3     Running   0               13m
+kube-system       anetd-t58sf                                                3/3     Running   0               45m
+kube-system       antrea-controller-horizontal-autoscaler-558df4666c-wsszx   1/1     Running   0               6m34s
+kube-system       csi-secrets-store-gke-jxqb5                                3/3     Running   0               3m15s
+kube-system       csi-secrets-store-gke-shb9s                                3/3     Running   0               13m
+kube-system       csi-secrets-store-gke-tj842                                3/3     Running   1 (44m ago)     45m
+kube-system       csi-secrets-store-gke-vkpkc                                3/3     Running   1 (5m45s ago)   7m14s
+kube-system       csi-secrets-store-provider-gke-82jwt                       1/1     Running   0               7m14s
+kube-system       csi-secrets-store-provider-gke-fpgbv                       1/1     Running   0               45m
+kube-system       csi-secrets-store-provider-gke-htzg8                       1/1     Running   0               13m
+kube-system       csi-secrets-store-provider-gke-zdczc                       1/1     Running   0               3m15s
+kube-system       event-exporter-gke-784bdb9d8b-bxqp4                        2/2     Running   0               12m
+kube-system       fluentbit-gke-fc74v                                        3/3     Running   0               13m
+kube-system       fluentbit-gke-hw8p9                                        3/3     Running   0               45m
+kube-system       fluentbit-gke-mv6ns                                        3/3     Running   0               7m14s
+kube-system       fluentbit-gke-nschd                                        3/3     Running   0               3m16s
+kube-system       gke-metadata-server-f7fmm                                  1/1     Running   0               45m
+kube-system       gke-metadata-server-h9qrc                                  1/1     Running   0               7m14s
+kube-system       gke-metadata-server-qnw49                                  1/1     Running   0               3m15s
+kube-system       gke-metadata-server-sbg84                                  1/1     Running   0               13m
+kube-system       gke-metrics-agent-4rh6n                                    3/3     Running   0               45m
+kube-system       gke-metrics-agent-htzm4                                    3/3     Running   0               7m14s
+kube-system       gke-metrics-agent-lgkb8                                    3/3     Running   0               13m
+kube-system       gke-metrics-agent-vfjt4                                    3/3     Running   0               3m15s
+kube-system       konnectivity-agent-68c7b5d8bf-f6rvx                        2/2     Running   0               6m34s
+kube-system       konnectivity-agent-68c7b5d8bf-lwddk                        2/2     Running   0               3m
+kube-system       konnectivity-agent-68c7b5d8bf-tp9k2                        2/2     Running   0               12m
+kube-system       konnectivity-agent-autoscaler-cbd5bf56b-4vhzv              1/1     Running   0               6m34s
+kube-system       kube-dns-6c78b558c4-dwnrl                                  4/4     Running   0               2m57s
+kube-system       kube-dns-6c78b558c4-qfvnq                                  4/4     Running   0               6m34s
+kube-system       kube-dns-autoscaler-848df96df6-t5rx4                       1/1     Running   0               6m33s
+kube-system       l7-default-backend-7c7c496ff7-t7mpl                        1/1     Running   0               6m33s
+kube-system       metrics-server-v1.35.1-69f48b6455-qbn5s                    1/1     Running   0               12m
+kube-system       netd-5bcxf                                                 3/3     Running   0               7m14s
+kube-system       netd-kdbjv                                                 3/3     Running   0               45m
+kube-system       netd-xsgwb                                                 3/3     Running   0               3m16s
+kube-system       netd-zbl7r                                                 3/3     Running   0               13m
+kube-system       node-local-dns-5g9m8                                       2/2     Running   0               7m14s
+kube-system       node-local-dns-8jbxf                                       2/2     Running   0               3m16s
+kube-system       node-local-dns-ps5k7                                       2/2     Running   0               13m
+kube-system       node-local-dns-v94t5                                       2/2     Running   0               45m
+kube-system       pdcsi-node-56crs                                           3/3     Running   0               3m15s
+kube-system       pdcsi-node-5tvxg                                           3/3     Running   0               45m
+kube-system       pdcsi-node-jgdtr                                           3/3     Running   0               7m14s
+kube-system       pdcsi-node-kxjx4                                           3/3     Running   0               13m
+
+$ kubectl describe nodes | grep -A5 "Allocated resources"
+Name:               gke-cm-gke-cm-pool-404d116a-2pvm
+  cpu                915m (47%)        8 (414%)
+  memory             1451363200 (22%)  7737326080 (122%)
+Name:               gke-cm-gke-cm-pool-404d116a-fzib
+  cpu                805m (41%)        8043m (416%)
+  memory             1593135360 (25%)  6083356160 (96%)
+Name:               gke-cm-gke-cm-pool-404d116a-ge3c
+  cpu                894m (46%)        8 (414%)
+  memory             1425363200 (22%)  5737326080 (90%)

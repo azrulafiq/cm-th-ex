@@ -1,3 +1,5 @@
+# from task 1 - bootstrap inputs
+
 variable "project_id" {
   description = "GCP project ID."
   type        = string
