@@ -1,0 +1,49 @@
+## 2026-09-27T08:42:40Z before update
+$ kubectl -n app get rs -o wide
+NAME            DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES                                                                  SELECTOR
+app-cf4575ccb   3         3         2       104s   app          asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v1   app=cm-app,pod-template-hash=cf4575ccb
+
+$ (GET / on each pod)
+{"message":"hello from cm-app on gke","pod":"app-cf4575ccb-295l9","version":"v1"}
+
+{"message":"hello from cm-app on gke","pod":"app-cf4575ccb-4854j","version":"v1"}
+
+
+## 2026-09-27T08:42:44Z rolling update v1 -> v2
+$ kubectl -n app set image deploy/app app=asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v2
+deployment.apps/app image updated
+
+$ kubectl -n app rollout status deploy/app --timeout=300s
+Waiting for deployment "app" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+deployment "app" successfully rolled out
+
+$ kubectl -n app rollout history deploy/app
+deployment.apps/app 
+REVISION  CHANGE-CAUSE
+1         initial deploy v1
+2         update to v2
+
+
+$ kubectl -n app get rs -o wide
+NAME             DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES                                                                  SELECTOR
+app-76d5cc9c79   3         3         3       50s     app          asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v2   app=cm-app,pod-template-hash=76d5cc9c79
+app-cf4575ccb    0         0         0       2m37s   app          asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v1   app=cm-app,pod-template-hash=cf4575ccb
+
+$ (GET / on each pod)
+{"message":"hello from cm-app on gke","pod":"app-76d5cc9c79-gnlnj","version":"v2"}
+
+{"message":"hello from cm-app on gke","pod":"app-76d5cc9c79-h5kfw","version":"v2"}
+
+{"message":"hello from cm-app on gke","pod":"app-76d5cc9c79-vm74f","version":"v2"}
+
+Error from server (NotFound): pods "app-cf4575ccb-295l9" not found
+

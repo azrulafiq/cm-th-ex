@@ -1,0 +1,31 @@
+module.ingress.google_compute_global_address.app: Creating...
+module.ingress.google_compute_global_address.app: Still creating... [00m10s elapsed]
+module.ingress.google_compute_global_address.app: Creation complete after 14s [id=projects/cloud-mile-assessment/global/addresses/cm-app-ip]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+app_domain = "cm-app.sokay.my"
+app_ip_address = "8.232.93.111"
+app_ip_name = "cm-app-ip"
+app_ksa = "app/app-ksa"
+app_service_account = "cm-app@cloud-mile-assessment.iam.gserviceaccount.com"
+artifact_registry_url = "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app"
+db_name = "appdb"
+db_password_secret = "cm-db-password"
+db_user = "app"
+destroy_command = "terraform apply -var=deletion_protection=false && terraform destroy -var=deletion_protection=false"
+gke_cluster_location = "asia-southeast1-a"
+gke_cluster_name = "cm-gke"
+gke_get_credentials = "gcloud container clusters get-credentials cm-gke --zone asia-southeast1-a --project cloud-mile-assessment"
+gke_node_pool = "cm-pool"
+gke_node_service_account = "cm-gke-nodes@cloud-mile-assessment.iam.gserviceaccount.com"
+nat_name = "cm-nat"
+network_name = "cm-vpc"
+router_name = "cm-router"
+sql_connection_name = "cloud-mile-assessment:asia-southeast1:cm-pg"
+sql_instance_name = "cm-pg"
+sql_private_ip = "10.172.80.3"
+subnet_name = "cm-gke-subnet"
+apply exit: 0

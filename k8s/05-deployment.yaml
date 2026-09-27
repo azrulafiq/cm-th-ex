@@ -1,0 +1,148 @@
+# from task 2 - app deployment with cloud sql auth proxy as native sidecar
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: app
+  labels:
+    app: cm-app
+spec:
+  # no replicas here, the hpa owns the count
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: cm-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # add 1 new pod before taking an old one down
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: cm-app
+    spec:
+      serviceAccountName: app-ksa
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+
+      # spread pods over nodes so one node going down doesnt take all of them
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: cm-app
+
+      # native sidecar (restartPolicy Always), starts before the app and stops after it
+      initContainers:
+        - name: cloud-sql-proxy
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4
+          restartPolicy: Always
+          args:
+            - "--private-ip"
+            - "--port=5432"
+            - "--structured-logs"
+            - "--health-check"
+            - "--http-address=0.0.0.0"
+            - "--http-port=9090"
+            - "--exit-zero-on-sigterm"
+            - "cloud-mile-assessment:asia-southeast1:cm-pg"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          startupProbe:
+            httpGet:
+              path: /startup
+              port: 9090
+            periodSeconds: 1
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 9090
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+
+      containers:
+        - name: app
+          image: asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v3
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: app-config
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CHAOS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: app-chaos
+                  key: token
+          volumeMounts:
+            - name: db-secret
+              mountPath: /secrets/db
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+          # readiness checks the db, pod only gets traffic when it can reach cloud sql
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          # liveness never touches the db, a db blip shouldnt restart every pod
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          securityContext:
+            runAsUser: 10001
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+
+      volumes:
+        - name: db-secret
+          csi:
+            driver: secrets-store-gke.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: app-db-secret
+        - name: tmp
+          emptyDir: {}

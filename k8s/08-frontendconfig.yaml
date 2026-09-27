@@ -1,0 +1,10 @@
+# from task 2 - redirect http to https at the lb
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: app-frontendconfig
+  namespace: app
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: MOVED_PERMANENTLY_DEFAULT

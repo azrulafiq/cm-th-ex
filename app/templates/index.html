@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>cm-app</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body data-version="{{ version }}" data-pod="{{ pod }}">
+  <header class="top">
+    <div class="brand">
+      <span class="logo">cm</span>
+      <div>
+        <h1>cm-app</h1>
+        <p class="sub">{{ message }}</p>
+      </div>
+    </div>
+    <div class="meta">
+      <span class="badge" id="version-badge">{{ version }}</span>
+      <span class="pod">served by <code id="current-pod">{{ pod }}</code></span>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card">
+      <div class="card-head">
+        <h2>Health</h2>
+        <label class="toggle"><input type="checkbox" id="auto" checked> auto refresh 3s</label>
+      </div>
+      <div class="checks">
+        <div class="check" id="chk-healthz">
+          <span class="dot"></span>
+          <div><strong>Liveness</strong><small>/healthz, process only</small></div>
+          <span class="ms">-</span>
+        </div>
+        <div class="check" id="chk-readyz">
+          <span class="dot"></span>
+          <div><strong>Readiness</strong><small>/readyz, can reach Cloud SQL</small></div>
+          <span class="ms">-</span>
+        </div>
+        <div class="check" id="chk-info">
+          <span class="dot"></span>
+          <div><strong>App</strong><small>/api/info through the load balancer</small></div>
+          <span class="ms">-</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Load balancing</h2>
+        <button class="ghost" id="reset-lb">reset</button>
+      </div>
+      <p class="hint">Which pods answered this browser. Watch it shift during a rolling update.</p>
+      <div id="lb-bars" class="bars"></div>
+      <p class="total" id="lb-total">0 requests</p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Database</h2>
+        <button id="run-db">run query</button>
+      </div>
+      <dl class="kv" id="db-kv">
+        <dt>status</dt><dd id="db-status">not run yet</dd>
+        <dt>version</dt><dd id="db-version">-</dd>
+        <dt>db time</dt><dd id="db-time">-</dd>
+        <dt>visits</dt><dd id="db-visits">-</dd>
+        <dt>connections</dt><dd id="db-conns">-</dd>
+        <dt>served by</dt><dd id="db-pod">-</dd>
+      </dl>
+    </section>
+
+    <section class="card chaos">
+      <div class="card-head">
+        <h2>Chaos</h2>
+        <span class="warn">for testing alerts only</span>
+      </div>
+      <p class="hint">Needs the token from the <code>app-chaos</code> secret. It stays in this page only and is never stored.</p>
+      <input type="password" id="token" placeholder="X-Chaos-Token" autocomplete="off">
+      <div class="buttons">
+        <button data-chaos="/error">error 500</button>
+        <button data-chaos="/slow?ms=1500">slow 1.5s</button>
+        <button data-chaos="/cpu?seconds=120">cpu 120s</button>
+        <button data-chaos="/connections?n=22&amp;seconds=300">hold 22 db conns</button>
+        <button data-chaos="/memory?mb=200">memory +200MB</button>
+        <button data-chaos="/crash" class="danger">crash pod</button>
+      </div>
+    </section>
+
+    <section class="card wide">
+      <div class="card-head">
+        <h2>Request log</h2>
+        <button class="ghost" id="clear-log">clear</button>
+      </div>
+      <table class="log">
+        <thead><tr><th>time</th><th>request</th><th>status</th><th>ms</th><th>pod</th></tr></thead>
+        <tbody id="log-body"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="foot">GKE cm-gke &middot; Cloud SQL cm-pg via Auth Proxy &middot; asia-southeast1</footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+$ kubectl -n app exec app-cf4575ccb-295l9 -c app -- python -c import urllib.request,sys;print(urllib.request.urlopen("http://localhost:8080"+sys.argv[1]).read().decode()) /
+{"message":"hello from cm-app on gke","pod":"app-cf4575ccb-295l9","version":"v1"}
+
+
+$ kubectl -n app exec app-cf4575ccb-295l9 -c app -- python -c import urllib.request,sys;print(urllib.request.urlopen("http://localhost:8080"+sys.argv[1]).read().decode()) /readyz
+{"status":"ready"}
+
+
+$ kubectl -n app exec app-cf4575ccb-295l9 -c app -- python -c import urllib.request,sys;print(urllib.request.urlopen("http://localhost:8080"+sys.argv[1]).read().decode()) /db
+{"db_connections":1,"db_time":"2026-09-27T08:42:05.577001+00:00","db_version":"PostgreSQL 16.15 on x86_64-pc-linux-gnu, compiled by Debian clang version 12.0.1, 64-bit","pod":"app-cf4575ccb-295l9","visits":1}
+
+
+$ kubectl -n app exec app-cf4575ccb-295l9 -c app -- python -c import urllib.request,sys;print(urllib.request.urlopen("http://localhost:8080"+sys.argv[1]).read().decode()) /db
+{"db_connections":1,"db_time":"2026-09-27T08:42:06.976861+00:00","db_version":"PostgreSQL 16.15 on x86_64-pc-linux-gnu, compiled by Debian clang version 12.0.1, 64-bit","pod":"app-cf4575ccb-295l9","visits":2}
+
+
+$ kubectl -n app exec app-cf4575ccb-295l9 -c app -- ls -l /secrets/db/
+total 0
+lrwxrwxrwx 1 root root 18 Sep 27 08:40 db-password -> ..data/db-password
+

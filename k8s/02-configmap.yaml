@@ -1,0 +1,20 @@
+# from task 2 - non secret app config
+# note: pods only pick up changes on restart (kubectl rollout restart)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: app
+data:
+  APP_MESSAGE: "hello from cm-app on gke"
+  # cloud sql auth proxy sidecar listens on localhost
+  DB_HOST: "127.0.0.1"
+  DB_PORT: "5432"
+  DB_NAME: "appdb"
+  DB_USER: "app"
+  # mounted from secret manager by the csi driver
+  DB_PASSWORD_FILE: "/secrets/db/db-password"
+  # chaos endpoints for task 3 and 4, still need the token from the app-chaos secret
+  CHAOS_ENABLED: "true"
+  # set "true" to force CrashLoopBackOff
+  CRASH_ON_START: "false"

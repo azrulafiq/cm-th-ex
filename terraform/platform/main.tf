@@ -86,3 +86,10 @@ module "registry" {
     gke-nodes = "serviceAccount:${module.gke.node_service_account}"
   }
 }
+
+# from task 2 - static ip for the app https ingress
+module "ingress" {
+  source = "./modules/ingress"
+
+  name_prefix = var.name_prefix
+}

@@ -1,0 +1,121 @@
+$ kubectl -n app describe pod app-cf4575ccb-295l9
+Name:             app-cf4575ccb-295l9
+Namespace:        app
+Priority:         0
+Service Account:  app-ksa
+Node:             gke-cm-gke-cm-pool-404d116a-ge3c/10.10.0.9
+Start Time:       Sun, 27 Sep 2026 16:40:57 +0800
+Labels:           app=cm-app
+                  pod-template-hash=cf4575ccb
+                  topology.kubernetes.io/region=asia-southeast1
+                  topology.kubernetes.io/zone=asia-southeast1-a
+Annotations:      <none>
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               10.20.0.9
+IPs:
+  IP:           10.20.0.9
+Controlled By:  ReplicaSet/app-cf4575ccb
+Init Containers:
+  cloud-sql-proxy:
+    Container ID:  containerd://9ad173d361b208bb2c383ddb4c522fdc1eddd82c0d5dac3b74937fb70bd6d59a
+    Image:         gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4
+    Image ID:      gcr.io/cloud-sql-connectors/cloud-sql-proxy@sha256:88501f0a695a586988add1b8a206fdf3f29f9a1a3deeb9b45ef2b1481ea6be83
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      --private-ip
+      --port=5432
+      --structured-logs
+      --health-check
+      --http-address=0.0.0.0
+      --http-port=9090
+      --exit-zero-on-sigterm
+      cloud-mile-assessment:asia-southeast1:cm-pg
+    State:          Running
+      Started:      Sun, 27 Sep 2026 16:41:07 +0800
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     200m
+      memory:  128Mi
+    Requests:
+      cpu:        50m
+      memory:     64Mi
+    Liveness:     http-get http://:9090/liveness delay=0s timeout=5s period=10s #success=1 #failure=3
+    Startup:      http-get http://:9090/startup delay=0s timeout=1s period=1s #success=1 #failure=30
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-bkqrn (ro)
+Containers:
+  app:
+    Container ID:   containerd://f7b052f371b74cad7a44be8c5972d855984d46b7d0bc7ce2efb026be17b1c790
+    Image:          asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v1
+    Image ID:       asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app@sha256:b790756cac7bce336a16d40973a2f34ea88b364eaec5cb2f5609acbf57c3986b
+    Port:           8080/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Running
+      Started:      Sun, 27 Sep 2026 16:41:15 +0800
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:http/healthz delay=10s timeout=3s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:http/readyz delay=0s timeout=3s period=10s #success=1 #failure=3
+    Environment Variables from:
+      app-config  ConfigMap  Optional: false
+    Environment:
+      POD_NAME:     app-cf4575ccb-295l9 (v1:metadata.name)
+      CHAOS_TOKEN:  <set to the key 'token' in secret 'app-chaos'>  Optional: false
+    Mounts:
+      /secrets/db from db-secret (ro)
+      /tmp from tmp (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-bkqrn (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  db-secret:
+    Type:              CSI (a Container Storage Interface (CSI) volume source)
+    Driver:            secrets-store-gke.csi.k8s.io
+    FSType:            
+    ReadOnly:          true
+    VolumeAttributes:      secretProviderClass=app-db-secret
+  tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  kube-api-access-bkqrn:
+    Type:                     Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:   3607
+    ConfigMapName:            kube-root-ca.crt
+    Optional:                 false
+    DownwardAPI:              true
+QoS Class:                    Burstable
+Node-Selectors:               <none>
+Tolerations:                  node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                              node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Topology Spread Constraints:  kubernetes.io/hostname:ScheduleAnyway when max skew 1 is exceeded for selector app=cm-app
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  63s                default-scheduler  Successfully assigned app/app-cf4575ccb-295l9 to gke-cm-gke-cm-pool-404d116a-ge3c
+  Normal   Pulling    61s                kubelet            spec.initContainers{cloud-sql-proxy}: Pulling image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4"
+  Normal   Pulled     54s                kubelet            spec.initContainers{cloud-sql-proxy}: Successfully pulled image "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4" in 7.187s (7.188s including waiting). Image size: 18667947 bytes.
+  Normal   Created    54s                kubelet            spec.initContainers{cloud-sql-proxy}: Container created
+  Normal   Started    53s                kubelet            spec.initContainers{cloud-sql-proxy}: Container started
+  Warning  Unhealthy  53s                kubelet            spec.initContainers{cloud-sql-proxy}: Startup probe failed: Get "http://10.20.0.9:9090/startup": dial tcp 10.20.0.9:9090: connect: connection refused
+  Normal   Pulling    51s                kubelet            spec.containers{app}: Pulling image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v1"
+  Normal   Pulled     45s                kubelet            spec.containers{app}: Successfully pulled image "asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v1" in 5.865s (5.865s including waiting). Image size: 50595272 bytes.
+  Normal   Created    45s                kubelet            spec.containers{app}: Container created
+  Normal   Started    45s                kubelet            spec.containers{app}: Container started
+  Warning  Unhealthy  43s (x2 over 44s)  kubelet            spec.containers{app}: Readiness probe failed: Get "http://10.20.0.9:8080/readyz": dial tcp 10.20.0.9:8080: connect: connection refused
+

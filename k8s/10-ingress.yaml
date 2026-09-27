@@ -1,0 +1,29 @@
+# from task 2 - external https lb on the static ip from terraform (cm-app-ip)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app
+  namespace: app
+  annotations:
+    # gke still uses this annotation for its ingress controller (k8s shows a deprecation warning)
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: "cm-app-ip"
+    networking.gke.io/managed-certificates: "app-cert"
+    networking.gke.io/v1beta1.FrontendConfig: "app-frontendconfig"
+spec:
+  defaultBackend:
+    service:
+      name: app
+      port:
+        number: 80
+  rules:
+    - host: cm-app.sokay.my
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app
+                port:
+                  number: 80

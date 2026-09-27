@@ -1,0 +1,18 @@
+$ scripts/create-app-secret.sh
+secret/app-chaos created
+created secret app-chaos in app
+
+$ kubectl apply -f k8s/
+namespace/app unchanged
+serviceaccount/app-ksa created
+configmap/app-config created
+secretproviderclass.secrets-store.csi.x-k8s.io/app-db-secret created
+deployment.apps/app created
+service/app created
+backendconfig.cloud.google.com/app-backendconfig created
+frontendconfig.networking.gke.io/app-frontendconfig created
+managedcertificate.networking.gke.io/app-cert created
+Warning: annotation "kubernetes.io/ingress.class" is deprecated, please use 'spec.ingressClassName' instead
+ingress.networking.k8s.io/app created
+horizontalpodautoscaler.autoscaling/app created
+poddisruptionbudget.policy/app created

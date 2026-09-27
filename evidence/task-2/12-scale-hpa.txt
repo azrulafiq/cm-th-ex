@@ -1,0 +1,282 @@
+## 2026-09-27T08:48:39Z hpa: start
+$ kubectl -n app get hpa app
+NAME   REFERENCE        TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+app    Deployment/app   cpu: 3%/60%   2         6         2          7m41s
+
+$ kubectl -n app get pods -l app=cm-app -o wide
+NAME                  READY   STATUS    RESTARTS   AGE     IP           NODE                               NOMINATED NODE   READINESS GATES
+app-cf4575ccb-7tq72   2/2     Running   0          4m42s   10.20.0.11   gke-cm-gke-cm-pool-404d116a-ge3c   <none>           1/1
+app-cf4575ccb-hnfvt   2/2     Running   0          4m59s   10.20.3.15   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+
+## 2026-09-27T08:48:39Z hpa: burn cpu for 240s on every pod via /cpu
+$ kubectl -n app exec app-cf4575ccb-7tq72 -c app -- (GET /cpu?seconds=240 with X-Chaos-Token)
+{"burning_seconds":240}
+
+$ kubectl -n app exec app-cf4575ccb-hnfvt -c app -- (GET /cpu?seconds=240 with X-Chaos-Token)
+{"burning_seconds":240}
+
+
+## 2026-09-27T08:49:03Z hpa: t+20s
+app   Deployment/app   cpu: 33%/60%   2     6     2     8m5s
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-7tq72   app               63m          74Mi            
+app-cf4575ccb-hnfvt   app               4m           70Mi            
+
+## 2026-09-27T08:49:23Z hpa: t+40s
+app   Deployment/app   cpu: 498%/60%   2     6     6     8m25s
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-7tq72   app               464m         76Mi            
+app-cf4575ccb-hnfvt   app               500m         76Mi            
+
+## 2026-09-27T08:49:43Z hpa: t+60s
+app   Deployment/app   cpu: 467%/60%   2     6     6     8m46s
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-7tq72   app               464m         76Mi            
+app-cf4575ccb-hnfvt   app               500m         76Mi            
+
+## 2026-09-27T08:50:04Z hpa: t+80s
+app   Deployment/app   cpu: 244%/60%   2     6     6     9m6s
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               45m          70Mi            
+app-cf4575ccb-7qpvw   app               22m          70Mi            
+app-cf4575ccb-7tq72   app               480m         76Mi            
+app-cf4575ccb-cdt5z   app               129m         71Mi            
+app-cf4575ccb-hnfvt   app               500m         76Mi            
+app-cf4575ccb-lrg98   app               52m          70Mi            
+
+## 2026-09-27T08:50:24Z hpa: t+100s
+app   Deployment/app   cpu: 244%/60%   2     6     6     9m26s
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           70Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               501m         76Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               500m         76Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:50:44Z hpa: t+120s
+app   Deployment/app   cpu: 169%/60%   2     6     6     9m47s
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           70Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               501m         76Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               500m         76Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:51:05Z hpa: t+140s
+app   Deployment/app   cpu: 169%/60%   2     6     6     10m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           71Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               501m         76Mi            
+app-cf4575ccb-cdt5z   app               3m           71Mi            
+app-cf4575ccb-hnfvt   app               501m         76Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:51:25Z hpa: t+160s
+app   Deployment/app   cpu: 169%/60%   2     6     6     10m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           71Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               500m         76Mi            
+app-cf4575ccb-cdt5z   app               3m           71Mi            
+app-cf4575ccb-hnfvt   app               501m         76Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:51:46Z hpa: t+180s
+app   Deployment/app   cpu: 169%/60%   2     6     6     10m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           71Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               500m         76Mi            
+app-cf4575ccb-cdt5z   app               3m           71Mi            
+app-cf4575ccb-hnfvt   app               501m         76Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:52:06Z hpa: t+200s
+app   Deployment/app   cpu: 168%/60%   2     6     6     11m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               3m           71Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               501m         76Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               500m         76Mi            
+app-cf4575ccb-lrg98   app               3m           70Mi            
+
+## 2026-09-27T08:52:26Z hpa: t+220s
+app   Deployment/app   cpu: 168%/60%   2     6     6     11m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           71Mi            
+app-cf4575ccb-7qpvw   app               3m           70Mi            
+app-cf4575ccb-7tq72   app               501m         76Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               500m         76Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:52:47Z hpa: t+240s
+app   Deployment/app   cpu: 168%/60%   2     6     6     11m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           71Mi            
+app-cf4575ccb-7qpvw   app               3m           70Mi            
+app-cf4575ccb-7tq72   app               501m         76Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               500m         76Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:53:07Z hpa: t+260s
+app   Deployment/app   cpu: 75%/60%   2     6     6     12m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           71Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               501m         76Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               500m         76Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:53:28Z hpa: t+280s
+app   Deployment/app   cpu: 4%/60%   2     6     6     12m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           71Mi            
+app-cf4575ccb-7qpvw   app               3m           70Mi            
+app-cf4575ccb-7tq72   app               124m         71Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               112m         71Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:53:48Z hpa: t+300s
+app   Deployment/app   cpu: 4%/60%   2     6     6     12m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               3m           71Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               5m           71Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               4m           71Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:54:08Z hpa: t+320s
+app   Deployment/app   cpu: 4%/60%   2     6     6     13m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               3m           71Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               5m           71Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               4m           71Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:54:29Z hpa: t+340s
+app   Deployment/app   cpu: 4%/60%   2     6     6     13m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           71Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               4m           71Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               4m           71Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:54:49Z hpa: t+360s
+app   Deployment/app   cpu: 4%/60%   2     6     6     13m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               5m           71Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               3m           71Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               4m           71Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:55:10Z hpa: t+380s
+app   Deployment/app   cpu: 4%/60%   2     6     6     14m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               5m           71Mi            
+app-cf4575ccb-7qpvw   app               4m           70Mi            
+app-cf4575ccb-7tq72   app               3m           71Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               4m           71Mi            
+app-cf4575ccb-lrg98   app               4m           70Mi            
+
+## 2026-09-27T08:55:30Z hpa: t+400s
+app   Deployment/app   cpu: 3%/60%   2     6     2     14m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-42x4c   app               4m           71Mi            
+app-cf4575ccb-7tq72   app               4m           71Mi            
+app-cf4575ccb-cdt5z   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               4m           71Mi            
+
+## 2026-09-27T08:55:50Z hpa: t+420s
+app   Deployment/app   cpu: 3%/60%   2     6     2     14m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-7tq72   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               3m           71Mi            
+
+## 2026-09-27T08:56:11Z hpa: t+440s
+app   Deployment/app   cpu: 3%/60%   2     6     2     15m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-7tq72   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               3m           71Mi            
+
+## 2026-09-27T08:56:31Z hpa: t+460s
+app   Deployment/app   cpu: 3%/60%   2     6     2     15m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-7tq72   app               3m           71Mi            
+app-cf4575ccb-hnfvt   app               4m           71Mi            
+
+## 2026-09-27T08:56:51Z hpa: t+480s
+app   Deployment/app   cpu: 3%/60%   2     6     2     15m
+POD                   NAME              CPU(cores)   MEMORY(bytes)   
+app-cf4575ccb-7tq72   app               4m           71Mi            
+app-cf4575ccb-hnfvt   app               4m           71Mi            
+
+$ kubectl -n app describe hpa app
+Name:                                                                     app
+Namespace:                                                                app
+Labels:                                                                   <none>
+Annotations:                                                              <none>
+CreationTimestamp:                                                        Sun, 27 Sep 2026 16:40:58 +0800
+Reference:                                                                Deployment/app
+Metrics:                                                                  ( current / target )
+  resource cpu of container "app" on pods  (as a percentage of request):  3% (3m) / 60%
+Min replicas:                                                             2
+Max replicas:                                                             6
+Behavior:
+  Scale Up:
+    Stabilization Window: 0 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Pods     Value: 4    Period: 15 seconds
+      - Type: Percent  Value: 100  Period: 15 seconds
+  Scale Down:
+    Stabilization Window: 120 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Percent  Value: 100  Period: 15 seconds
+Deployment pods:       2 current / 2 desired
+Conditions:
+  Type            Status  Reason            Message
+  ----            ------  ------            -------
+  AbleToScale     True    ReadyForNewScale  recommended size matches current size
+  ScalingActive   True    ValidMetricFound  the HPA was able to successfully calculate a replica count from cpu container resource utilization (percentage of request)
+  ScalingLimited  True    TooFewReplicas    the desired replica count is less than the minimum replica count
+Events:
+  Type     Reason                   Age                From                       Message
+  ----     ------                   ----               ----                       -------
+  Normal   SuccessfulRescale        15m                horizontal-pod-autoscaler  New size: 2; reason: cpu container resource utilization (percentage of request) above target
+  Warning  FailedGetResourceMetric  15m (x5 over 15m)  horizontal-pod-autoscaler  unable to get metric cpu: no metrics returned from resource metrics API
+  Normal   SuccessfulRescale        14m                horizontal-pod-autoscaler  New size: 3; reason: cpu container resource utilization (percentage of request) above target
+  Warning  FailedGetResourceMetric  12m (x2 over 12m)  horizontal-pod-autoscaler  did not receive metrics for targeted pods (pods might be unready)
+  Normal   SuccessfulRescale        11m                horizontal-pod-autoscaler  New size: 4; reason: cpu container resource utilization (percentage of request) above target
+  Normal   SuccessfulRescale        11m                horizontal-pod-autoscaler  New size: 3; reason: cpu container resource utilization (percentage of request) below target
+  Normal   SuccessfulRescale        7m49s              horizontal-pod-autoscaler  New size: 6; reason: cpu container resource utilization (percentage of request) above target
+  Normal   SuccessfulRescale        99s                horizontal-pod-autoscaler  New size: 5; reason: cpu container resource utilization (percentage of request) below target
+  Normal   HpaProfilePerformance    84s (x6 over 14m)  horizontal-pod-autoscaler  The HPA rescaled target based on performance profile
+  Normal   SuccessfulRescale        84s (x2 over 10m)  horizontal-pod-autoscaler  New size: 2; reason: cpu container resource utilization (percentage of request) below target
+
+## 2026-09-27T08:56:52Z hpa: end
+$ kubectl -n app get hpa app
+NAME   REFERENCE        TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+app    Deployment/app   cpu: 3%/60%   2         6         2          15m
+
+$ kubectl -n app get pods -l app=cm-app -o wide
+NAME                  READY   STATUS    RESTARTS   AGE   IP           NODE                               NOMINATED NODE   READINESS GATES
+app-cf4575ccb-7tq72   2/2     Running   0          12m   10.20.0.11   gke-cm-gke-cm-pool-404d116a-ge3c   <none>           1/1
+app-cf4575ccb-hnfvt   2/2     Running   0          13m   10.20.3.15   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+

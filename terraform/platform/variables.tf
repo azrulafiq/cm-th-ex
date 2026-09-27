@@ -131,3 +131,10 @@ variable "deletion_protection" {
   type        = bool
   default     = true
 }
+
+# from task 2 - app domain for the managed cert
+variable "app_domain" {
+  description = "Public hostname for the app, A record must point to the ingress ip."
+  type        = string
+  default     = "cm-app.sokay.my"
+}

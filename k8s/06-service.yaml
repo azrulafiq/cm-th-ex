@@ -1,0 +1,17 @@
+# from task 2 - clusterip service, neg so the lb sends traffic straight to pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  namespace: app
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+    cloud.google.com/backend-config: '{"default": "app-backendconfig"}'
+spec:
+  type: ClusterIP
+  selector:
+    app: cm-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

@@ -1,0 +1,41 @@
+## 2026-09-27T08:45:06Z manual: start
+$ kubectl -n app get hpa app
+NAME   REFERENCE        TARGETS        MINPODS   MAXPODS   REPLICAS   AGE
+app    Deployment/app   cpu: 23%/60%   2         6         3          4m9s
+
+$ kubectl -n app get pods -l app=cm-app -o wide
+NAME                  READY   STATUS    RESTARTS   AGE   IP           NODE                               NOMINATED NODE   READINESS GATES
+app-cf4575ccb-7tq72   2/2     Running   0          69s   10.20.0.11   gke-cm-gke-cm-pool-404d116a-ge3c   <none>           1/1
+app-cf4575ccb-hnfvt   2/2     Running   0          86s   10.20.3.15   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+app-cf4575ccb-q6n2v   2/2     Running   0          51s   10.20.3.16   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+
+## 2026-09-27T08:45:07Z manual: scale up, hpa minReplicas 2 -> 4
+$ kubectl -n app patch hpa app -p {"spec":{"minReplicas":4}}
+horizontalpodautoscaler.autoscaling/app patched
+
+## 2026-09-27T08:45:38Z manual: after scale up
+$ kubectl -n app get hpa app
+NAME   REFERENCE        TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+app    Deployment/app   cpu: 3%/60%   4         6         4          4m40s
+
+$ kubectl -n app get pods -l app=cm-app -o wide
+NAME                  READY   STATUS    RESTARTS   AGE    IP           NODE                               NOMINATED NODE   READINESS GATES
+app-cf4575ccb-7tq72   2/2     Running   0          100s   10.20.0.11   gke-cm-gke-cm-pool-404d116a-ge3c   <none>           1/1
+app-cf4575ccb-fhl6p   2/2     Running   0          25s    10.20.1.14   gke-cm-gke-cm-pool-404d116a-2pvm   <none>           1/1
+app-cf4575ccb-hnfvt   2/2     Running   0          117s   10.20.3.15   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+app-cf4575ccb-q6n2v   2/2     Running   0          82s    10.20.3.16   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+
+## 2026-09-27T08:45:38Z manual: scale down, hpa minReplicas 4 -> 2 (scale down stabilization 120s)
+$ kubectl -n app patch hpa app -p {"spec":{"minReplicas":2}}
+horizontalpodautoscaler.autoscaling/app patched
+
+## 2026-09-27T08:48:38Z manual: after scale down
+$ kubectl -n app get hpa app
+NAME   REFERENCE        TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+app    Deployment/app   cpu: 3%/60%   2         6         2          7m41s
+
+$ kubectl -n app get pods -l app=cm-app -o wide
+NAME                  READY   STATUS    RESTARTS   AGE     IP           NODE                               NOMINATED NODE   READINESS GATES
+app-cf4575ccb-7tq72   2/2     Running   0          4m41s   10.20.0.11   gke-cm-gke-cm-pool-404d116a-ge3c   <none>           1/1
+app-cf4575ccb-hnfvt   2/2     Running   0          4m58s   10.20.3.15   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+

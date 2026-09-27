@@ -1,0 +1,9 @@
+# from task 2 - google managed tls cert, needs the a record pointing at cm-app-ip first
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: app-cert
+  namespace: app
+spec:
+  domains:
+    - cm-app.sokay.my

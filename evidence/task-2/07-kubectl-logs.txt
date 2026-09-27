@@ -1,0 +1,29 @@
+$ kubectl -n app logs app-cf4575ccb-295l9 -c app --tail=30
+[2026-09-27 08:41:17 +0000] [1] [INFO] Starting gunicorn 23.0.0
+[2026-09-27 08:41:17 +0000] [1] [INFO] Listening at: http://0.0.0.0:8080 (1)
+[2026-09-27 08:41:17 +0000] [1] [INFO] Using worker: gthread
+[2026-09-27 08:41:17 +0000] [7] [INFO] Booting worker with pid: 7
+[2026-09-27 08:41:17 +0000] [8] [INFO] Booting worker with pid: 8
+{"severity": "INFO", "message": "db init ok", "version": "v1", "pod": "app-cf4575ccb-295l9"}
+{"severity": "WARNING", "message": "db init failed", "version": "v1", "pod": "app-cf4575ccb-295l9", "error": "duplicate key value violates unique constraint \"pg_class_relname_nsp_index\"\nDETAIL:  Key (relname, relnamespace)=(visits_id_seq, 2200) already exists."}
+
+$ kubectl -n app logs app-cf4575ccb-295l9 -c cloud-sql-proxy --tail=30
+{"timestamp":"2026-09-27T08:41:07Z","severity":"INFO","message":"Authorizing with Application Default Credentials"}
+{"timestamp":"2026-09-27T08:41:08Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] Listening on 127.0.0.1:5432"}
+{"timestamp":"2026-09-27T08:41:08Z","severity":"INFO","message":"The proxy has started successfully and is ready for new connections!"}
+{"timestamp":"2026-09-27T08:41:08Z","severity":"INFO","message":"Starting health check server at 0.0.0.0:9090"}
+{"timestamp":"2026-09-27T08:41:20Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] Accepted connection from 127.0.0.1:46612"}
+{"timestamp":"2026-09-27T08:41:20Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] Accepted connection from 127.0.0.1:46616"}
+{"timestamp":"2026-09-27T08:41:20Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] client closed the connection"}
+{"timestamp":"2026-09-27T08:41:20Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] client closed the connection"}
+{"timestamp":"2026-09-27T08:41:20Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] Accepted connection from 127.0.0.1:46618"}
+{"timestamp":"2026-09-27T08:41:20Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] client closed the connection"}
+{"timestamp":"2026-09-27T08:41:28Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] Accepted connection from 127.0.0.1:46628"}
+{"timestamp":"2026-09-27T08:41:28Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] client closed the connection"}
+{"timestamp":"2026-09-27T08:41:38Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] Accepted connection from 127.0.0.1:52804"}
+{"timestamp":"2026-09-27T08:41:38Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] client closed the connection"}
+{"timestamp":"2026-09-27T08:41:48Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] Accepted connection from 127.0.0.1:35026"}
+{"timestamp":"2026-09-27T08:41:48Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] client closed the connection"}
+{"timestamp":"2026-09-27T08:41:58Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] Accepted connection from 127.0.0.1:36626"}
+{"timestamp":"2026-09-27T08:41:58Z","severity":"INFO","message":"[cloud-mile-assessment:asia-southeast1:cm-pg] client closed the connection"}
+

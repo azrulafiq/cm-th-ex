@@ -1,0 +1,11 @@
+# from task 2 - keep at least 1 pod up during node drains and upgrades
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: app
+  namespace: app
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: cm-app

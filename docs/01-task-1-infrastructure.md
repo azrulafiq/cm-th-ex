@@ -361,6 +361,10 @@ Raw output: files `10` to `20` in [evidence/task-1/platform/](../evidence/task-1
 
 ![Firewall rules](../src/task1-02-firewall-rules.png)
 
+**Cloud NAT** (`cm-nat` on `cm-router`, all subnet primary and secondary ranges, automatic IP allocation)
+
+![Cloud NAT](../src/task1-10-cloud-nat.png)
+
 **IP addresses** (private services access range, NAT egress IP, node internal IPs only)
 
 ![IP addresses](../src/task1-03-ip-addresses.png)

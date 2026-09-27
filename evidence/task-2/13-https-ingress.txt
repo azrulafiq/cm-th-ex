@@ -1,0 +1,95 @@
+## 2026-09-27T09:30:19Z
+$ kubectl -n app get managedcertificate app-cert -o yaml
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.gke.io/v1","kind":"ManagedCertificate","metadata":{"annotations":{},"name":"app-cert","namespace":"app"},"spec":{"domains":["cm-app.sokay.my"]}}
+  creationTimestamp: "2026-09-27T08:40:57Z"
+  generation: 4
+  name: app-cert
+  namespace: app
+  resourceVersion: "1790501135605775004"
+  uid: ab2e09de-7e26-4ec5-a8ba-03ed3babbe23
+spec:
+  domains:
+  - cm-app.sokay.my
+status:
+  certificateName: mcrt-bfcfd28c-de16-455e-9457-97ca2cfc124a
+  certificateStatus: Provisioning
+  domainStatus:
+  - domain: cm-app.sokay.my
+    status: Active
+
+$ kubectl -n app describe ingress app
+Name:             app
+Labels:           <none>
+Namespace:        app
+Address:          8.232.93.111
+Ingress Class:    <none>
+Default backend:  app:80 (10.20.3.15:8080,10.20.3.22:8080)
+Rules:
+  Host             Path  Backends
+  ----             ----  --------
+  cm-app.sokay.my  
+                   /   app:80 (10.20.3.15:8080,10.20.3.22:8080)
+Annotations:       ingress.gcp.kubernetes.io/pre-shared-cert: mcrt-bfcfd28c-de16-455e-9457-97ca2cfc124a
+                   ingress.kubernetes.io/backends: {"k8s1-75b98460-app-app-80-a291f78d":"HEALTHY"}
+                   ingress.kubernetes.io/forwarding-rule: k8s2-fr-6485tgx0-app-app-7317i286
+                   ingress.kubernetes.io/https-forwarding-rule: k8s2-fs-6485tgx0-app-app-7317i286
+                   ingress.kubernetes.io/https-target-proxy: k8s2-ts-6485tgx0-app-app-7317i286
+                   ingress.kubernetes.io/redirect-url-map: k8s2-rm-6485tgx0-app-app-7317i286
+                   ingress.kubernetes.io/ssl-cert: mcrt-bfcfd28c-de16-455e-9457-97ca2cfc124a
+                   ingress.kubernetes.io/target-proxy: k8s2-tp-6485tgx0-app-app-7317i286
+                   ingress.kubernetes.io/url-map: k8s2-um-6485tgx0-app-app-7317i286
+                   kubernetes.io/ingress.class: gce
+                   kubernetes.io/ingress.global-static-ip-name: cm-app-ip
+                   networking.gke.io/managed-certificates: app-cert
+                   networking.gke.io/v1beta1.FrontendConfig: app-frontendconfig
+Events:
+  Type    Reason     Age                   From                     Message
+  ----    ------     ----                  ----                     -------
+  Normal  Sync       47m                   loadbalancer-controller  UrlMap "k8s2-um-6485tgx0-app-app-7317i286" created
+  Normal  Sync       47m                   loadbalancer-controller  TargetProxy "k8s2-tp-6485tgx0-app-app-7317i286" created
+  Normal  Sync       46m                   loadbalancer-controller  ForwardingRule "k8s2-fr-6485tgx0-app-app-7317i286" created
+  Normal  IPChanged  46m                   loadbalancer-controller  IP is now 8.232.93.111
+  Normal  Sync       46m                   loadbalancer-controller  TargetProxy "k8s2-ts-6485tgx0-app-app-7317i286" created
+  Normal  Sync       46m                   loadbalancer-controller  ForwardingRule "k8s2-fs-6485tgx0-app-app-7317i286" created
+  Normal  Sync       4m56s (x11 over 49m)  loadbalancer-controller  Scheduled for sync
+
+$ curl -sS -o /dev/null -w %{http_code} -> %{redirect_url}\n http://cm-app.sokay.my/
+301 -> https://cm-app.sokay.my:443/
+
+$ curl -sS -w \n[%{http_code}] ssl_verify=%{ssl_verify_result} time=%{time_total}s\n https://cm-app.sokay.my/
+{"message":"hello from cm-app on gke","pod":"app-cf4575ccb-hnfvt","version":"v1"}
+
+[200] ssl_verify=0 time=0.133817s
+
+$ curl -sS -w \n[%{http_code}]\n https://cm-app.sokay.my/healthz
+{"status":"ok"}
+
+[200]
+
+$ curl -sS -w \n[%{http_code}]\n https://cm-app.sokay.my/db
+{"db_connections":1,"db_time":"2026-09-27T09:30:21.316449+00:00","db_version":"PostgreSQL 16.15 on x86_64-pc-linux-gnu, compiled by Debian clang version 12.0.1, 64-bit","pod":"app-cf4575ccb-k45kj","visits":3}
+
+[200]
+
+$ curl -sS -w \n[%{http_code}]\n https://cm-app.sokay.my/error
+{"error":"chaos endpoints disabled or bad token"}
+
+[403]
+
+$ openssl s_client -connect cm-app.sokay.my:443 -servername cm-app.sokay.my | openssl x509 -noout -subject -issuer -dates -ext subjectAltName
+subject=CN = cm-app.sokay.my
+issuer=C = US, O = Google Trust Services, CN = WR3
+notBefore=Sep 27 08:25:30 2026 GMT
+notAfter=Dec 26 09:19:24 2026 GMT
+X509v3 Subject Alternative Name: 
+    DNS:cm-app.sokay.my
+
+## 2026-09-27T09:36:17Z follow up
+$ kubectl -n app get managedcertificate app-cert
+NAME       AGE   STATUS
+app-cert   55m   Active

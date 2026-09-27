@@ -1,0 +1,46 @@
+## 2026-09-27T09:34:41Z build and push v3 (web ui) and v4 (same code, for live rolling update demo)
+$ docker build -q --build-arg APP_VERSION=v3 -t asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v3 app/
+sha256:a7958d012c6213e255d326db554f494405fb6047c7b554cbc951a319c6118d01
+
+$ docker push asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v3
+v3: digest: sha256:a7958d012c6213e255d326db554f494405fb6047c7b554cbc951a319c6118d01 size: 856
+
+$ docker build -q --build-arg APP_VERSION=v4 -t asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v4 app/
+sha256:1a0d35ddc5f7a3f64a334b3c077b0fbc4bf72731a65a91979986918a49854113
+
+$ docker push asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v4
+v4: digest: sha256:1a0d35ddc5f7a3f64a334b3c077b0fbc4bf72731a65a91979986918a49854113 size: 856
+
+## 2026-09-27T09:34:49Z apply manifest with image v3
+$ kubectl apply -f k8s/05-deployment.yaml
+deployment.apps/app configured
+
+$ kubectl -n app rollout status deploy/app --timeout=300s
+Waiting for deployment "app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+deployment "app" successfully rolled out
+
+$ kubectl -n app rollout history deploy/app
+deployment.apps/app 
+REVISION  CHANGE-CAUSE
+2         update to v2
+3         initial deploy v1
+4         v3 web ui
+
+
+$ kubectl -n app get pods -o wide
+NAME                   READY   STATUS        RESTARTS   AGE   IP           NODE                               NOMINATED NODE   READINESS GATES
+app-68cf846886-2q27j   2/2     Running       0          13s   10.20.3.26   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+app-68cf846886-5mntv   2/2     Running       0          31s   10.20.3.25   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+app-cf4575ccb-hnfvt    2/2     Terminating   0          51m   10.20.3.15   gke-cm-gke-cm-pool-404d116a-fzib   <none>           1/1
+
+$ curl -sS https://cm-app.sokay.my/
+{"message":"hello from cm-app on gke","pod":"app-68cf846886-5mntv","version":"v3"}
+
+$ curl -sS -H "Accept: text/html" https://cm-app.sokay.my/ | grep -E "<title>|version-badge"
+  <title>cm-app</title>
+      <span class="badge" id="version-badge">v3</span>

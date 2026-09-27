@@ -1,0 +1,134 @@
+## 2026-09-27T08:43:40Z rollback v2 -> v1
+$ kubectl -n app rollout undo deploy/app
+deployment.apps/app rolled back
+
+$ kubectl -n app rollout status deploy/app --timeout=300s
+Waiting for deployment "app" rollout to finish: 0 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "app" rollout to finish: 1 old replicas are pending termination...
+deployment "app" successfully rolled out
+
+$ kubectl -n app rollout history deploy/app
+deployment.apps/app 
+REVISION  CHANGE-CAUSE
+2         update to v2
+3         initial deploy v1
+
+
+$ kubectl -n app get rs -o wide
+NAME             DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES                                                                  SELECTOR
+app-76d5cc9c79   0         0         0       110s    app          asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v2   app=cm-app,pod-template-hash=76d5cc9c79
+app-cf4575ccb    3         3         3       3m37s   app          asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v1   app=cm-app,pod-template-hash=cf4575ccb
+
+$ (GET / on each pod)
+error: Internal error occurred: unable to upgrade connection: container not found ("app")
+{"message":"hello from cm-app on gke","pod":"app-cf4575ccb-7tq72","version":"v1"}
+
+{"message":"hello from cm-app on gke","pod":"app-cf4575ccb-hnfvt","version":"v1"}
+
+{"message":"hello from cm-app on gke","pod":"app-cf4575ccb-q6n2v","version":"v1"}
+
+
+$ kubectl -n app describe deploy app
+Name:                   app
+Namespace:              app
+CreationTimestamp:      Sun, 27 Sep 2026 16:40:57 +0800
+Labels:                 app=cm-app
+Annotations:            deployment.kubernetes.io/revision: 3
+                        kubernetes.io/change-cause: initial deploy v1
+Selector:               app=cm-app
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  0 max unavailable, 1 max surge
+Pod Template:
+  Labels:           app=cm-app
+  Service Account:  app-ksa
+  Init Containers:
+   cloud-sql-proxy:
+    Image:      gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.25.4
+    Port:       <none>
+    Host Port:  <none>
+    Args:
+      --private-ip
+      --port=5432
+      --structured-logs
+      --health-check
+      --http-address=0.0.0.0
+      --http-port=9090
+      --exit-zero-on-sigterm
+      cloud-mile-assessment:asia-southeast1:cm-pg
+    Limits:
+      cpu:     200m
+      memory:  128Mi
+    Requests:
+      cpu:        50m
+      memory:     64Mi
+    Liveness:     http-get http://:9090/liveness delay=0s timeout=5s period=10s #success=1 #failure=3
+    Startup:      http-get http://:9090/startup delay=0s timeout=1s period=1s #success=1 #failure=30
+    Environment:  <none>
+    Mounts:       <none>
+  Containers:
+   app:
+    Image:      asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v1
+    Port:       8080/TCP (http)
+    Host Port:  0/TCP (http)
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:http/healthz delay=10s timeout=3s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:http/readyz delay=0s timeout=3s period=10s #success=1 #failure=3
+    Environment Variables from:
+      app-config  ConfigMap  Optional: false
+    Environment:
+      POD_NAME:      (v1:metadata.name)
+      CHAOS_TOKEN:  <set to the key 'token' in secret 'app-chaos'>  Optional: false
+    Mounts:
+      /secrets/db from db-secret (ro)
+      /tmp from tmp (rw)
+  Volumes:
+   db-secret:
+    Type:              CSI (a Container Storage Interface (CSI) volume source)
+    Driver:            secrets-store-gke.csi.k8s.io
+    FSType:            
+    ReadOnly:          true
+    VolumeAttributes:      secretProviderClass=app-db-secret
+   tmp:
+    Type:                       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:                     
+    SizeLimit:                  <unset>
+  Topology Spread Constraints:  kubernetes.io/hostname:ScheduleAnyway when max skew 1 is exceeded for selector app=cm-app
+  Node-Selectors:               <none>
+  Tolerations:                  <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  app-76d5cc9c79 (0/0 replicas created)
+NewReplicaSet:   app-cf4575ccb (3/3 replicas created)
+Events:
+  Type    Reason             Age                  From                   Message
+  ----    ------             ----                 ----                   -------
+  Normal  ScalingReplicaSet  116s                 deployment-controller  Scaled up replica set app-76d5cc9c79 from 0 to 1
+  Normal  ScalingReplicaSet  103s                 deployment-controller  Scaled down replica set app-cf4575ccb from 3 to 2
+  Normal  ScalingReplicaSet  103s                 deployment-controller  Scaled up replica set app-76d5cc9c79 from 1 to 2
+  Normal  ScalingReplicaSet  84s                  deployment-controller  Scaled down replica set app-cf4575ccb from 2 to 1
+  Normal  ScalingReplicaSet  84s                  deployment-controller  Scaled up replica set app-76d5cc9c79 from 2 to 3
+  Normal  ScalingReplicaSet  67s                  deployment-controller  Scaled down replica set app-cf4575ccb from 1 to 0
+  Normal  ScalingReplicaSet  59s (x2 over 3m43s)  deployment-controller  Scaled up replica set app-cf4575ccb from 0 to 1
+  Normal  ScalingReplicaSet  42s (x2 over 3m27s)  deployment-controller  Scaled up replica set app-cf4575ccb from 1 to 2
+  Normal  ScalingReplicaSet  24s (x2 over 2m10s)  deployment-controller  Scaled up replica set app-cf4575ccb from 2 to 3
+  Normal  ScalingReplicaSet  7s (x3 over 42s)     deployment-controller  (combined from similar events): Scaled down replica set app-76d5cc9c79 from 1 to 0
+

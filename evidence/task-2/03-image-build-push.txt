@@ -1,0 +1,26 @@
+$ gcloud auth configure-docker asia-southeast1-docker.pkg.dev --quiet
+Adding credentials for: asia-southeast1-docker.pkg.dev
+Docker configuration file updated.
+
+$ docker build --build-arg APP_VERSION=v1 -t asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v1 .
+sha256:b790756cac7bce336a16d40973a2f34ea88b364eaec5cb2f5609acbf57c3986b
+$ docker push asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v1
+6b37362b3da7: Pushed
+v1: digest: sha256:b790756cac7bce336a16d40973a2f34ea88b364eaec5cb2f5609acbf57c3986b size: 856
+
+$ docker build --build-arg APP_VERSION=v2 -t asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v2 .
+sha256:23c2a2c826132d452195752a0c5f8d358c0d9a0f985dc9a937dd5c1f0b36bb5a
+$ docker push asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app:v2
+ba2a6e58603a: Pushed
+v2: digest: sha256:23c2a2c826132d452195752a0c5f8d358c0d9a0f985dc9a937dd5c1f0b36bb5a size: 856
+
+$ gcloud artifacts docker images list asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app --include-tags
+Listing items under project cloud-mile-assessment, location asia-southeast1, repository cm-app.
+
+IMAGE                                                               DIGEST                                                                   TAGS  CREATE_TIME          UPDATE_TIME          SIZE
+asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app  sha256:0d8c9140c7efef0b820dfe8114ca480f2237ad0b9caf96ae15d97e2b8103fc6b        2026-09-27T16:38:47  2026-09-27T16:38:47  50592416
+asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app  sha256:10909c0b63af3f6cb8619e78224fc15e91d659ff3a7f04cfd6c2afb34e381bee        2026-09-27T16:38:52  2026-09-27T16:38:52  50592417
+asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app  sha256:23c2a2c826132d452195752a0c5f8d358c0d9a0f985dc9a937dd5c1f0b36bb5a  v2    2026-09-27T16:38:52  2026-09-27T16:38:52  None
+asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app  sha256:44039c582bcc78e0fea0c2946fa88695eb8f38ef8f5e21e50670981ffbf0d86b        2026-09-27T16:38:47  2026-09-27T16:38:47  1736
+asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app  sha256:449a7ece581c7977559c6bd322b4662c46e7daf6cc75e73bf3ab3202ce14975c        2026-09-27T16:38:52  2026-09-27T16:38:52  1736
+asia-southeast1-docker.pkg.dev/cloud-mile-assessment/cm-app/cm-app  sha256:b790756cac7bce336a16d40973a2f34ea88b364eaec5cb2f5609acbf57c3986b  v1    2026-09-27T16:38:47  2026-09-27T16:38:47  None

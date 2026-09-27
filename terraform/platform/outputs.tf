@@ -79,3 +79,18 @@ output "destroy_command" {
   description = "Do not run before the live defense. Set deletion_protection = false and apply first."
   value       = "terraform apply -var=deletion_protection=false && terraform destroy -var=deletion_protection=false"
 }
+
+# from task 2 - ingress outputs
+
+output "app_ip_name" {
+  value = module.ingress.ip_name
+}
+
+output "app_ip_address" {
+  description = "Create an A record for app_domain pointing to this."
+  value       = module.ingress.ip_address
+}
+
+output "app_domain" {
+  value = var.app_domain
+}

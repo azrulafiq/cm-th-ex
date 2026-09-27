@@ -1,0 +1,7 @@
+# from task 2 - app namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app
+  labels:
+    app.kubernetes.io/part-of: cm-app
