@@ -11,6 +11,7 @@ Cloudmile Take-home Exercise: GCP Cloud Operations hands-on homework.
 | [03-task-3-observability.md](docs/03-task-3-observability.md) | Task 3: dashboard, 4 alert policies, email channel, uptime check, log based metric, alert fire and resolve timeline |
 | [04-task-4-break-fix-rca.md](docs/04-task-4-break-fix-rca.md) | Task 4: firewall rule blocking LB health checks, symptoms, diagnosis, 5 Whys, fix, preventive controls verified by re-injection |
 | [05-task-5-healthcheck.md](docs/05-task-5-healthcheck.md) | Task 5: health check script (pods, HPA, Cloud SQL, endpoint), JSON output, pass and fail runs |
+| [06-task-6-cleanup-readiness.md](docs/06-task-6-cleanup-readiness.md) | Task 6: destroy order, `terraform plan -destroy` output, what gets removed and what stays (nothing destroyed yet) |
 
 ## Repository layout
 
@@ -50,4 +51,7 @@ kubectl apply -f k8s/
 
 # 5. health check (Task 5), prints json, exit 1 if unhealthy
 scripts/healthcheck.py
+
+# 6. cleanup (Task 6), plan only unless --destroy is given. do not run before the live defense
+scripts/cleanup.sh
 ```

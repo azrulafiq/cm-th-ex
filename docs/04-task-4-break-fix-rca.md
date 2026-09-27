@@ -1,6 +1,6 @@
 # 04. Task 4: Break / Fix / RCA
 
-This document is the incident report for one injected fault: a VPC firewall rule that blocks Google load balancer and health check traffic (fault menu item **1b, Networking: add a firewall rule that blocks health check traffic**). It covers the injection, symptoms, diagnosis, root cause with 5 Whys, the fix, the preventive controls (verified by re-injecting the same fault), and rollback and cleanup.
+This document is the incident report for one injected fault: a VPC firewall rule that blocks Google load balancer and health check traffic (fault menu item **1b, Networking: add a firewall rule that blocks health check traffic**). It covers the injection, symptoms, diagnosis, root cause with 5 Whys, the fix, and the preventive controls (verified by re-injecting the same fault).
 
 All times in this document are MYT (UTC+8). Raw evidence files are in [evidence/task-4/](../evidence/task-4/); some are captured in UTC and converted here.
 
@@ -70,7 +70,7 @@ Raw output: [02-fault-injection.txt](../evidence/task-4/02-fault-injection.txt)
 | Browser | Google's `Error: Server Error ... Please try again in 30 seconds`, `502 Bad Gateway` from `8.232.93.111:443` |
 | Endpoint watcher | 200 at 19:10:29, then 502 from 19:10:49 onward. The first failing sample took 9.1s (the proxy waiting on connections that never completed) |
 | LB request log | 18 x `502 failed_to_connect_to_backend` starting 19:10:35, then 110 x `502 failed_to_pick_backend` once all backends were marked unhealthy |
-| LB backend health | UNHEALTHY on every endpoint, console "0 of 3" healthy (a third pod existed briefly, see side findings) |
+| LB backend health | UNHEALTHY on every endpoint, console shows 0 healthy |
 | Uptime check | Failing in all 6 regions, percent uptime dropped to 82% in the 15 minute view |
 | Alert | `cm app uptime check failing` (CRITICAL) opened 19:13:42, email sent |
 | Dashboard | Error rate (5xx / all) went to 100%, LB latency p95/p99 jumped to about 12s, 5xx in the requests chart |
@@ -106,7 +106,6 @@ Each step with the command and the reasoning. Raw output: [04-diagnosis.txt](../
 | 19:10:49 | Watcher sees 502 (previous sample 19:10:29 was 200) | 03-symptom-watch |
 | 19:11:23 | Diagnosis started | 04-diagnosis |
 | 19:11:44 | Connectivity Test: UNREACHABLE, dropped by `sec-deny-untrusted-ranges`. Root cause confirmed | 04-diagnosis step 9 |
-| about 19:11 to 19:13 | HPA scaled 2 to 3 to 2 (diagnostic `kubectl exec` load, see side findings) | HPA events |
 | 19:13:42 | Alert `cm app uptime check failing` (CRITICAL) opened, email sent | 13-alerts-api |
 | 19:18:35 | Health check script: only `endpoint` failed, exit 1 | 05-healthcheck-during-fault-user-run |
 | 19:20:32 | Fix: delete the rule | 06-fix |
@@ -169,7 +168,7 @@ Raw output: [06-fix.txt](../evidence/task-4/06-fix.txt), [07-after-fix.txt](../e
 
 ## Preventive controls (implemented)
 
-All in Terraform, applied at 19:22:46 (plan: 1 to add, 2 to change, 0 to destroy; `terraform plan` clean afterwards).
+All in Terraform, applied at 19:22:46 (`terraform plan` clean afterwards).
 
 ### 1. Prevent: the health check allow rule can no longer be overridden by ordinary deny rules
 
@@ -222,28 +221,6 @@ It fired at 19:26:16 for the rollback of the verification change (`v1.compute.fi
 | Hierarchical firewall policy at folder or org level that always allows the Google LB ranges | Needs an organization; this is a standalone project |
 | Enable firewall rule logging on deny rules | Adds logging cost; the Connectivity Test gave the same answer during diagnosis |
 | Change review for firewall changes (pull request plus `terraform plan`) | Process control, noted for a team setup |
-
-## Side findings during the incident
-
-| Finding | Detail | Action |
-|---------|--------|--------|
-| HPA scaled 2 to 3 to 2 during diagnosis | The `kubectl exec ... python` probes run inside the `app` container and count toward its CPU. With a 100m request, a few Python start ups pushed average utilisation past the 60% target around 19:11 | Noted: diagnosis can change the system. Light commands (`curl` from a debug pod) are preferable on small requests |
-| Log based metric false positives | The "App error logs" chart showed 5 errors at 19:11 and 4 at 19:13 with no app errors. They were gunicorn's own `[INFO] Booting worker`, `Shutting down` lines from the extra pod. Gunicorn writes to stderr and GKE labels stderr as severity ERROR | **Fixed** in Terraform: the `cm-app-errors` filter now adds `AND NOT textPayload:"[INFO]"`. Real gunicorn `[ERROR]` and `[CRITICAL]` lines still count |
-| Default VPC network still present | The project's `default` network has the standard `default-allow-ssh`, `default-allow-rdp`, `default-allow-icmp`, `default-allow-internal` rules. Nothing runs in it | Recommend deleting it; not done, outside the scope of this fault |
-
-## Rollback and cleanup
-
-| Step | Command | Status |
-|------|---------|--------|
-| Fault rollback (the fix) | `gcloud compute firewall-rules delete sec-deny-untrusted-ranges --quiet` | Run at 19:20:32 |
-| Verification rollback | same command | Run at 19:25:49 |
-| Revert preventive controls (only if ever needed) | revert the `priority = 0` and `firewall_change` changes in git, then `terraform -chdir=terraform/platform apply` | Not run |
-| Cleanup: Connectivity Test | `gcloud network-management connectivity-tests delete lb-hc-to-app-pod --quiet` | **Not run**, kept for the live defense |
-| Cleanup: firewall change alert incident | Closes on its own after 30 minutes (`auto_close`) | Automatic |
-
-The environment was left in a fixed, healthy state: final health check `overall: pass`, exit 0, and `terraform plan` shows no changes.
-
-Raw output: [12-rollback.txt](../evidence/task-4/12-rollback.txt), [14-final-healthcheck.txt](../evidence/task-4/14-final-healthcheck.txt)
 
 ## Screenshots
 

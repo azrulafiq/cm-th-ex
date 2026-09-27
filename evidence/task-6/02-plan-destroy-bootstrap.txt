@@ -1,0 +1,230 @@
+## 2026-09-27T19:39:42 MYT
+$ cd terraform/bootstrap && terraform plan -destroy
+google_project_service.this["artifactregistry.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/artifactregistry.googleapis.com]
+google_project_service.this["compute.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/compute.googleapis.com]
+google_project_service.this["serviceusage.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/serviceusage.googleapis.com]
+google_project_service.this["servicenetworking.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/servicenetworking.googleapis.com]
+google_project_service.this["sqladmin.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/sqladmin.googleapis.com]
+google_project_service.this["container.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/container.googleapis.com]
+google_project_service.this["logging.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/logging.googleapis.com]
+google_project_service.this["monitoring.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/monitoring.googleapis.com]
+google_project_service.this["cloudresourcemanager.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/cloudresourcemanager.googleapis.com]
+google_project_service.this["iamcredentials.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/iamcredentials.googleapis.com]
+google_project_service.this["iam.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/iam.googleapis.com]
+google_project_service.this["networkmanagement.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/networkmanagement.googleapis.com]
+google_project_service.this["secretmanager.googleapis.com"]: Refreshing state... [id=cloud-mile-assessment/secretmanager.googleapis.com]
+google_storage_bucket.tfstate: Refreshing state... [id=cloud-mile-assessment-tfstate]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # google_project_service.this["artifactregistry.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/artifactregistry.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "artifactregistry.googleapis.com" -> null
+    }
+
+  # google_project_service.this["cloudresourcemanager.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/cloudresourcemanager.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "cloudresourcemanager.googleapis.com" -> null
+    }
+
+  # google_project_service.this["compute.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/compute.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "compute.googleapis.com" -> null
+    }
+
+  # google_project_service.this["container.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/container.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "container.googleapis.com" -> null
+    }
+
+  # google_project_service.this["iam.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/iam.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "iam.googleapis.com" -> null
+    }
+
+  # google_project_service.this["iamcredentials.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/iamcredentials.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "iamcredentials.googleapis.com" -> null
+    }
+
+  # google_project_service.this["logging.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/logging.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "logging.googleapis.com" -> null
+    }
+
+  # google_project_service.this["monitoring.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/monitoring.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "monitoring.googleapis.com" -> null
+    }
+
+  # google_project_service.this["networkmanagement.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/networkmanagement.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "networkmanagement.googleapis.com" -> null
+    }
+
+  # google_project_service.this["secretmanager.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/secretmanager.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "secretmanager.googleapis.com" -> null
+    }
+
+  # google_project_service.this["servicenetworking.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/servicenetworking.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "servicenetworking.googleapis.com" -> null
+    }
+
+  # google_project_service.this["serviceusage.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/serviceusage.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "serviceusage.googleapis.com" -> null
+    }
+
+  # google_project_service.this["sqladmin.googleapis.com"] will be destroyed
+  - resource "google_project_service" "this" {
+      - deletion_policy    = "DELETE" -> null
+      - disable_on_destroy = false -> null
+      - id                 = "cloud-mile-assessment/sqladmin.googleapis.com" -> null
+      - project            = "cloud-mile-assessment" -> null
+      - service            = "sqladmin.googleapis.com" -> null
+    }
+
+  # google_storage_bucket.tfstate will be destroyed
+  - resource "google_storage_bucket" "tfstate" {
+      - default_event_based_hold    = false -> null
+      - deletion_policy             = "DELETE" -> null
+      - effective_labels            = {
+          - "goog-terraform-provisioned" = "true"
+        } -> null
+      - enable_object_retention     = false -> null
+      - force_destroy               = false -> null
+      - id                          = "cloud-mile-assessment-tfstate" -> null
+      - labels                      = {} -> null
+      - location                    = "ASIA-SOUTHEAST1" -> null
+      - name                        = "cloud-mile-assessment-tfstate" -> null
+      - project                     = "cloud-mile-assessment" -> null
+      - project_number              = 969886371063 -> null
+      - public_access_prevention    = "enforced" -> null
+      - requester_pays              = false -> null
+      - self_link                   = "https://www.googleapis.com/storage/v1/b/cloud-mile-assessment-tfstate" -> null
+      - storage_class               = "STANDARD" -> null
+      - terraform_labels            = {
+          - "goog-terraform-provisioned" = "true"
+        } -> null
+      - time_created                = "2026-09-27T06:17:20.720Z" -> null
+      - uniform_bucket_level_access = true -> null
+      - updated                     = "2026-09-27T06:17:20.720Z" -> null
+      - url                         = "gs://cloud-mile-assessment-tfstate" -> null
+
+      - hierarchical_namespace {
+          - enabled = false -> null
+        }
+
+      - lifecycle_rule {
+          - action {
+              - type          = "Delete" -> null
+                # (1 unchanged attribute hidden)
+            }
+          - condition {
+              - age                                     = 0 -> null
+              - days_since_custom_time                  = 0 -> null
+              - days_since_noncurrent_time              = 0 -> null
+              - matches_prefix                          = [] -> null
+              - matches_storage_class                   = [] -> null
+              - matches_suffix                          = [] -> null
+              - num_newer_versions                      = 10 -> null
+              - send_age_if_zero                        = false -> null
+              - send_days_since_custom_time_if_zero     = false -> null
+              - send_days_since_noncurrent_time_if_zero = false -> null
+              - send_num_newer_versions_if_zero         = false -> null
+              - size_above_bytes                        = 0 -> null
+              - size_below_bytes                        = 0 -> null
+              - with_state                              = "ANY" -> null
+                # (3 unchanged attributes hidden)
+            }
+        }
+
+      - soft_delete_policy {
+          - effective_time             = "2026-09-27T06:17:20.720Z" -> null
+          - retention_duration_seconds = 604800 -> null
+        }
+
+      - versioning {
+          - enabled = true -> null
+        }
+    }
+
+Plan: 0 to add, 0 to change, 14 to destroy.
+
+Changes to Outputs:
+  - enabled_services = [
+      - "artifactregistry.googleapis.com",
+      - "cloudresourcemanager.googleapis.com",
+      - "compute.googleapis.com",
+      - "container.googleapis.com",
+      - "iam.googleapis.com",
+      - "iamcredentials.googleapis.com",
+      - "logging.googleapis.com",
+      - "monitoring.googleapis.com",
+      - "networkmanagement.googleapis.com",
+      - "secretmanager.googleapis.com",
+      - "servicenetworking.googleapis.com",
+      - "serviceusage.googleapis.com",
+      - "sqladmin.googleapis.com",
+    ] -> null
+  - tfstate_bucket   = "cloud-mile-assessment-tfstate" -> null
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
+exit code: 0

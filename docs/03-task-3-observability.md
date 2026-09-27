@@ -284,7 +284,6 @@ Raw output: [10-log-metric-evidence.txt](../evidence/task-3/10-log-metric-eviden
 
 ## Notes
 
-- **Changed in Task 4.** The log based metric filter now also has `AND NOT textPayload:"[INFO]"`. Gunicorn writes its own startup and shutdown lines (`[INFO] Booting worker`, `Shutting down`) to stderr, and GKE labels stderr as severity ERROR, so every pod start or stop was counted as about 9 app errors. Real gunicorn `[ERROR]` and `[CRITICAL]` lines still count. See [04-task-4-break-fix-rca.md](04-task-4-break-fix-rca.md).
 - **Added in Task 4.** A fifth alert policy, `cm vpc firewall rule changed`, alerts on any VPC firewall change from the audit log.
 - The page's "hold db conns" chaos button was changed from 22 to 20 in the app source for the reason above. It will ship with the next image build.
 - The uptime alert fired twice after this: during the Task 5 scale to zero test (18:46:35 to 18:46:58) and during the Task 4 firewall incident (19:13:42 to 19:22:51).

@@ -22,8 +22,8 @@ resource "google_logging_metric" "app_errors" {
   name        = "${var.name_prefix}-app-errors"
   description = "Application log entries with severity >= ERROR in the app namespace."
   # logging query language uses resource.labels (monitoring filters use resource.label)
-  # from task 4 - gunicorn writes its own [INFO] lines (boot, shutdown) to stderr and gke marks stderr as ERROR,
-  # so every pod start/stop counted ~9 fake errors. skip those, real [ERROR]/[CRITICAL] gunicorn lines still count
+  # from task 3 - gunicorn writes its own [INFO] lines (boot, shutdown) to stderr and gke marks stderr as ERROR,
+  # skip those so pod start/stop is not counted as app errors, real [ERROR]/[CRITICAL] gunicorn lines still count
   filter = "resource.type=\"k8s_container\" AND resource.labels.cluster_name=\"${var.cluster_name}\" AND resource.labels.namespace_name=\"${var.app_namespace}\" AND resource.labels.container_name=\"app\" AND severity>=ERROR AND NOT textPayload:\"[INFO]\""
 
   metric_descriptor {
