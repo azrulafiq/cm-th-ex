@@ -1,6 +1,6 @@
 # 04. Task 4: Break / Fix / RCA
 
-This document is the incident report for one injected fault: a VPC firewall rule that blocks Google load balancer and health check traffic (fault menu item **1b, Networking: add a firewall rule that blocks health check traffic**). It covers the injection, symptoms, diagnosis, root cause with 5 Whys, the fix, and the preventive controls (verified by re-injecting the same fault).
+This document is the incident report for one injected fault: a VPC firewall rule that blocks Google load balancer and health check traffic (fault menu item **1b, Networking: add a firewall rule that blocks health check traffic**). It covers the injection, symptoms, diagnosis, root cause with 5 Whys, the fix, the preventive controls (verified by re-injecting the same fault), and the rollback and cleanup commands.
 
 All times in this document are MYT (UTC+8). Raw evidence files are in [evidence/task-4/](../evidence/task-4/); some are captured in UTC and converted here.
 
@@ -221,6 +221,22 @@ It fired at 19:26:16 for the rollback of the verification change (`v1.compute.fi
 | Hierarchical firewall policy at folder or org level that always allows the Google LB ranges | Needs an organization; this is a standalone project |
 | Enable firewall rule logging on deny rules | Adds logging cost; the Connectivity Test gave the same answer during diagnosis |
 | Change review for firewall changes (pull request plus `terraform plan`) | Process control, noted for a team setup |
+
+## Rollback and cleanup
+
+Cleanup is not run before the live defense.
+
+| Step | Command | Status |
+|------|---------|--------|
+| Rollback the fault (the fix) | `gcloud compute firewall-rules delete sec-deny-untrusted-ranges --quiet` | Run at 19:20:32 |
+| Rollback the verification re-injection | `gcloud compute firewall-rules delete sec-deny-untrusted-ranges --quiet` | Run at 19:25:49 |
+| Rollback the preventive controls (only if ever needed) | revert the `priority = 0` and `firewall_change` changes in git, then `terraform -chdir=terraform/platform apply` | Not run |
+| Cleanup: Connectivity Test | `gcloud network-management connectivity-tests delete lb-hc-to-app-pod --quiet` | Not run, kept for the live defense |
+| Cleanup: firewall change alert incident | none, closes on its own after 30 minutes (`auto_close`) | Automatic |
+
+The environment was left in a fixed, healthy state: final health check `overall: pass`, exit 0, and `terraform plan` shows no changes.
+
+Raw output: [12-rollback.txt](../evidence/task-4/12-rollback.txt), [14-final-healthcheck.txt](../evidence/task-4/14-final-healthcheck.txt)
 
 ## Screenshots
 
